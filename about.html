@@ -3,232 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>陆知雨的个人主页</title>
+    <title>陆知雨的个人主页——CV</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: "SF Pro SC", "SF Pro Text", "SF Pro Icons", "PingFang SC", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-            line-height: 1.8;
-            color: #374151;
-            background: #f9fafb;
-        }
-
-        .header {
-            background: #f3f4f6;
-            color: #111827;
-            padding: 4rem 2rem;
-            text-align: center;
-            border-bottom: 1px solid #e5e7eb;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 20px;
             position: relative;
         }
-
         .nav-container {
             position: absolute;
-            top: 2rem;
-            right: 2rem;
+            top: 20px;
+            right: 20px;
             display: flex;
-            gap: 1.5rem;
+            gap: 1rem;
         }
-
         .nav-link {
             color: #374151;
             text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.9);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            border: 1px solid #e5e7eb;
             transition: all 0.2s ease;
-            font-size: 1rem;
-            backdrop-filter: blur(5px);
-            border: 1px solid #e5e7eb;
         }
-
         .nav-link:hover {
-            background: white;
-            transform: translateY(-2px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background: #f3f4f6;
         }
-
-        .header-content {
-            max-width: 800px;
-            margin: 0 auto;
+        main {
+            margin-top: 40px;
         }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 2rem;
+        .title {
+            margin: 20px 0;
         }
-
-        .section {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e5e7eb;
+        .name {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            color: #111827;
-        }
-
-        h2 {
-            font-size: 1.5rem;
-            color: #111827;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #e5e7eb;
-        }
-
-        h3 {
-            font-size: 1.2rem;
-            color: #374151;
-            margin: 1rem 0;
-        }
-
-        .research-item {
-            margin-bottom: 2rem;
-            padding-left: 1rem;
-            border-left: 3px solid #9ca3af;
-        }
-
-        .research-interests {
+        .publication-list {
             list-style: none;
+            padding: 0;
         }
-
-        .research-interests li {
-            margin-bottom: 0.5rem;
-            padding-left: 1.5rem;
-            position: relative;
+        .publication-item {
+            margin-bottom: 20px;
         }
-
-        .research-interests li::before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: #6b7280;
-        }
-
-        .publication {
-            margin-bottom: 1.5rem;
-            padding: 1.5rem;
-            background: #f9fafb;
-            border-radius: 8px;
-            border: 1px solid #e5e7eb;
-            transition: transform 0.2s ease;
-        }
-
-        .publication:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        }
-
         .publication-title {
             font-weight: bold;
-            color: #111827;
-            margin-bottom: 0.5rem;
+            margin-bottom: 5px;
         }
-
-        .publication p {
-            color: #6b7280;
-        }
-
-        ul {
-            list-style-type: none;
-            padding-left: 1.5rem;
-        }
-
-        ul li {
-            margin-bottom: 0.5rem;
-            position: relative;
-            color: #4b5563;
-        }
-
-        ul li::before {
-            content: "–";
-            position: absolute;
-            left: -1.5rem;
-            color: #9ca3af;
-        }
-
         @media (max-width: 768px) {
-            .header {
-                padding: 2rem 1rem;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
-
-            .container {
-                padding: 1rem;
-            }
-
-            .section {
-                padding: 1.5rem;
-            }
-
             .nav-container {
                 position: static;
-                justify-content: center;
-                margin-top: 1rem;
+                justify-content: flex-end;
+                margin-bottom: 20px;
+            }
+            main {
+                margin-top: 0;
             }
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <nav class="nav-container">
-            <a href="index.html" class="nav-link">博客</a>
-            <a href="about.html" class="nav-link active">关于我</a>
-        </nav>
-        <div class="header-content">
-            <h1>陆知雨</h1>
-            <p>中央财经大学财政税务学院 | 财政学（财政基础理论）</p>
-        </div>
-    </header>
+    <nav class="nav-container">
+        <a href="index.html" class="nav-link">Blog</a>
+        <a href="about.html" class="nav-link">CV</a>
+    </nav>
 
-    <main class="container">
-        <section class="section">
+    <main>
+        <div class="title">
+            <h1 class="name">陆知雨</h1>
+            <p>邮箱：luzhiyu@email.cufe.edu.cn</p>
+        </div>
+
+        <section>
             <h2>研究兴趣</h2>
-            <ul class="research-interests">
-                <li>大语言模型在经济学领域文本分析的应用</li>
+            <ul>
+                <li>大语言模型文本分析在经济学领域的应用</li>
                 <li>政府与企业关系</li>
-                <li>地方政府债务问题</li>
+                <li>地方政府债务治理</li>
             </ul>
         </section>
 
-        <section class="section">
+        <section>
             <h2>主要科研成果</h2>
-            <div class="research-item">
-                <div class="publication">
+            <ul class="publication-list">
+                <li class="publication-item">
                     <div class="publication-title">《政府数字化转型如何影响政府治理能力？——基于政府采购数据与大语言模型的研究》</div>
                     <p>大学生创新项目立项（预计2025年结项）</p>
-                </div>
-                <div class="publication">
+                </li>
+                <li class="publication-item">
                     <div class="publication-title">《财政预算绩效管理能防范化解地方政府债务风险吗？——以"北京模式"为例》</div>
                     <p>获得全国大学生公共经济与政策论文大赛决赛三等奖</p>
-                </div>
-                <div class="publication">
+                </li>
+                <li class="publication-item">
                     <div class="publication-title">《从财政政策不确定性冲击到财政政策不确定性感知——基于CEO特质的异质性分析》</div>
                     <p>大学生创新项目北京市级结项</p>
-                </div>
-            </div>
+                </li>
+            </ul>
         </section>
 
-        <section class="section">
+        <section>
             <h2>其他科研经历</h2>
-            <div class="research-item">
+            <div>
                 <h3>研究项目</h3>
-                <p>• 基于大语言模型的企业数字化转型指标构建</p>
-                <p>• 财政韧性与地方政府债务</p>
+                <ul>
+                    <li>基于大语言模型的企业数字化转型指标构建</li>
+                    <li>财政韧性与地方政府债务</li>
+                </ul>
+                
                 <h3>助研工作</h3>
                 <ul>
                     <li>政府采购文本内容整理</li>
