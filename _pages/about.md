@@ -35,5 +35,3 @@ I'm an undergraduate student at the Central University of Finance and Economics,
 * **Kaggle:** [markluzy](https://www.kaggle.com/markluzy)
 * **Personal Website/Blog:** `https://luzhiyu-econ.github.io`
 
-> [!tip]
-> 123
