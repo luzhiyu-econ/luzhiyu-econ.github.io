@@ -1,67 +1,39 @@
 {
   "basics": {
-    "name": "Your Sidebar Name",
-    "email": "none@example.org",
+    "name": "Lu Zhiyu",
+    "email": "mark.lu589698@outlook.com",
     "phone": "",
-    "website": "https://academicpages.github.io",
-    "summary": "Currently employed at Red Brick University. Short biography for the left-hand sidebar",
+    "website": "https://luzhiyu-econ.github.io",
+    "summary": "Currently learning Economics in Central University of Finance and Economics",
     "location": {
       "address": "",
       "postalCode": "",
-      "city": "Earth",
-      "countryCode": "US",
+      "city": "BeiJing",
+      "countryCode": "CHN",
       "region": ""
     },
     "profiles": [
       {
-        "network": "Google Scholar",
-        "username": "",
-        "url": "https://scholar.google.com/citations?user=PS_CX0AAAAAJ"
-      },
-      {
-        "network": "ORCID",
-        "username": "",
-        "url": "http://orcid.org/yourorcidurl"
-      },
-      {
         "network": "GitHub",
-        "username": "academicpages",
-        "url": "https://github.com/academicpages"
+        "username": "luzhiyu-econ",
+        "url": "https://github.com/luzhiyu-econ"
       }
     ]
   },
   "work": [],
   "education": [
     {
-      "institution": "GitHub University",
-      "area": "Ph.D in Version Control Theory",
+      "institution": "Central University of Finance and Economics",
+      "area": "B.S. in Public Finance",
       "studyType": "",
       "startDate": "",
-      "endDate": "2018",
+      "endDate": "2026",
       "gpa": null,
       "courses": []
     },
-    {
-      "institution": "GitHub University",
-      "area": "M.S. in Jekyll",
-      "studyType": "",
-      "startDate": "",
-      "endDate": "2014",
-      "gpa": null,
-      "courses": []
-    },
-    {
-      "institution": "GitHub University",
-      "area": "B.S. in GitHub",
-      "studyType": "",
-      "startDate": "",
-      "endDate": "2012",
-      "gpa": null,
-      "courses": []
-    }
   ],
-  "skills": [],
-  "languages": [],
+  "skills": [Python Stata],
+  "languages": [English Chinese Japanese Russian],
   "interests": [],
   "references": [],
   "publications": [
