@@ -34,7 +34,3 @@ I'm an undergraduate student at the Central University of Finance and Economics,
 * **Email:** [mark.lu589698@outlook.com](mailto:mark.lu589698@outlook.com)
 * **Kaggle:** [markluzy](https://www.kaggle.com/markluzy)
 * **Personal Website/Blog:** `https://luzhiyu-econ.github.io`
-
-> [!tip]
->
-> 123
