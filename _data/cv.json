@@ -32,8 +32,8 @@
       "courses": []
     },
   ],
-  "skills": [Python;Stata],
-  "languages": [English;Chinese;Japanese;Russian],
+  "skills": ["Python;Stata"],
+  "languages": ["English;Chinese;Japanese;Russian"],
   "interests": [],
   "references": [],
   "publications": [
