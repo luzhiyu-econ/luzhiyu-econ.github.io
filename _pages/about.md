@@ -6,6 +6,7 @@ redirect_from:
   - /about/
   - /about.html
 ---
+
 ### Hi, I'm LuZhiyu (Mark Lu) 👋
 
 I'm an undergraduate student at the Central University of Finance and Economics, majoring in Public Finance (Expected Graduation: 2026). I'm passionate about applying Machine Learning in Economics, with a particular focus on leveraging advanced computational techniques to solve complex textual analysis challenges.
@@ -25,6 +26,7 @@ I'm an undergraduate student at the Central University of Finance and Economics,
 * **Machine Learning / Deep Learning:** TensorFlow, PyTorch, Pandas, NumPy
 * **Language:** Chinese(Native), English(Proficient), Japanese(Basic), Russian(Basic)
 * **Other:** LaTeX, Stata
+  
 ---
 
 ### 📫 Let's Connect!
