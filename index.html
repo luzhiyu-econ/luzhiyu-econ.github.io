@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zhiyu Lu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            color: #333;
+            background-color: #fff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px 40px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: 300;
+            color: #666;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        nav {
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            padding: 20px 0;
+            margin-bottom: 60px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap; /* 允许换行 */
+            gap: 40px; /* 调整间距 */
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #666;
+            font-size: 1.1em;
+            transition: color 0.3s;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: #000;
+            background-color: #f5f5f5;
+        }
+
+        .content-section {
+            display: none;
+            padding: 40px 0;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .profile-container {
+            display: flex;
+            gap: 60px;
+            align-items: flex-start;
+            margin-bottom: 40px;
+        }
+
+        .profile-image {
+            flex-shrink: 0;
+        }
+
+        .profile-image img {
+            width: 300px;
+            height: auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .profile-info h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .profile-info p {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        .profile-info strong {
+            font-weight: 600;
+        }
+
+        .bio {
+            text-align: justify;
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+
+        .research-item {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .research-item:last-child {
+            border-bottom: none;
+        }
+
+        .research-item h3 {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .research-item .authors {
+            color: #666;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+
+        .research-item .journal {
+            color: #888;
+            margin-bottom: 15px;
+        }
+
+        .cv-section {
+            margin-bottom: 40px;
+        }
+        
+        /* CV 页面共享标题样式 */
+        #cv h2, #cv-cn h2 {
+            font-size: 1.8em; 
+            margin-bottom: 40px; 
+            color: #333;
+        }
+
+        .cv-section h3 {
+            font-size: 1.4em;
+            color: #333;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .cv-item {
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+
+        .cv-item h4 {
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .cv-item .period {
+            color: #888;
+            font-size: 0.95em;
+            margin-bottom: 5px;
+        }
+
+        .cv-item .details {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .cv-item .details ul {
+            list-style-type: disc; /* 为中文CV中的技能列表添加点 */
+            margin-left: 20px;
+        }
+
+
+        @media (max-width: 768px) {
+            .profile-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .profile-image img {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 20px;
+                align-items: center;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>MARK LU (陆知雨)</h1>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a class="nav-link active" data-section="home">HOME</a></li>
+                <li><a class="nav-link" data-section="research">RESEARCH</a></li>
+                <li><a class="nav-link" data-section="cv">CV (EN)</a></li>
+                <li><a class="nav-link" data-section="cv-cn">中文简历</a></li> </ul>
+        </nav>
+
+        <section id="home" class="content-section active">
+            <div class="profile-container">
+                <div class="profile-image">
+                    <img src="fig/selfie.jpg" alt="Profile Photo">
+                </div>
+                <div class="profile-info">
+                    <h2>Appointments:</h2>
+                    <p>Ph.D. Candidate in Finance, Central University of Finance and Economics (CUFE)</p>
+                    <p>Affiliation: Center for China Fiscal Development</p>
+                    <p><strong>Email:</strong> mark.lu589698@outlook.com</p>
+                </div>
+            </div>
+
+            <div class="bio">
+                <p>I am Zhiyu Lu, a Ph.D. candidate in Finance at the Central University of Finance and Economics (CUFE). My research interests lie at the intersection of <strong>political economy</strong>, <strong>development economics</strong>, and <strong>public finance</strong>.</p>
+                <p>I am particularly interested in applying methods from computational linguistics and machine learning (e.g., text analysis, LLMs) to analyze policy texts, institutional dynamics, and their impact on economic outcomes. My current work explores policy diffusion and institutional analysis within the Chinese context.</p>
+            </div>
+        </section>
+
+        <section id="research" class="content-section">
+            <h2 style="font-size: 1.8em; margin-bottom: 40px; color: #333;">Research</h2>
+            
+            <div class="cv-section">
+                <h3>Working Papers</h3>
+                
+                <div class="research-item">
+                    <h3>[Title of Working Paper 1]</h3>
+                    <div class="authors">Zhiyu Lu</div>
+                    <div class="journal">Working Paper, 2025</div>
+                    <p>[Insert abstract here]. This paper investigates... using... We employ a... methodology and find that... Our results contribute to the literature on...</p>
+                </div>
+
+                <div class="research-item">
+                    <h3>[Title of Working Paper 2]</h3>
+                    <div class="authors">Zhiyu Lu, [Co-author Name]</div>
+                    <div class="journal">Working Paper, 2025</div>
+                    <p>[Insert abstract here]. This study examines the relationship between... and... Using a novel dataset derived from..., we show that... This research has implications for...</p>
+                </div>
+
+                <div class="research-item">
+                    <h3>[Title of Working Paper 3]</h3>
+                    <div class="authors">[Co-author Name], Zhiyu Lu, [Co-author Name]</div>
+                    <div class="journal">Working Paper, 2024</div>
+                    <p>[Insert abstract here]. This paper explores... by leveraging large language models to process... We find that... This contributes to our understanding of...</p>
+                </div>
+            </div>
+
+            </section>
+
+        <section id="cv" class="content-section">
+            <h2>Curriculum Vitae</h2>
+
+            <div class="cv-section">
+                <h3>Education</h3>
+                <div class="cv-item">
+                    <h4>Ph.D. Candidate in Finance</h4>
+                    <div class="period">Central University of Finance and Economics, Beijing, China, [Year] - Present</div>
+                </div>
+                <div class="cv-item">
+                    <h4>Bachelor of [Degree, e.g., Economics]</h4>
+                    <div class="period">[Your Undergraduate University], [City, Country], [Year] - [Year]</div>
+                </div>
+            </div>
+
+            <div class="cv-section">
+                <h3>Research Interests</h3>
+                <div class="cv-item">
+                    <div class="details">
+                        Political Economy<br>
+                        Computational Social Science (Text Analysis, LLMs)<br>
+                        Development Economics<br>
+                        Public Finance<br>
+                        Econometrics
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cv-section">
+                <h3>Research & Teaching Experience</h3>
+                 <div class="cv-item">
+                    <h4>Research Group Lead</h4>
+                    <div class="period">Central University of Finance and Economics, 2025</div>
+                    <div class="details">Mentored a group of undergraduate students (freshman to junior) on research projects using judicial judgment databases and five-year plan policy texts.</div>
+                </div>
+                <div class="cv-item">
+                    <h4>Research Assistant</h4>
+                    <div class="period">[University/Institution], [Year] - [Year]</div>
+                    <div class="details">Assisted Prof. [Professor's Name] on projects related to...</div>
+                </div>
+            </div>
+
+            <div class="cv-section">
+                <h3>Conference Presentations</h3>
+                <div class="cv-item">
+                    <h4>[Title of your paper]</h4>
+                    <div class="period">11th China Organizational Economics Symposium, Shanghai, Sep 2025</div>
+                </div>
+                <div class="cv-item">
+                    <h4>[Title of another paper]</h4>
+                    <div class="period">[Name of Conference], [Location], [Date]</div>
+                </div>
+            </div>
+
+            <div class="cv-section">
+                <h3>Honors and Awards</h3>
+                <div class="cv-item">
+                    <h4>[Name of Award or Scholarship]</h4>
+                    <div class="period">[Institution], [Year]</div>
+                </div>
+                <div class="cv-item">
+                    <h4>[Name of Award or Scholarship]</h4>
+                    <div class="period">[Institution], [Year]</div>
+                </div>
+            </div>
+            
+            <div class="cv-section">
+                <h3>Skills</h3>
+                <div class="cv-item">
+                    <div class="details">
+                        <strong>Programming:</strong> Python (Pandas, Numpy, Scikit-learn, TensorFlow), R, Stata<br>
+                        <strong>Other:</strong> LaTeX, SQL, Git
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="cv-cn" class="content-section">
+            <h2>中文简历</h2>
+
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h3>陆知雨 (Zhiyu Lu)</h3>
+                <p>中央财经大学 财政学博士在读<br>
+                   中国财政发展协同创新中心<br>
+                   邮箱: mark.lu589698@outlook.com
+                </p>
+            </div>
+
+            <div class="cv-section">
+                <h3>教育背景</h3>
+                <div class="cv-item">
+                    <h4>博士 (财政学)</h4>
+                    <div class="period">中央财经大学, 中国财政发展协同创新中心, [入学年份] - 至今</div>
+                </div>
+                <div class="cv-item">
+                    <h4>[学士学位，例如：经济学学士]</h4>
+                    <div class="period">[你的本科院校], [就读城市], [年份] - [年份]</div>
+                </div>
+            </div>
+
+            <div class="cv-section">
+                <h3>研究方向</h3>
+                <div class="cv-item">
+                    <div class="details">
+                        政治经济学<br>
+                        计算社会科学 (文本分析, 大语言模型应用)<br>
+                        发展经济学<br>
+                        公共财政与政策评估
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cv-section">
+                <h3>学术经历</h3>
+                 <div class="cv-item">
+                    <h4>本科生科研项目指导</h4>
+                    <div class="period">中央财经大学, 2025年</div>
+                    <div class="details">指导一个由大一至大三学生组成的科研小组，使用司法判决数据库和“五年规划”政策文本数据库开展研究项目。</div>
+                </div>
+                <div class="cv-item">
+                    <h4>会议报告</h4>
+                    <div class="period">第十一届中国组织经济学研讨会, 2025年9月</div>
+                    <div class="details">报告论文: [你的论文题目]</div>
+                </div>
+                 <div class="cv-item">
+                    <h4>研究助理</h4>
+                    <div class="period">[机构名称], [职位], [年份] - [年份]</div>
+                    <div class="details">担任 [教授姓名] 教授的研究助理，协助处理...</div>
+                </div>
+            </div>
+            
+            <div class="cv-section">
+                <h3>荣誉与奖项</h3>
+                <div class="cv-item">
+                    <h4>[奖项或奖学金名称]</h4>
+                    <div class="period">[颁发机构], [年份]</div>
+                </div>
+                <div class="cv-item">
+                    <h4>[奖项或奖学金名称]</h4>
+                    <div class="period">[颁发机构], [年份]</div>
+                </div>
+            </div>
+
+            <div class="cv-section">
+                <h3>专业技能</h3>
+                <div class="cv-item">
+                    <div class="details">
+                       <ul>
+                           <li><strong>编程语言:</strong> Python (熟练使用 Pandas, Numpy, Scikit-learn, TensorFlow 等库), R, Stata</li>
+                           <li><strong>文本分析:</strong> 熟悉大语言模型(LLMs)API调用、自然语言处理(NLP)基本流程</li>
+                           <li><strong>其他工具:</strong> LaTeX, SQL, Git</li>
+                       </ul>
+                    </div>
+                </div>
+            </div>
+            
+        </section>
+
+    </div>
+
+    <script>
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.content-section');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault(); // 阻止默认锚点跳转
+                const targetSection = this.getAttribute('data-section');
+                
+                // 更新导航链接的 active 状态
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                // 切换内容板块的 active 状态
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                document.getElementById(targetSection).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
