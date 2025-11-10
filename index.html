@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zhiyu Lu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            color: #333;
+            background-color: #fff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px 40px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: 300;
+            color: #666;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        nav {
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            padding: 20px 0;
+            margin-bottom: 60px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #666;
+            font-size: 1.1em;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: #000;
+            background-color: #f5f5f5;
+            padding: 5px 10px;
+        }
+
+        .content-section {
+            display: none;
+            padding: 40px 0;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .profile-container {
+            display: flex;
+            gap: 60px;
+            align-items: flex-start;
+            margin-bottom: 40px;
+        }
+
+        .profile-image {
+            flex-shrink: 0;
+        }
+
+        .profile-image img {
+            width: 300px;
+            height: auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .profile-info h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .profile-info p {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        .profile-info strong {
+            font-weight: 600;
+        }
+
+        .bio {
+            text-align: justify;
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+
+        .research-item {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .research-item:last-child {
+            border-bottom: none;
+        }
+
+        .research-item h3 {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .research-item .authors {
+            color: #666;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+
+        .research-item .journal {
+            color: #888;
+            margin-bottom: 15px;
+        }
+
+        .cv-section {
+            margin-bottom: 40px;
+        }
+
+        .cv-section h3 {
+            font-size: 1.4em;
+            color: #333;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .cv-item {
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+
+        .cv-item h4 {
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .cv-item .period {
+            color: #888;
+            font-size: 0.95em;
+            margin-bottom: 5px;
+        }
+
+        .cv-item .details {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .profile-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .profile-image img {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 20px;
+                align-items: center;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>陆知雨</h1>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a class="nav-link active" data-section="home">HOME</a></li>
+                <li><a class="nav-link" data-section="research">RESEARCH</a></li>
+                <li><a class="nav-link" data-section="cv">CV</a></li>
+            </ul>
+        </nav>
+
+        <!-- Home Section -->
+        <section id="home" class="content-section active">
+            <div class="profile-container">
+                <div class="profile-image">
+                    <img src="https://via.placeholder.com/300x400/cccccc/666666?text=Your+Photo" alt="个人照片">
+                </div>
+                <div class="profile-info">
+                    <h2>Appointments:</h2>
+                    <p>PhD, 财政学</p>
+                    <p><strong>Email:</strong> luzhiyu@email.cufe.edu.cn</p>
+                </div>
+            </div>
+
+            <div class="bio">
+                <p>我是陆知雨，现就读中央财经大学，中国财政发展协同创新中心财政学博士，研究方向包括政治经济学、计算语言学、发展经济学等领域。</p>
+            </div>
+        </section>
+
+        <!-- Research Section -->
+        <section id="research" class="content-section">
+            <h2 style="font-size: 1.8em; margin-bottom: 40px; color: #333;">Research</h2>
+
+            <div class="research-item">
+                <h3>研究论文标题一</h3>
+                <div class="authors">作者姓名, 合作者姓名</div>
+                <div class="journal">期刊名称, 年份, 卷(期): 页码</div>
+                <p>这里是论文摘要或简介。描述研究的主要发现和贡献。可以包含研究方法、数据来源和主要结论等信息。</p>
+            </div>
+
+            <div class="research-item">
+                <h3>研究论文标题二</h3>
+                <div class="authors">作者姓名, 合作者姓名, 其他作者</div>
+                <div class="journal">期刊名称, 年份, 卷(期): 页码</div>
+                <p>这里是论文摘要或简介。描述研究的主要发现和贡献。可以包含研究方法、数据来源和主要结论等信息。</p>
+            </div>
+
+            <div class="research-item">
+                <h3>工作论文标题</h3>
+                <div class="authors">作者姓名, 合作者姓名</div>
+                <div class="journal">Working Paper, 年份</div>
+                <p>这里是论文摘要或简介。描述研究的主要发现和贡献。可以包含研究方法、数据来源和主要结论等信息。</p>
+            </div>
+        </section>
+
+        <!-- CV Section -->
+        <section id="cv" class="content-section">
+            <h2 style="font-size: 1.8em; margin-bottom: 40px; color: #333;">Curriculum Vitae</h2>
+
+            <div class="cv-section">
+                <h3>教育背景</h3>
+                <div class="cv-item">
+                    <h4>博士学位，经济学</h4>
+                    <div class="period">某某大学, 20XX - 20XX</div>
+                    <div class="details">论文题目：XXXX</div>
+                </div>
+                <div class="cv-item">
+                    <h4>学士学位，经济学</h4>
+                    <div class="period">某某大学, 20XX - 20XX</div>
+                </div>
+            </div>
+
+            <div class="cv-section">
+                <h3>职业经历</h3>
+                <div class="cv-item">
+                    <h4>助理教授</h4>
+                    <div class="period">某某大学某某学院, 20XX - 至今</div>
+                </div>
+                <div class="cv-item">
+                    <h4>博士后研究员</h4>
+                    <div class="period">某某大学某某研究所, 20XX - 20XX</div>
+                </div>
+            </div>
+
+            <div class="cv-section">
+                <h3>研究领域</h3>
+                <div class="cv-item">
+                    <div class="details">
+                        发展经济学<br>
+                        环境经济学<br>
+                        政策评估<br>
+                        中国经济
+                    </div>
+                </div>
+            </div>
+
+            <div class="cv-section">
+                <h3>荣誉与奖项</h3>
+                <div class="cv-item">
+                    <h4>某某奖项</h4>
+                    <div class="period">颁发机构, 20XX</div>
+                </div>
+                <div class="cv-item">
+                    <h4>某某奖学金</h4>
+                    <div class="period">颁发机构, 20XX</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.content-section');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                const targetSection = this.getAttribute('data-section');
+                
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                document.getElementById(targetSection).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
