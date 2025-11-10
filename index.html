@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zhiyu Lu</title>
+    <title>Zhiyu Lu (陆知雨)</title>
     <style>
         * {
             margin: 0;
@@ -108,11 +108,24 @@
         .profile-info strong {
             font-weight: 600;
         }
+        
+        .profile-info a {
+            color: #337ab7;
+            text-decoration: none;
+        }
+        .profile-info a:hover {
+            text-decoration: underline;
+        }
+
 
         .bio {
             text-align: justify;
             line-height: 1.8;
             font-size: 1.05em;
+        }
+        
+        .bio p {
+             margin-bottom: 15px;
         }
 
         .research-item {
@@ -141,16 +154,46 @@
             color: #888;
             margin-bottom: 15px;
         }
+        
+        .research-item .conference {
+            font-weight: bold;
+            color: #555;
+            margin-top: 10px;
+        }
 
         .cv-section {
             margin-bottom: 40px;
         }
         
         /* CV 页面共享标题样式 */
-        #cv h2, #cv-cn h2 {
+        #cv h2, #cv-cn h2, #research h2 {
             font-size: 1.8em; 
             margin-bottom: 40px; 
             color: #333;
+        }
+        
+        .cv-contact-info {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .cv-contact-info h3 {
+             font-size: 1.5em;
+             margin-bottom: 10px;
+        }
+        
+        .cv-contact-info p {
+            font-size: 1.1em;
+            color: #555;
+            line-height: 1.7;
+        }
+        
+        .cv-contact-info a {
+            color: #337ab7;
+            text-decoration: none;
+        }
+        .cv-contact-info a:hover {
+            text-decoration: underline;
         }
 
         .cv-section h3 {
@@ -171,6 +214,13 @@
             color: #333;
             margin-bottom: 5px;
         }
+        
+        .cv-item h4 .advisor {
+            font-size: 0.9em;
+            font-weight: normal;
+            font-style: italic;
+            color: #666;
+        }
 
         .cv-item .period {
             color: #888;
@@ -184,8 +234,18 @@
         }
         
         .cv-item .details ul {
-            list-style-type: disc; /* 为中文CV中的技能列表添加点 */
+            list-style-type: disc;
             margin-left: 20px;
+            margin-top: 5px;
+        }
+        
+        .cv-item .details-flex {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .cv-item .details-flex .major-rank {
+             color: #666;
         }
 
 
@@ -209,6 +269,10 @@
             h1 {
                 font-size: 2em;
             }
+            
+            .cv-item .details-flex {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -223,7 +287,8 @@
                 <li><a class="nav-link active" data-section="home">HOME</a></li>
                 <li><a class="nav-link" data-section="research">RESEARCH</a></li>
                 <li><a class="nav-link" data-section="cv">CV (EN)</a></li>
-                <li><a class="nav-link" data-section="cv-cn">中文简历</a></li> </ul>
+                <li><a class="nav-link" data-section="cv-cn">中文简历</a></li>
+            </ul>
         </nav>
 
         <section id="home" class="content-section active">
@@ -233,120 +298,91 @@
                 </div>
                 <div class="profile-info">
                     <h2>Affiliation:</h2>
-                    <p>Ph.D. Candidate in Finance, Central University of Finance and Economics (CUFE)</p>
-                    <p>Affiliation: Center for China Fiscal Development</p>
-                    <p><strong>Email:</strong> mark.lu589698@outlook.com</p>
+                    <p>
+                        Ph.D. Candidate in Public Finance <br>
+                        Center for China Fiscal Development<br>
+                        Central University of Finance and Economics (CUFE)
+                    </p>
+                    <p><strong>Email:</strong> <a href="mailto:mark.lu589698@outlook.com">mark.lu589698@outlook.com</a> </p>
+                    <p><strong>GitHub:</strong> <a href="https://github.com/luzhiyu-econ" target="_blank">github.com/luzhiyu-econ</a> </p>
                 </div>
             </div>
 
             <div class="bio">
-                <p>I am Zhiyu Lu, a Ph.D. candidate in Finance at the Central University of Finance and Economics (CUFE). My research interests lie at the intersection of <strong>political economy</strong>, <strong>development economics</strong>, and <strong>public finance</strong>.</p>
-                <p>I am particularly interested in applying methods from computational linguistics and machine learning (e.g., text analysis, LLMs) to analyze policy texts, institutional dynamics, and their impact on economic outcomes. My current work explores policy diffusion and institutional analysis within the Chinese context.</p>
+                <p>I am Zhiyu Lu, a Ph.D. candidate in Public Finance at the Central University of Finance and Economics (CUFE).</p>
+                <p>My research interests lie at the intersection of <strong>Public Finance</strong>, <strong>Political Economy</strong>, and <strong>Computational Social Science</strong>. I am particularly passionate about applying computational linguistics and machine learning methods (e.g., LLM text analysis, text mining) to analyze government policies, institutional dynamics, and their economic impacts[cite: 19, 26, 53].</p>
+                <p>My current work focuses on fiscal resilience [cite: 11, 13], digital governance , and enterprise innovation , often leveraging large-scale text data from government procurement contracts [cite: 19, 20], corporate annual reports , and historical archives.</p>
             </div>
         </section>
 
         <section id="research" class="content-section">
-            <h2 style="font-size: 1.8em; margin-bottom: 40px; color: #333;">Research</h2>
-            
-            <div class="cv-section">
-                <h3>Working Papers</h3>
-                
-                <div class="research-item">
-                    <h3>[Title of Working Paper 1]</h3>
-                    <div class="authors">Zhiyu Lu</div>
-                    <div class="journal">Working Paper, 2025</div>
-                    <p>[Insert abstract here]. This paper investigates... using... We employ a... methodology and find that... Our results contribute to the literature on...</p>
-                </div>
+            <h2>Research</h2>
 
-                <div class="research-item">
-                    <h3>[Title of Working Paper 2]</h3>
-                    <div class="authors">Zhiyu Lu, [Co-author Name]</div>
-                    <div class="journal">Working Paper, 2025</div>
-                    <p>[Insert abstract here]. This study examines the relationship between... and... Using a novel dataset derived from..., we show that... This research has implications for...</p>
-                </div>
-
-                <div class="research-item">
-                    <h3>[Title of Working Paper 3]</h3>
-                    <div class="authors">[Co-author Name], Zhiyu Lu, [Co-author Name]</div>
-                    <div class="journal">Working Paper, 2024</div>
-                    <p>[Insert abstract here]. This paper explores... by leveraging large language models to process... We find that... This contributes to our understanding of...</p>
-                </div>
-            </div>
-
-            </section>
+            Forthcoming...
+        </section>
 
         <section id="cv" class="content-section">
             <h2>Curriculum Vitae</h2>
+            
+            <div class="cv-contact-info">
+                <h3>LU ZHIYU </h3>
+                <p>
+                    Email: <a href="mailto:mark.lu589698@outlook.com">mark.lu589698@outlook.com</a> <br>
+                    GitHub: <a href="https://github.com/luzhiyu-econ" target="_blank">https://github.com/luzhiyu-econ</a> 
+                </p>
+            </div>
 
             <div class="cv-section">
                 <h3>Education</h3>
                 <div class="cv-item">
-                    <h4>Ph.D. Candidate in Finance</h4>
-                    <div class="period">Central University of Finance and Economics, Beijing, China, [Year] - Present</div>
+                    <h4>Bachelor in Public Finance </h4>
+                    <div class="period">Central University of Finance and Economics, 2022.09 - 2026.06 (Expected) </div>
+                    <div class="details details-flex">
+                    </div>
                 </div>
                 <div class="cv-item">
-                    <h4>Bachelor of [Degree, e.g., Economics]</h4>
-                    <div class="period">[Your Undergraduate University], [City, Country], [Year] - [Year]</div>
+                    <h4>Ph.D. in Public Finance </h4>
+                    <div class="period">Central University of Finance and Economics, Center for China Fiscal Development, 2026.09(Expected) - </div>
+                    <div class="details details-flex">
+                    </div>
                 </div>
-            </div>
-
+                </div>
+            
             <div class="cv-section">
-                <h3>Research Interests</h3>
+                <h3>Publications / Working Papers</h3>
                 <div class="cv-item">
+                    <h4>Can Digital Governance Enhance Urban Entrepreneurial Vitality? - Evidence Based on Government Procurement Data </h4>
                     <div class="details">
-                        Political Economy<br>
-                        Computational Social Science (Text Analysis, LLMs)<br>
-                        Development Economics<br>
-                        Public Finance<br>
-                        Econometrics
+                        Admitted by The 10th China Organizational Economics Symposium.<br>
+                        Uses fine-tuned ERNIE LLM to analyze >3 million government procurement contracts[cite: 19, 20].
                     </div>
                 </div>
             </div>
-            
-            <div class="cv-section">
-                <h3>Research & Teaching Experience</h3>
-                 <div class="cv-item">
-                    <h4>Research Group Lead</h4>
-                    <div class="period">Central University of Finance and Economics, 2025</div>
-                    <div class="details">Mentored a group of undergraduate students (freshman to junior) on research projects using judicial judgment databases and five-year plan policy texts.</div>
-                </div>
-                <div class="cv-item">
-                    <h4>Research Assistant</h4>
-                    <div class="period">[University/Institution], [Year] - [Year]</div>
-                    <div class="details">Assisted Prof. [Professor's Name] on projects related to...</div>
-                </div>
-            </div>
 
             <div class="cv-section">
-                <h3>Conference Presentations</h3>
+                <h3>Research Experience </h3>
                 <div class="cv-item">
-                    <h4>[Title of your paper]</h4>
-                    <div class="period">11th China Organizational Economics Symposium, Shanghai, Sep 2025</div>
-                </div>
-                <div class="cv-item">
-                    <h4>[Title of another paper]</h4>
-                    <div class="period">[Name of Conference], [Location], [Date]</div>
-                </div>
-            </div>
-
-            <div class="cv-section">
-                <h3>Honors and Awards</h3>
-                <div class="cv-item">
-                    <h4>[Name of Award or Scholarship]</h4>
-                    <div class="period">[Institution], [Year]</div>
-                </div>
-                <div class="cv-item">
-                    <h4>[Name of Award or Scholarship]</h4>
-                    <div class="period">[Institution], [Year]</div>
-                </div>
-            </div>
-            
-            <div class="cv-section">
-                <h3>Skills</h3>
-                <div class="cv-item">
+                    <h4>Project Leader, LLM Training for Marriage Litigation Prediction </h4>
+                    <div class="period">Mar 2025 - Present </div>
                     <div class="details">
-                        <strong>Programming:</strong> Python (Pandas, Numpy, Scikit-learn, TensorFlow), R, Stata<br>
-                        <strong>Other:</strong> LaTeX, SQL, Git
+                        <span class="advisor">Advisor: Dongming Yao</span> 
+                        <ul>
+                            <li>Leading the development of a specialized LLM for predicting outcomes in marriage litigation cases.</li>
+                            <li>Curating and structuring a dataset of Chinese marriage litigation case documents.</li>
+                            <li>Implementing two-stage fine-tuning (knowledge injection and case-specific tuning) on a base LLM architecture.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="cv-item">
+                    <h4>Research Assistant, Fiscal Resilience and Land Finance Project </h4>
+                    <div class="period">Jan 2024 - Present </div>
+                    <div class="details">
+                        <span class="advisor">Lincoln Institute of Land Policy & Beijing University, Advisor: Yang He</span> 
+                        <ul>
+                            <li>Investigating the relationship between land finance dependency and local government fiscal resilience.</li>
+                            <li>Constructed a composite index of fiscal resilience using the entropy weight method.</li>
+                            <li>Contributed to working papers: "Can Debt Resolution Enhance Urban Fiscal Resilience?" and "Make or Break: Land Public Finance and Fiscal Resilience." [cite: 34, 35]</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -355,81 +391,78 @@
         <section id="cv-cn" class="content-section">
             <h2>中文简历</h2>
 
-            <div style="text-align: center; margin-bottom: 30px;">
-                <h3>陆知雨 (Zhiyu Lu)</h3>
-                <p>中央财经大学 财政学博士在读<br>
-                   中国财政发展协同创新中心<br>
-                   邮箱: mark.lu589698@outlook.com
+            <div class="cv-contact-info">
+                <h3>陆知雨 (LU ZHIYU) </h3>
+                <p>
+                    邮箱: <a href="mailto:mark.lu589698@outlook.com">mark.lu589698@outlook.com</a> <br>
+                    GitHub: <a href="https://github.com/luzhiyu-econ" target="_blank">https://github.com/luzhiyu-econ</a> 
                 </p>
             </div>
 
             <div class="cv-section">
                 <h3>教育背景</h3>
                 <div class="cv-item">
-                    <h4>博士 (财政学)</h4>
-                    <div class="period">中央财经大学, 中国财政发展协同创新中心, [入学年份] - 至今</div>
+                    <h4>本科 (财政学) </h4>
+                    <div class="period">中央财经大学, 2022.09 - 2026.06 (预计) </div>
                 </div>
                 <div class="cv-item">
-                    <h4>[学士学位，例如：经济学学士]</h4>
-                    <div class="period">[你的本科院校], [就读城市], [年份] - [年份]</div>
+                    <h4>博士 (财政学) </h4>
+                    <div class="period">中央财经大学, 2026.09(Expected) - </div>
+                </div>
+                </div>
+            
+            <div class="cv-section">
+                <h3>研究成果 </h3>
+                <div class="cv-item">
+                    <h4>数字治理能否提升城市创业活力? 基于政府采购数据的证据 </h4>
+                    <div class="details">
+                        第十届中国组织经济学研讨会(2024)入选论文 <br>
+                        核心创新：使用手动标注数据微调ERNIE大模型，构建政府采购文本分析专用模型，并应用于处理超过三百万份政府采购合同 [cite: 19, 20]。
+                    </div>
                 </div>
             </div>
 
             <div class="cv-section">
-                <h3>研究方向</h3>
-                <div class="cv-item">
+                <h3>研究经历 </h3>
+                 <div class="cv-item">
+                    <h4>项目负责人, 婚姻诉讼预测的LLM训练 </h4>
+                    <div class="period">2025年3月 - 至今 </div>
                     <div class="details">
-                        政治经济学<br>
-                        计算社会科学 (文本分析, 大语言模型应用)<br>
-                        发展经济学<br>
-                        公共财政与政策评估
+                        <span class="advisor">指导教师: 姚东明</span> 
+                        <ul>
+                            <li>主导开发用于预测婚姻诉讼案件结果的专用大语言模型 。</li>
+                            <li>整理和构建中国婚姻诉讼案件文书的数据集 。</li>
+                            <li>在基础LLM架构上实施两阶段微调（知识注入和案例特定微调） 。</li>
+                        </ul>
                     </div>
                 </div>
-            </div>
-            
-            <div class="cv-section">
-                <h3>学术经历</h3>
-                 <div class="cv-item">
-                    <h4>本科生科研项目指导</h4>
-                    <div class="period">中央财经大学, 2025年</div>
-                    <div class="details">指导一个由大一至大三学生组成的科研小组，使用司法判决数据库和“五年规划”政策文本数据库开展研究项目。</div>
+                <div class="cv-item">
+                    <h4>研究助理, 财政韧性与土地财政项目 </h4>
+                    <div class="period">2024年1月 - 至今 </div>
+                    <div class="details">
+                        <span class="advisor">林肯土地政策研究院 & 北京大学, 指导教师: 何杨</span> 
+                        <ul>
+                            <li>研究后疫情时代中国土地财政依赖与地方政府财政韧性之间的关系 。</li>
+                            <li>使用熵权法构建财政韧性综合指数 。</li>
+                            <li>为工作论文《债务化解能否提升城市财政韧性?》和《Make or Break: Land Public Finance and Fiscal Resilience》做出贡献 [cite: 34, 35]。</li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="cv-item">
-                    <h4>会议报告</h4>
-                    <div class="period">第十一届中国组织经济学研讨会, 2025年9月</div>
-                    <div class="details">报告论文: [你的论文题目]</div>
-                </div>
-                 <div class="cv-item">
-                    <h4>研究助理</h4>
-                    <div class="period">[机构名称], [职位], [年份] - [年份]</div>
-                    <div class="details">担任 [教授姓名] 教授的研究助理，协助处理...</div>
-                </div>
-            </div>
-            
-            <div class="cv-section">
-                <h3>荣誉与奖项</h3>
-                <div class="cv-item">
-                    <h4>[奖项或奖学金名称]</h4>
-                    <div class="period">[颁发机构], [年份]</div>
-                </div>
-                <div class="cv-item">
-                    <h4>[奖项或奖学金名称]</h4>
-                    <div class="period">[颁发机构], [年份]</div>
+                    <h4>项目负责人, 历史文本分析项目 </h4>
+                    <div class="period">2023年10月 - 2024年2月 </div>
+                    <div class="details">
+                        <span class="advisor">独立研究, 指导教师: 阮睿</span> 
+                        <ul>
+                            <li>使用历史文本（《清实录》）研究清代海关改革（“常关”）对地方治理能力的影响 。</li>
+                            <li>应用文本挖掘技术（Python, 文本匹配, Word2Vec）识别和量化反税民变实例 。</li>
+                            <li>进行了严格的数据验证，识别了以往相关研究中源数据使用的不一致性 。</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
-            <div class="cv-section">
-                <h3>专业技能</h3>
-                <div class="cv-item">
-                    <div class="details">
-                       <ul>
-                           <li><strong>编程语言:</strong> Python (熟练使用 Pandas, Numpy, Scikit-learn, TensorFlow 等库), R, Stata</li>
-                           <li><strong>文本分析:</strong> 熟悉大语言模型(LLMs)API调用、自然语言处理(NLP)基本流程</li>
-                           <li><strong>其他工具:</strong> LaTeX, SQL, Git</li>
-                       </ul>
-                    </div>
-                </div>
-            </div>
+         </div>
             
         </section>
 
