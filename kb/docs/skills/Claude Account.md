@@ -10,16 +10,14 @@ tags:
 	其实也可以使用自己的谷歌账号直接登录，但是也同样存在被封号风险，这是目前没法解决的，最好的方法就是保持vpn尽可能优质。可以在https://www.ipipseek.com 上查看vpn质量
 3. 登陆谷歌账号绑定信用卡
     
-    1. 登陆账号，点击manage your google account
-        
-        ![Screenshot 2026-03-03 at 9.55.54 AM](file:///Users/mark/Library/Application%20Support/typora-user-images/Screenshot%202026-03-03%20at%209.55.54%E2%80%AFAM.png?lastModify=1772806381)
+    1. 登陆账号，点击manage your google account![[Screenshot 2026-03-06 at 10.37.27 PM.png]]
         
     
     2. 在wallet andsubscriptions中选择 manage payment methods
         
-    3. 而后选择添加信用卡![Screenshot 2026-03-03 at 9.59.17 AM](file:///Users/mark/Library/Application%20Support/typora-user-images/Screenshot%202026-03-03%20at%209.59.17%E2%80%AFAM.png?lastModify=1772806381)
+    3. 而后选择添加信用卡![[Screenshot 2026-03-06 at 10.37.54 PM.png]]
     4. 另外两个方案与该方案没有本质区别，对苹果账号和谷歌账号，如果是手机应用商店下载，则可通过应用商店订阅。这里除了使用信用卡，也可以直接支付宝购买苹果、谷歌商店充值卡充值。    
     
-1. 登陆claude账号（参照它的教程[https://xcnwunejjtg9.feishu.cn/wiki/VAA9w3A4AiFZ9NkR1g7c2RWUncb](https://xcnwunejjtg9.feishu.cn/wiki/VAA9w3A4AiFZ9NkR1g7c2RWUncb)）
+4. 登陆claude账号（参照它的教程[https://xcnwunejjtg9.feishu.cn/wiki/VAA9w3A4AiFZ9NkR1g7c2RWUncb](https://xcnwunejjtg9.feishu.cn/wiki/VAA9w3A4AiFZ9NkR1g7c2RWUncb)）
     
-2. 在claude升级pro中选择使用谷歌支付即可
+5. 在claude升级pro中选择使用谷歌支付即可
