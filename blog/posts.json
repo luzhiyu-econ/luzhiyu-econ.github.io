@@ -1,8 +1,8 @@
 [
   {
     "id": "jrnldaily",
-    "title": "构建属于自己的经济学文献库：JRNL DAILY 上线",
-    "date": "2026-03-06",
+    "title": "构建属于自己的经济学文献库",
+    "date": "2026-01-10",
     "excerpt": "经济学文献库的搭建心得，以及对于JRNL DAILY的介绍。",
     "tags": ["经济学文献", "大语言模型", "教程"],
     "file": "blog/posts/jrnldaily/index.md",
@@ -10,20 +10,20 @@
   },
   {
     "id": "python-ds-tutorial",
-    "title": "Python 数据科学完整教程：从环境配置到机器学习",
-    "date": "2026-03-06",
+    "title": "Python 数据科学完整教程",
+    "date": "2025-10-31",
     "excerpt": "面向社科研究者的 Python 数据科学入门指南，涵盖环境搭建、基础语法、NumPy/Pandas/Matplotlib、Scikit-learn 机器学习，以及 AI 辅助编程技巧。",
     "tags": ["Python", "数据科学", "教程"],
     "file": "blog/posts/python-ds-tutorial/index.md",
     "base": "blog/posts/python-ds-tutorial/"
   },
   {
-    "id": "hello-world",
-    "title": "Hello World — 我的第一篇博客",
-    "date": "2026-03-06",
-    "excerpt": "欢迎来到我的个人博客！在这里我会分享关于公共财政、计算社会科学和学术生活的思考。",
-    "tags": ["随笔", "公告"],
-    "file": "blog/posts/hello-world/index.md",
-    "base": "blog/posts/hello-world/"
+    "id": "cufe_courses",
+    "title": "把本科生阶段的课程资料整理成了一个网站",
+    "date": "2025-06-06",
+    "excerpt": "信息不对称不应该成为学生差距的来源，分享信息让考试“市场”更透明。",
+    "tags": ["项目", "开源"],
+    "file": "blog/posts/cufe_courses/index.md",
+    "base": "blog/posts/cufe_courses/"
   }
 ]
