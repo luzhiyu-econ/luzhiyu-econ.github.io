@@ -1,6 +1,9 @@
-# 公共财政文献笔记
+---
+title: 公共财政文献笔记
+tags: [public-finance, literature]
+---
 
-#public-finance #literature
+# 公共财政文献笔记
 
 ## 概述
 

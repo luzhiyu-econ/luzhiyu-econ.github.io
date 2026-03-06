@@ -24,9 +24,40 @@
     });
   }
 
+  function stripFrontmatter(md) {
+    return md.replace(/^---\s*\n[\s\S]*?\n---\s*\n/, "");
+  }
+
+  function resolveWikilink(name) {
+    const lower = name.toLowerCase().replace(/\s+/g, "-");
+    return allDocs.find(
+      (d) =>
+        d.path.toLowerCase().endsWith("/" + lower + ".md") ||
+        d.path.toLowerCase() === "docs/" + lower + ".md"
+    );
+  }
+
+  function renderObsidianSyntax(md) {
+    md = md.replace(/!\[\[([^\]|]+?)(\|([^\]]*))?\]\]/g, (_, file, __, alt) => {
+      return `![${alt || file}](${file})`;
+    });
+
+    md = md.replace(/(?<!!)\[\[([^\]|]+?)(\|([^\]]*))?\]\]/g, (_, target, __, display) => {
+      const doc = resolveWikilink(target);
+      if (doc) {
+        return `[${display || target}](#${doc.path})`;
+      }
+      return `[${display || target}](#)`;
+    });
+
+    return md;
+  }
+
   function renderMarkdown(md) {
     if (typeof marked === "undefined") return `<pre>${md}</pre>`;
 
+    md = stripFrontmatter(md);
+    md = renderObsidianSyntax(md);
     const { text, blocks, inlines } = extractMath(md);
     let html = marked.parse(text);
     html = restoreMath(html, blocks, inlines);
@@ -251,6 +282,14 @@
           activeTag = tag.dataset.tag;
           renderTagCloud();
           applyFilter();
+        });
+      });
+
+      content.querySelectorAll('a[href^="#docs/"]').forEach((a) => {
+        a.addEventListener("click", (e) => {
+          e.preventDefault();
+          const docPath = a.getAttribute("href").slice(1);
+          loadDocument(docPath);
         });
       });
 

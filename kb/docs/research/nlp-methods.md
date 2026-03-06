@@ -1,6 +1,9 @@
-# NLP 方法论笔记
+---
+title: NLP 方法论笔记
+tags: [nlp, methodology]
+---
 
-#nlp #methodology
+# NLP 方法论笔记
 
 ## 文本分类
 
