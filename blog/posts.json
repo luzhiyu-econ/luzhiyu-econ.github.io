@@ -1,5 +1,13 @@
 [
   {
+    "id": "python-ds-tutorial",
+    "title": "Python 数据科学完整教程：从环境配置到机器学习",
+    "date": "2026-03-06",
+    "excerpt": "面向社科研究者的 Python 数据科学入门指南，涵盖环境搭建、基础语法、NumPy/Pandas/Matplotlib、Scikit-learn 机器学习，以及 AI 辅助编程技巧。",
+    "tags": ["Python", "数据科学", "教程"],
+    "file": "blog/posts/python_ds_tutorial.md"
+  },
+  {
     "id": "hello-world",
     "title": "Hello World — 我的第一篇博客",
     "date": "2026-03-06",
