@@ -1,0 +1,25 @@
+{
+  "tree": [
+    {
+      "title": "Welcome",
+      "path": "docs/welcome.md",
+      "tags": ["guide"]
+    },
+    {
+      "title": "Research",
+      "type": "folder",
+      "children": [
+        {
+          "title": "公共财政文献笔记",
+          "path": "docs/research/public-finance-notes.md",
+          "tags": ["public-finance", "literature"]
+        },
+        {
+          "title": "NLP 方法论笔记",
+          "path": "docs/research/nlp-methods.md",
+          "tags": ["nlp", "methodology"]
+        }
+      ]
+    }
+  ]
+}

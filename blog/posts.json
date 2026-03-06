@@ -1,0 +1,10 @@
+[
+  {
+    "id": "hello-world",
+    "title": "Hello World — 我的第一篇博客",
+    "date": "2026-03-06",
+    "excerpt": "欢迎来到我的个人博客！在这里我会分享关于公共财政、计算社会科学和学术生活的思考。",
+    "tags": ["随笔", "公告"],
+    "file": "blog/posts/hello-world.md"
+  }
+]

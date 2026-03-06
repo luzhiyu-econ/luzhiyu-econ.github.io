@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Base — Zhiyu Lu</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/styles/github.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h1 class="sidebar-title">📚 Knowledge Base</h1>
+            <button class="sidebar-toggle" id="sidebar-close" aria-label="Close sidebar">✕</button>
+        </div>
+
+        <div class="sidebar-search">
+            <input type="text" id="tag-search" placeholder="搜索 #标签 或关键词…">
+        </div>
+
+        <div class="tag-cloud" id="tag-cloud"></div>
+
+        <nav class="file-tree" id="file-tree"></nav>
+    </aside>
+
+    <main class="kb-main">
+        <div class="kb-topbar">
+            <button class="sidebar-toggle mobile-only" id="sidebar-open" aria-label="Open sidebar">☰</button>
+            <div class="kb-breadcrumb" id="breadcrumb"></div>
+        </div>
+
+        <article class="kb-content" id="kb-content">
+            <div class="kb-welcome">
+                <p>← 从左侧选择一篇文档开始阅读</p>
+            </div>
+        </article>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/highlight.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
