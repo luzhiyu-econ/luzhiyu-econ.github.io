@@ -19,3 +19,8 @@ order: 0
 | `skills`     | 各类教程   |
 | `research`   | 研究经验总结 |
 | `reflection` | 生活反思   |
+## 导航
+
+1. 使用国际信息资源：[[VPN Theory]] [[VISA Card]] [[Claude Account]]
+2. python调用大模型 [[API Tutorial]] [[LLM Platform Trainning]]
+3. 科研工作的心得总结：[[Submit to journals]]
