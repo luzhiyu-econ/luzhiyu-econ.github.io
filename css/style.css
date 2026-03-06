@@ -396,41 +396,75 @@ img {
   margin-bottom: 32px;
 }
 
-.blog-post-detail .post-body h2 {
+/* ── Post Body: Typography ── */
+.post-body h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  line-height: 1.35;
+}
+
+.post-body h2 {
   font-size: 1.3rem;
   font-weight: 600;
-  margin: 32px 0 16px;
+  margin: 36px 0 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--color-border);
   color: var(--color-text);
 }
 
-.blog-post-detail .post-body h3 {
+.post-body h3 {
   font-size: 1.1rem;
   font-weight: 600;
-  margin: 24px 0 12px;
+  margin: 28px 0 10px;
   color: var(--color-text);
 }
 
-.blog-post-detail .post-body p {
+.post-body h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 22px 0 8px;
+  color: var(--color-text-secondary);
+}
+
+.post-body p {
   margin-bottom: 16px;
   font-size: 1.02rem;
 }
 
-.blog-post-detail .post-body pre {
-  background: #f5f5f5;
+.post-body > *:first-child {
+  margin-top: 0;
+}
+
+/* ── Post Body: Code ── */
+.post-body pre {
+  background: #f6f7f9;
+  border: 1px solid var(--color-border);
   border-radius: var(--radius);
   padding: 16px 20px;
   overflow-x: auto;
-  margin-bottom: 16px;
-  font-size: 0.9rem;
-  line-height: 1.6;
+  margin: 4px 0 18px;
+  font-size: 0.85rem;
+  line-height: 1.65;
 }
 
-.blog-post-detail .post-body code {
+.post-body code {
   font-family: "SF Mono", "Fira Code", "Consolas", monospace;
-  font-size: 0.88em;
+  font-size: 0.87em;
 }
 
-.blog-post-detail .post-body blockquote {
+.post-body p code,
+.post-body li code,
+.post-body td code {
+  background: #f0f1f3;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 0.85em;
+  word-break: break-word;
+}
+
+/* ── Post Body: Blockquote ── */
+.post-body blockquote {
   border-left: 3px solid var(--color-accent);
   padding: 12px 20px;
   margin: 16px 0;
@@ -439,13 +473,112 @@ img {
   border-radius: 0 var(--radius) var(--radius) 0;
 }
 
-.blog-post-detail .post-body ul,
-.blog-post-detail .post-body ol {
-  margin: 12px 0 16px 24px;
+.post-body blockquote p {
+  margin-bottom: 0;
 }
 
-.blog-post-detail .post-body li {
-  margin-bottom: 6px;
+/* ── Post Body: Lists ── */
+.post-body ul,
+.post-body ol {
+  margin: 8px 0 16px 24px;
+}
+
+.post-body li {
+  margin-bottom: 5px;
+  font-size: 1.02rem;
+}
+
+.post-body li > ul,
+.post-body li > ol {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+/* ── Post Body: Tables ── */
+.post-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 0.92rem;
+  overflow-x: auto;
+  display: block;
+}
+
+.post-body thead {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.post-body tbody {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.post-body th,
+.post-body td {
+  border: 1px solid var(--color-border);
+  padding: 8px 14px;
+  text-align: left;
+}
+
+.post-body th {
+  background: #f5f6f8;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.post-body tr:nth-child(even) {
+  background: #fafbfc;
+}
+
+/* ── Post Body: Images ── */
+.post-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  margin: 8px 0;
+  display: block;
+}
+
+.post-body p > img:only-child {
+  margin: 20px auto;
+}
+
+/* ── Post Body: Horizontal Rule ── */
+.post-body hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 32px 0;
+}
+
+/* ── Post Body: Math (KaTeX) ── */
+.post-body .katex-display {
+  margin: 20px 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 4px 0;
+}
+
+.post-body .katex {
+  font-size: 1.05em;
+}
+
+/* ── Heading Anchors ── */
+.heading-anchor {
+  position: relative;
+  cursor: default;
+}
+
+.heading-anchor:hover::before {
+  content: "#";
+  position: absolute;
+  left: -1.2em;
+  color: var(--color-text-muted);
+  font-weight: 400;
+  opacity: 0.5;
 }
 
 .blog-back-link {

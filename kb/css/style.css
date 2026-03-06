@@ -287,7 +287,9 @@ a:hover {
   font-size: 1rem;
 }
 
-/* Markdown rendered content */
+/* ── Markdown rendered content ── */
+
+/* Typography */
 .kb-content h1 {
   font-size: 1.75rem;
   font-weight: 700;
@@ -312,12 +314,24 @@ a:hover {
   color: var(--color-text);
 }
 
+.kb-content h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 20px 0 6px;
+  color: var(--color-text-secondary);
+}
+
+.kb-content > *:first-child {
+  margin-top: 0;
+}
+
 .kb-content p {
   margin-bottom: 14px;
   line-height: 1.8;
   font-size: 0.95rem;
 }
 
+/* Lists */
 .kb-content ul,
 .kb-content ol {
   margin: 8px 0 16px 24px;
@@ -329,6 +343,13 @@ a:hover {
   font-size: 0.95rem;
 }
 
+.kb-content li > ul,
+.kb-content li > ol {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+/* Code */
 .kb-content pre {
   background: #f5f6f8;
   border: 1px solid var(--color-border);
@@ -346,13 +367,16 @@ a:hover {
 }
 
 .kb-content p code,
-.kb-content li code {
+.kb-content li code,
+.kb-content td code {
   background: #f0f1f3;
   padding: 1px 6px;
   border-radius: 3px;
   font-size: 0.85em;
+  word-break: break-word;
 }
 
+/* Blockquote */
 .kb-content blockquote {
   border-left: 3px solid var(--color-accent);
   padding: 10px 20px;
@@ -366,11 +390,21 @@ a:hover {
   margin-bottom: 0;
 }
 
+/* Tables */
 .kb-content table {
   width: 100%;
   border-collapse: collapse;
   margin: 14px 0;
   font-size: 0.9rem;
+  display: block;
+  overflow-x: auto;
+}
+
+.kb-content thead,
+.kb-content tbody {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
 }
 
 .kb-content th,
@@ -383,18 +417,59 @@ a:hover {
 .kb-content th {
   background: #f5f6f8;
   font-weight: 600;
+  white-space: nowrap;
 }
 
+.kb-content tr:nth-child(even) {
+  background: #fafbfc;
+}
+
+/* Images */
 .kb-content img {
   max-width: 100%;
+  height: auto;
   border-radius: var(--radius);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   margin: 8px 0;
+  display: block;
 }
 
+.kb-content p > img:only-child {
+  margin: 16px auto;
+}
+
+/* Horizontal Rule */
 .kb-content hr {
   border: none;
   border-top: 1px solid var(--color-border);
   margin: 28px 0;
+}
+
+/* Math (KaTeX) */
+.kb-content .katex-display {
+  margin: 20px 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 4px 0;
+}
+
+.kb-content .katex {
+  font-size: 1.05em;
+}
+
+/* Heading Anchors */
+.heading-anchor {
+  position: relative;
+  cursor: default;
+}
+
+.heading-anchor:hover::before {
+  content: "#";
+  position: absolute;
+  left: -1.2em;
+  color: var(--color-text-muted);
+  font-weight: 400;
+  opacity: 0.5;
 }
 
 /* Inline #tags in rendered content */

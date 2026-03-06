@@ -13,7 +13,7 @@
   let blogPosts = [];
   let currentBlogView = "list";
 
-  // ── Markdown setup ──
+  // ── Markdown + Math ──
 
   function initMarked() {
     if (typeof marked === "undefined") return;
@@ -31,7 +31,56 @@
 
   function renderMarkdown(md) {
     if (typeof marked === "undefined") return `<pre>${md}</pre>`;
-    return marked.parse(md);
+
+    const { text, blocks, inlines } = extractMath(md);
+    let html = marked.parse(text);
+    html = restoreMath(html, blocks, inlines);
+    return html;
+  }
+
+  function extractMath(md) {
+    const blocks = [];
+    const inlines = [];
+
+    md = md.replace(/\$\$([\s\S]+?)\$\$/g, (_, tex) => {
+      blocks.push(tex.trim());
+      return `\n\nMATHBLOCK${blocks.length - 1}END\n\n`;
+    });
+
+    md = md.replace(/(?<!\$)\$(?!\$)([^\$\n]+?)\$(?!\$)/g, (_, tex) => {
+      inlines.push(tex.trim());
+      return `MATHINLINE${inlines.length - 1}END`;
+    });
+
+    return { text: md, blocks, inlines };
+  }
+
+  function restoreMath(html, blocks, inlines) {
+    if (typeof katex === "undefined") return html;
+
+    html = html.replace(/MATHBLOCK(\d+)END/g, (_, i) => {
+      try {
+        return katex.renderToString(blocks[+i], {
+          displayMode: true,
+          throwOnError: false,
+        });
+      } catch {
+        return `<pre class="math-error">${blocks[+i]}</pre>`;
+      }
+    });
+
+    html = html.replace(/MATHINLINE(\d+)END/g, (_, i) => {
+      try {
+        return katex.renderToString(inlines[+i], {
+          displayMode: false,
+          throwOnError: false,
+        });
+      } catch {
+        return `<code>${inlines[+i]}</code>`;
+      }
+    });
+
+    return html;
   }
 
   // ── Helpers ──
@@ -43,6 +92,43 @@
     const text = await res.text();
     sectionCache[url] = text;
     return text;
+  }
+
+  function resolveAssetPaths(container, base) {
+    if (!base) return;
+
+    container.querySelectorAll("img").forEach((img) => {
+      const src = img.getAttribute("src");
+      if (src && !src.startsWith("http") && !src.startsWith("/") && !src.startsWith("data:")) {
+        img.src = base + src;
+      }
+    });
+
+    container.querySelectorAll("a").forEach((a) => {
+      const href = a.getAttribute("href");
+      if (
+        href &&
+        !href.startsWith("http") &&
+        !href.startsWith("/") &&
+        !href.startsWith("#") &&
+        !href.startsWith("mailto:")
+      ) {
+        a.href = base + href;
+      }
+    });
+  }
+
+  function addHeadingAnchors(container) {
+    container.querySelectorAll("h1, h2, h3, h4").forEach((h) => {
+      const id =
+        h.textContent
+          .trim()
+          .toLowerCase()
+          .replace(/[^\w\u4e00-\u9fff]+/g, "-")
+          .replace(/^-|-$/g, "") || "heading";
+      h.id = id;
+      h.classList.add("heading-anchor");
+    });
   }
 
   // ── Section Loading ──
@@ -177,10 +263,16 @@
         <div class="post-meta">${post.date} · ${post.tags.join(", ")}</div>
         <div class="post-body">${rendered}</div>`;
 
+      const postBody = postContainer.querySelector(".post-body");
+      resolveAssetPaths(postBody, post.base);
+      addHeadingAnchors(postBody);
+
       document.getElementById("blog-back").addEventListener("click", () => {
         currentBlogView = "list";
         showBlogList(listContainer, postContainer);
       });
+
+      window.scrollTo({ top: 0 });
     } catch {
       postContainer.innerHTML =
         '<p style="text-align:center;color:#888;">文章加载失败</p>';

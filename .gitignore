@@ -10,3 +10,5 @@ package-lock.json
 *.swo
 
 local/
+
+BLOG_README.md

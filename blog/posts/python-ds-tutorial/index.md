@@ -20,9 +20,12 @@
 
 **下载与安装：**
 
-1. 访问 [Anaconda 官网](https://www.anaconda.com/download) 下载对应系统版本
+1. 访问 [Anaconda 官网](https://www.anaconda.com/download) 下载对应系统版本；也可前往 [清华镜像站](https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/) 下载，速度更快
 2. **Windows**：双击 `.exe` 安装，建议勾选 "Add Anaconda to PATH"
-3. **macOS / Linux**：终端执行 `bash Anaconda3-*.sh`
+3. **macOS**：双击下载的 `.pkg` 安装包，按提示完成安装即可
+4. **Linux**：在终端执行 `bash Anaconda3-*.sh`，按提示完成安装
+
+> **注意：** Anaconda 在 2024 年底更改了命名规则，版本号从原来的 `x.x.x` 格式改为 `年份.月份` 的日期格式（如 `2025.06`）。从镜像站下载时，请选择 **Anaconda3**（注意是 3）开头、日期较新、且与你操作系统对应的版本。
 
 **验证安装：**
 

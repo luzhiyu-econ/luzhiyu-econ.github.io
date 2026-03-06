@@ -1,0 +1,76 @@
+<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" font-family="'Georgia', serif">
+  <rect width="800" height="360" fill="#FAFAF7"/>
+  <text x="400" y="30" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a2e" letter-spacing="1">关键词搜索 vs 语义向量搜索</text>
+
+  <!-- LEFT: Keyword Search -->
+  <text x="195" y="62" text-anchor="middle" font-size="13" font-weight="bold" fill="#DC2626">传统关键词搜索</text>
+  
+  <!-- Query box -->
+  <rect x="110" y="78" width="170" height="34" rx="6" fill="#FEE2E2" stroke="#DC2626" stroke-width="1.5"/>
+  <text x="195" y="100" text-anchor="middle" font-size="11" fill="#7F1D1D">查询: "货币政策效果"</text>
+  
+  <line x1="195" y1="112" x2="195" y2="138" stroke="#DC2626" stroke-width="1.5" marker-end="url(#redarr)"/>
+  
+  <!-- Matching rule -->
+  <rect x="120" y="140" width="150" height="28" rx="5" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1"/>
+  <text x="195" y="158" text-anchor="middle" font-size="10" fill="#991B1B">精确字符串匹配</text>
+  
+  <line x1="195" y1="168" x2="195" y2="195" stroke="#DC2626" stroke-width="1.5" marker-end="url(#redarr)"/>
+
+  <!-- Results - matched -->
+  <rect x="80" y="198" width="230" height="26" rx="5" fill="#DCFCE7" stroke="#86EFAC" stroke-width="1"/>
+  <text x="100" y="215" font-size="9.5" fill="#166534">✓ "货币政策的实际效果分析"</text>
+  
+  <!-- Results - missed -->
+  <rect x="80" y="230" width="230" height="26" rx="5" fill="#F3F4F6" stroke="#D1D5DB" stroke-width="1"/>
+  <text x="100" y="247" font-size="9.5" fill="#9CA3AF">✗ "QE对通胀预期的影响" (未匹配)</text>
+  
+  <rect x="80" y="262" width="230" height="26" rx="5" fill="#F3F4F6" stroke="#D1D5DB" stroke-width="1"/>
+  <text x="100" y="279" font-size="9.5" fill="#9CA3AF">✗ "Central bank transmission" (未匹配)</text>
+  
+  <rect x="80" y="294" width="230" height="26" rx="5" fill="#F3F4F6" stroke="#D1D5DB" stroke-width="1"/>
+  <text x="100" y="311" font-size="9.5" fill="#9CA3AF">✗ "interest rate policy efficacy" (未匹配)</text>
+
+  <!-- Divider -->
+  <line x1="400" y1="50" x2="400" y2="340" stroke="#E5E7EB" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <!-- RIGHT: Semantic Search -->
+  <text x="605" y="62" text-anchor="middle" font-size="13" font-weight="bold" fill="#7C3AED">语义向量搜索（理想态）</text>
+  
+  <!-- Query box -->
+  <rect x="520" y="78" width="170" height="34" rx="6" fill="#EDE9FE" stroke="#7C3AED" stroke-width="1.5"/>
+  <text x="605" y="100" text-anchor="middle" font-size="11" fill="#4C1D95">查询: "货币政策效果"</text>
+  
+  <line x1="605" y1="112" x2="605" y2="138" stroke="#7C3AED" stroke-width="1.5" marker-end="url(#purplearr)"/>
+
+  <!-- Embedding -->
+  <rect x="530" y="140" width="150" height="28" rx="5" fill="#F5F3FF" stroke="#C4B5FD" stroke-width="1"/>
+  <text x="605" y="158" text-anchor="middle" font-size="10" fill="#5B21B6">大模型 Embedding → 向量</text>
+  
+  <line x1="605" y1="168" x2="605" y2="195" stroke="#7C3AED" stroke-width="1.5" marker-end="url(#purplearr)"/>
+
+  <!-- Results - all matched with similarity -->
+  <rect x="490" y="198" width="230" height="26" rx="5" fill="#DCFCE7" stroke="#86EFAC" stroke-width="1"/>
+  <text x="510" y="215" font-size="9.5" fill="#166534">✓ "货币政策的实际效果分析" <tspan fill="#6B7280">0.97</tspan></text>
+  
+  <rect x="490" y="230" width="230" height="26" rx="5" fill="#DCFCE7" stroke="#86EFAC" stroke-width="1"/>
+  <text x="510" y="247" font-size="9.5" fill="#166534">✓ "QE对通胀预期的影响" <tspan fill="#6B7280">0.91</tspan></text>
+  
+  <rect x="490" y="262" width="230" height="26" rx="5" fill="#DCFCE7" stroke="#86EFAC" stroke-width="1"/>
+  <text x="510" y="279" font-size="9.5" fill="#166534">✓ "Central bank transmission" <tspan fill="#6B7280">0.88</tspan></text>
+  
+  <rect x="490" y="294" width="230" height="26" rx="5" fill="#DCFCE7" stroke="#86EFAC" stroke-width="1"/>
+  <text x="510" y="311" font-size="9.5" fill="#166534">✓ "interest rate policy efficacy" <tspan fill="#6B7280">0.85</tspan></text>
+
+  <!-- Bottom note -->
+  <text x="400" y="347" text-anchor="middle" font-size="10" fill="#9CA3AF" font-style="italic">右侧数字为余弦相似度，语义搜索可跨语言、跨表述匹配同义内容</text>
+
+  <defs>
+    <marker id="redarr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#DC2626"/>
+    </marker>
+    <marker id="purplearr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7C3AED"/>
+    </marker>
+  </defs>
+</svg>
