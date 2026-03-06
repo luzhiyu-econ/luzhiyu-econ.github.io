@@ -4,7 +4,7 @@ tags:
   - methodology
   - tools
 ---
-1. 前置条件：已经挂上梯子@[[VPN Theory]]，获取国外虚拟信用卡@[[VISA Card]]、拥有登录非中华区账号的苹果手机、拥有登录非中华区账号且安装google play的安卓手机（三选一）
+1. 前置条件：已经挂上梯子[[VPN Theory]]，获取国外虚拟信用卡[[VISA Card]]、拥有登录非中华区账号的苹果手机、拥有登录非中华区账号且安装google play的安卓手机（三选一）
 2. 获取claude成品白号（新号可能存在充值pro被封风险，这家我正常使用了一段时间目前没问题）
     【闲鱼】[https://m.tb.cn/h.i1cwvbF?tk=LEXbUsouhKN](https://m.tb.cn/h.i1cwvbF?tk=LEXbUsouhKN) CZ321 「快来捡漏【Claude 4.6 官网注册成品｜下单即用】」
 	其实也可以使用自己的谷歌账号直接登录，但是也同样存在被封号风险，这是目前没法解决的，最好的方法就是保持vpn尽可能优质。可以在https://www.ipipseek.com 上查看vpn质量
