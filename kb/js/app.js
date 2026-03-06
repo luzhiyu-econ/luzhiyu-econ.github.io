@@ -29,23 +29,27 @@
   }
 
   function resolveWikilink(name) {
-    const lower = name.toLowerCase().replace(/\s+/g, "-");
-    return allDocs.find(
-      (d) =>
-        d.path.toLowerCase().endsWith("/" + lower + ".md") ||
-        d.path.toLowerCase() === "docs/" + lower + ".md"
-    );
+    const normalize = (s) => s.toLowerCase().replace(/[-_\s]+/g, " ").trim();
+    const target = normalize(name);
+    return allDocs.find((d) => {
+      const filename = d.path.split("/").pop().replace(/\.md$/, "");
+      return normalize(filename) === target;
+    });
   }
+
+  const ATTACHMENTS_DIR = "docs/attachments/";
 
   function renderObsidianSyntax(md) {
     md = md.replace(/!\[\[([^\]|]+?)(\|([^\]]*))?\]\]/g, (_, file, __, alt) => {
-      return `![${alt || file}](${file})`;
+      const raw = file.includes("/") ? file : ATTACHMENTS_DIR + file;
+      const src = encodeURI(raw);
+      return `![${alt || file}](${src})`;
     });
 
     md = md.replace(/(?<!!)\[\[([^\]|]+?)(\|([^\]]*))?\]\]/g, (_, target, __, display) => {
       const doc = resolveWikilink(target);
       if (doc) {
-        return `[${display || target}](#${doc.path})`;
+        return `[${display || target}](#${encodeURI(doc.path)})`;
       }
       return `[${display || target}](#)`;
     });
@@ -111,13 +115,13 @@
     if (!base) return;
     container.querySelectorAll("img").forEach((img) => {
       const src = img.getAttribute("src");
-      if (src && !src.startsWith("http") && !src.startsWith("/") && !src.startsWith("data:")) {
+      if (src && !src.startsWith("http") && !src.startsWith("/") && !src.startsWith("data:") && !src.startsWith("docs/")) {
         img.src = base + src;
       }
     });
     container.querySelectorAll("a").forEach((a) => {
       const href = a.getAttribute("href");
-      if (href && !href.startsWith("http") && !href.startsWith("/") && !href.startsWith("#") && !href.startsWith("mailto:")) {
+      if (href && !href.startsWith("http") && !href.startsWith("/") && !href.startsWith("#") && !href.startsWith("mailto:") && !href.startsWith("docs/")) {
         a.href = base + href;
       }
     });
@@ -266,7 +270,7 @@
       if (docCache[path]) {
         md = docCache[path];
       } else {
-        const res = await fetch(path);
+        const res = await fetch(encodeURI(path));
         if (!res.ok) throw new Error("Not found");
         md = await res.text();
         docCache[path] = md;
@@ -288,7 +292,7 @@
       content.querySelectorAll('a[href^="#docs/"]').forEach((a) => {
         a.addEventListener("click", (e) => {
           e.preventDefault();
-          const docPath = a.getAttribute("href").slice(1);
+          const docPath = decodeURI(a.getAttribute("href").slice(1));
           loadDocument(docPath);
         });
       });
