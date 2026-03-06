@@ -367,6 +367,9 @@
     if (hash) {
       const doc = allDocs.find((d) => d.path === hash || d.path.endsWith(hash));
       if (doc) loadDocument(doc.path);
+    } else {
+      const welcome = allDocs.find((d) => d.path.endsWith("welcome.md"));
+      if (welcome) loadDocument(welcome.path);
     }
   }
 
