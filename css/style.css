@@ -218,24 +218,42 @@ img {
   line-height: 1.5;
 }
 
-.research-item .authors {
+.research-item .authors,
+.research-item .coauthors {
   color: var(--color-text-secondary);
   margin-bottom: 6px;
   font-style: italic;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+}
+
+.research-item .coauthors::before {
+  content: "(";
+}
+
+.research-item .coauthors::after {
+  content: ")";
 }
 
 .research-item .journal {
   color: var(--color-text-muted);
-  margin-bottom: 12px;
-  font-size: 0.92rem;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
 }
 
 .research-item .conference {
-  font-weight: 600;
   color: var(--color-text-secondary);
-  margin-top: 8px;
-  font-size: 0.95rem;
+  margin-top: 6px;
+  font-size: 0.9rem;
+}
+
+.research-item h3 a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.research-item h3 a:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
 }
 
 .research-item .description {
