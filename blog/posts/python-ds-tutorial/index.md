@@ -1,4 +1,4 @@
-# Python 数据科学完整教程：从环境配置到机器学习
+# Python 数据科学完整教程：从环境配置到Vibe-coding
 
 > 本文是一份面向社科研究者的 Python 数据科学入门指南，涵盖环境搭建、基础语法、数据处理、可视化、机器学习，以及如何用 AI 工具加速编程。适合零基础或有少量编程经验的读者。
 
@@ -122,7 +122,7 @@ num_str = str(42)                   # "42"
 str_num = int("42")                 # 42
 ```
 
-### 2.2 控制流
+### 2.2 逻辑语法
 
 ```python
 # 条件判断
@@ -564,13 +564,11 @@ print(f"平均绝对误差: {-scores.mean():.2f}")
 - [data-science-ipython-notebooks](https://github.com/donnemartin/data-science-ipython-notebooks) — 数据科学教程合集
 - [Python-100-Days](https://github.com/jackfrued/Python-100-Days) — 100 天 Python 学习计划
 - [scikit-learn 官方示例](https://github.com/scikit-learn/scikit-learn)
-- [pandas-exercises](https://github.com/guipsamora/pandas_exercises) — Pandas 练习题
 
 **在线平台：**
 
 - [Kaggle Learn](https://www.kaggle.com/learn) — 免费交互式课程
 - [Real Python](https://realpython.com/) — 深度教程文章
-- Kaggle Competitions — 真实数据集竞赛
 
 ---
 
