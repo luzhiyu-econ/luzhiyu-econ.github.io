@@ -1,7 +1,6 @@
 ---
 title: 如何创建国外大模型账户并支付
 tags:
-  - methodology
   - tools
 ---
 1. 前置条件：已经挂上梯子[[VPN Theory]]，获取国外虚拟信用卡[[VISA Card]]、拥有登录非中华区账号的苹果手机、拥有登录非中华区账号且安装google play的安卓手机（三选一）

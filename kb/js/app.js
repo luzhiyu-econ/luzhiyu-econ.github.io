@@ -254,6 +254,52 @@
     });
   }
 
+  // ── Tag Navigation (auto-generated for welcome page) ──
+
+  function buildTagNavHTML() {
+    const tagGroups = {};
+    for (const doc of allDocs) {
+      for (const tag of doc.tags) {
+        if (tag === "index") continue;
+        if (!tagGroups[tag]) tagGroups[tag] = [];
+        tagGroups[tag].push(doc);
+      }
+    }
+
+    const sortedTags = Object.keys(tagGroups).sort();
+    if (sortedTags.length === 0) return "";
+
+    let html = '<div class="tag-nav"><h2 id="导航">导航</h2>';
+    for (const tag of sortedTags) {
+      html += '<div class="tag-nav-group">';
+      html += `<h3><span class="tag-nav-pill" data-tag="${tag}">#${tag}</span></h3>`;
+      html += "<ul>";
+      for (const doc of tagGroups[tag]) {
+        html += `<li><a href="#${encodeURI(doc.path)}" class="tag-nav-link" data-path="${doc.path}">${doc.title}</a></li>`;
+      }
+      html += "</ul></div>";
+    }
+    html += "</div>";
+    return html;
+  }
+
+  function bindTagNavEvents(container) {
+    container.querySelectorAll(".tag-nav-link").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        loadDocument(link.dataset.path);
+      });
+    });
+
+    container.querySelectorAll(".tag-nav-pill").forEach((pill) => {
+      pill.addEventListener("click", () => {
+        activeTag = pill.dataset.tag;
+        renderTagCloud();
+        applyFilter();
+      });
+    });
+  }
+
   // ── Document Loading ──
 
   async function loadDocument(path) {
@@ -277,6 +323,11 @@
       }
 
       content.innerHTML = renderMarkdown(md);
+
+      if (path.endsWith("welcome.md")) {
+        content.innerHTML += buildTagNavHTML();
+        bindTagNavEvents(content);
+      }
 
       resolveAssetPaths(content, getBasePath(path));
       addHeadingAnchors(content);

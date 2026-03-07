@@ -2,7 +2,6 @@
 title: 如何使用API调用大模型处理数据
 tags:
   - nlp
-  - methodology
 ---
 录制: API Key的安全使用与OpenAI库的应用
 日期: 2025-03-30 19:10:50

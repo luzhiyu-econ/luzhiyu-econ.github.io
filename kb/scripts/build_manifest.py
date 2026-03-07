@@ -35,22 +35,41 @@ def parse_frontmatter(filepath):
         return {}
 
     fm = {}
-    for line in m.group(1).splitlines():
-        line = line.strip()
-        if not line or line.startswith("#"):
+    lines = m.group(1).splitlines()
+    i = 0
+    while i < len(lines):
+        stripped = lines[i].strip()
+        if not stripped or stripped.startswith("#"):
+            i += 1
             continue
-        if ":" not in line:
+        if ":" not in stripped:
+            i += 1
             continue
-        key, _, val = line.partition(":")
+
+        key, _, val = stripped.partition(":")
         key = key.strip().lower()
         val = val.strip()
 
         if key == "tags":
-            list_match = YAML_LIST_RE.search(val)
-            if list_match:
-                fm["tags"] = [t.strip().strip("'\"") for t in list_match.group(1).split(",") if t.strip()]
+            if val:
+                list_match = YAML_LIST_RE.search(val)
+                if list_match:
+                    fm["tags"] = [t.strip().strip("'\"") for t in list_match.group(1).split(",") if t.strip()]
+                else:
+                    fm["tags"] = [t.strip().strip("'\"") for t in val.split(",") if t.strip()]
             else:
-                fm["tags"] = [t.strip().strip("'\"") for t in val.split(",") if t.strip()]
+                tags = []
+                j = i + 1
+                while j < len(lines):
+                    item = lines[j].strip()
+                    if item.startswith("- "):
+                        tags.append(item[2:].strip().strip("'\""))
+                        j += 1
+                    else:
+                        break
+                fm["tags"] = tags
+                i = j
+                continue
         elif key == "title":
             fm["title"] = val.strip("'\"")
         elif key == "order":
@@ -58,6 +77,8 @@ def parse_frontmatter(filepath):
                 fm["order"] = int(val)
             except ValueError:
                 pass
+
+        i += 1
 
     return fm
 

@@ -490,6 +490,72 @@ a:hover {
   color: var(--color-tag-active-text);
 }
 
+/* ===== Tag Navigation (welcome page) ===== */
+.tag-nav {
+  margin-top: 32px;
+}
+
+.tag-nav h2 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin: 0 0 16px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.tag-nav-group {
+  margin-bottom: 18px;
+}
+
+.tag-nav-group h3 {
+  margin: 0 0 6px;
+}
+
+.tag-nav-pill {
+  display: inline-block;
+  padding: 3px 14px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: var(--color-tag-bg);
+  color: var(--color-tag-text);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.tag-nav-pill:hover {
+  background: var(--color-tag-active-bg);
+  color: var(--color-tag-active-text);
+}
+
+.tag-nav-group ul {
+  list-style: none;
+  margin: 0 0 0 8px;
+  padding: 0;
+}
+
+.tag-nav-group li {
+  padding: 4px 0;
+  font-size: 0.93rem;
+}
+
+.tag-nav-group li::before {
+  content: "→";
+  margin-right: 8px;
+  color: var(--color-text-muted);
+}
+
+.tag-nav-link {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+.tag-nav-link:hover {
+  text-decoration: underline;
+}
+
 .mobile-only {
   display: none;
 }
