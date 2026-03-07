@@ -45,8 +45,9 @@
     });
     md = md.replace(/(?<!!)\[\[([^\]|]+?)(\|([^\]]*))?\]\]/g, (_, target, __, display) => {
       const doc = resolveWikilink(target);
-      if (doc) return `[${display || doc.title || target}](#${encodeURI(doc.path)})`;
-      return `[${display || target}](#)`;
+      const label = display || (doc && doc.title) || target;
+      if (doc) return `[@${label}](#${encodeURI(doc.path)})`;
+      return `[@${label}](#)`;
     });
     return md;
   }
