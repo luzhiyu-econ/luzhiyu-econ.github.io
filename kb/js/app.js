@@ -49,7 +49,7 @@
     md = md.replace(/(?<!!)\[\[([^\]|]+?)(\|([^\]]*))?\]\]/g, (_, target, __, display) => {
       const doc = resolveWikilink(target);
       if (doc) {
-        return `[${display || target}](#${encodeURI(doc.path)})`;
+        return `[${display || doc.title || target}](#${encodeURI(doc.path)})`;
       }
       return `[${display || target}](#)`;
     });
