@@ -3,7 +3,10 @@
 build_manifest.py — Auto-generate kb/manifest.json from docs/ folder structure.
 
 Scans kb/docs/ recursively, reads YAML frontmatter from each .md file,
-and outputs a manifest.json that app.js consumes to render the sidebar.
+and builds a **tag-driven** virtual folder tree.  Hierarchical tags like
+``skills/tools`` become nested folders (Skills > Tools) in the manifest.
+
+A single file with multiple tags appears under each corresponding folder.
 
 Zero external dependencies (stdlib only).
 """
@@ -84,44 +87,19 @@ def parse_frontmatter(filepath):
 
 
 def title_from_filename(filename):
-    """Derive a display title from a filename: remove .md, replace - with space, capitalize words."""
+    """Derive a display title from a filename."""
     name = filename.replace(".md", "")
     name = name.replace("-", " ").replace("_", " ")
     return name.title()
 
 
-def read_folder_meta(dirpath):
-    """Read optional _folder.yml for custom folder display name and order."""
-    meta_path = os.path.join(dirpath, "_folder.yml")
-    if not os.path.isfile(meta_path):
-        return {}
-    return parse_frontmatter_raw(meta_path)
+ACRONYMS = {"nlp", "api", "llm", "vpn", "ai", "ml", "cv"}
 
 
-def parse_frontmatter_raw(filepath):
-    """Parse a simple key: value file (for _folder.yml)."""
-    result = {}
-    try:
-        with open(filepath, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if not line or line.startswith("#"):
-                    continue
-                if ":" not in line:
-                    continue
-                key, _, val = line.partition(":")
-                key = key.strip().lower()
-                val = val.strip().strip("'\"")
-                if key == "title":
-                    result["title"] = val
-                elif key == "order":
-                    try:
-                        result["order"] = int(val)
-                    except ValueError:
-                        pass
-    except OSError:
-        pass
-    return result
+def format_folder_title(name):
+    """Title-case a folder name, keeping known acronyms uppercase."""
+    words = name.replace("-", " ").replace("_", " ").split()
+    return " ".join(w.upper() if w.lower() in ACRONYMS else w.title() for w in words)
 
 
 def should_skip(name):
@@ -129,56 +107,100 @@ def should_skip(name):
     return name.startswith(".") or name.startswith("_")
 
 
-def build_tree(dirpath, rel_prefix="docs"):
-    """Recursively build the manifest tree for a directory."""
-    entries = sorted(os.listdir(dirpath))
-    files = []
-    folders = []
+def collect_all_docs(dirpath, rel_prefix="docs"):
+    """Recursively collect every .md file under dirpath into a flat list."""
+    results = []
+    try:
+        entries = sorted(os.listdir(dirpath))
+    except OSError:
+        return results
 
     for entry in entries:
         if should_skip(entry):
             continue
         full = os.path.join(dirpath, entry)
         if os.path.isdir(full):
-            folders.append((entry, full))
+            results.extend(collect_all_docs(full, os.path.join(rel_prefix, entry)))
         elif entry.endswith(".md"):
-            files.append((entry, full))
+            fm = parse_frontmatter(full)
+            rel_path = os.path.join(rel_prefix, entry).replace(os.sep, "/")
+            results.append({
+                "title": fm.get("title") or title_from_filename(entry),
+                "path": rel_path,
+                "tags": fm.get("tags", []),
+                "_order": fm.get("order", 9999),
+            })
 
-    tree = []
+    return results
 
-    for fname, fpath in files:
-        fm = parse_frontmatter(fpath)
-        rel_path = os.path.join(rel_prefix, fname).replace(os.sep, "/")
-        node = {
-            "title": fm.get("title") or title_from_filename(fname),
-            "path": rel_path,
-            "tags": fm.get("tags", []),
-        }
-        if "order" in fm:
-            node["_order"] = fm["order"]
-        tree.append(node)
 
-    for dname, dpath in folders:
-        children = build_tree(dpath, os.path.join(rel_prefix, dname))
-        if not children:
+def build_tag_tree(all_docs):
+    """Build a virtual folder tree driven by hierarchical tags.
+
+    - ``index`` tagged docs go to root level.
+    - Docs without tags go to root level.
+    - Tag ``a/b/c`` produces nested folders A > B > C with the doc inside C.
+    """
+    root_items = []
+    tag_dict = {}
+
+    for doc in all_docs:
+        tags = [t for t in doc["tags"] if t != "index"]
+        if not tags:
+            root_items.append(doc)
             continue
-        meta = read_folder_meta(dpath)
-        folder_title = meta.get("title") or dname.replace("-", " ").replace("_", " ").title()
-        node = {
-            "title": folder_title,
+
+        for tag in tags:
+            parts = tag.split("/")
+            node = tag_dict
+            for part in parts:
+                node = node.setdefault(part, {})
+            node.setdefault("__docs__", []).append(doc)
+
+    root_items.sort(key=lambda d: (d["_order"], d["title"]))
+
+    tree = [_make_doc_node(d) for d in root_items]
+    tree.extend(_dict_to_tree(tag_dict))
+    return tree
+
+
+def _dict_to_tree(d):
+    """Convert the nested tag dict into the manifest folder/doc structure."""
+    folders = []
+    for key, value in sorted(d.items()):
+        if key == "__docs__":
+            continue
+        children = []
+        docs = value.get("__docs__", [])
+        docs.sort(key=lambda d: (d["_order"], d["title"]))
+        children.extend(_make_doc_node(doc) for doc in docs)
+        children.extend(_dict_to_tree(value))
+        folders.append({
+            "title": format_folder_title(key),
             "type": "folder",
             "children": children,
-        }
-        if "order" in meta:
-            node["_order"] = meta["order"]
-        tree.append(node)
+        })
+    return folders
 
-    tree.sort(key=lambda n: (n.get("_order", 9999), n.get("title", "")))
 
+def _make_doc_node(doc):
+    return {
+        "title": doc["title"],
+        "path": doc["path"],
+        "tags": doc["tags"],
+    }
+
+
+def walk_docs(tree):
+    seen = set()
     for node in tree:
-        node.pop("_order", None)
-
-    return tree
+        if node.get("type") == "folder":
+            yield from walk_docs(node.get("children", []))
+        else:
+            path = node["path"]
+            if path not in seen:
+                seen.add(path)
+                yield node
 
 
 def main():
@@ -186,7 +208,8 @@ def main():
         print(f"Error: docs directory not found at {DOCS_DIR}", file=sys.stderr)
         sys.exit(1)
 
-    tree = build_tree(DOCS_DIR)
+    all_docs = collect_all_docs(DOCS_DIR)
+    tree = build_tag_tree(all_docs)
     manifest = {"tree": tree}
 
     with open(MANIFEST_PATH, "w", encoding="utf-8") as f:
@@ -194,15 +217,7 @@ def main():
         f.write("\n")
 
     doc_count = sum(1 for _ in walk_docs(tree))
-    print(f"manifest.json generated: {doc_count} doc(s) found.")
-
-
-def walk_docs(tree):
-    for node in tree:
-        if node.get("type") == "folder":
-            yield from walk_docs(node.get("children", []))
-        else:
-            yield node
+    print(f"manifest.json generated: {doc_count} unique doc(s) found.")
 
 
 if __name__ == "__main__":

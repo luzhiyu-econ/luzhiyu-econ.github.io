@@ -106,7 +106,7 @@
 
   function renderInlineTags(html) {
     return html.replace(
-      /(?:^|(?<=\s))#([\w\u4e00-\u9fff-]+)/g,
+      /(?:^|(?<=\s))#([\w\u4e00-\u9fff/-]+(?:\/[\w\u4e00-\u9fff-]+)*)/g,
       '<span class="inline-tag" data-tag="$1">#$1</span>'
     );
   }
@@ -146,41 +146,80 @@
 
   function flattenDocs(tree, breadcrumb) {
     const docs = [];
-    for (const node of tree) {
-      if (node.type === "folder") {
-        docs.push(
-          ...flattenDocs(node.children || [], [...breadcrumb, node.title])
-        );
-      } else {
-        docs.push({
-          title: node.title,
-          path: node.path,
-          tags: node.tags || [],
-          breadcrumb: [...breadcrumb, node.title],
-        });
+    const seen = new Set();
+    function walk(nodes, crumbs) {
+      for (const node of nodes) {
+        if (node.type === "folder") {
+          walk(node.children || [], [...crumbs, node.title]);
+        } else if (!seen.has(node.path)) {
+          seen.add(node.path);
+          docs.push({
+            title: node.title,
+            path: node.path,
+            tags: node.tags || [],
+            breadcrumb: [...crumbs, node.title],
+          });
+        }
       }
     }
+    walk(tree, breadcrumb);
     return docs;
   }
 
   function collectTags(docs) {
     const tagSet = new Set();
     for (const doc of docs) {
-      for (const t of doc.tags) tagSet.add(t);
+      for (const t of doc.tags) {
+        if (t === "index") continue;
+        tagSet.add(t);
+      }
     }
     return Array.from(tagSet).sort();
+  }
+
+  function buildTagHierarchy(tags) {
+    const tree = {};
+    for (const t of tags) {
+      const parts = t.split("/");
+      let node = tree;
+      for (const part of parts) {
+        if (!node[part]) node[part] = {};
+        node = node[part];
+      }
+    }
+    return tree;
+  }
+
+  function tagMatches(docTags, filterTag) {
+    return docTags.some((t) => t === filterTag || t.startsWith(filterTag + "/"));
   }
 
   // ── Sidebar: Tag Cloud ──
 
   function renderTagCloud() {
     const container = document.getElementById("tag-cloud");
-    container.innerHTML = allTags
-      .map(
-        (t) =>
-          `<span class="tag-pill${activeTag === t ? " active" : ""}" data-tag="${t}">#${t}</span>`
-      )
-      .join("");
+    const hierarchy = buildTagHierarchy(allTags);
+
+    let html = "";
+    function renderLevel(node, prefix) {
+      const keys = Object.keys(node).sort();
+      for (const key of keys) {
+        const fullTag = prefix ? prefix + "/" + key : key;
+        const isActive = activeTag === fullTag;
+        const isParent = Object.keys(node[key]).length > 0;
+        const cls = "tag-pill" + (isParent ? " tag-parent" : "") + (isActive ? " active" : "");
+        const display = prefix ? key : key;
+        html += `<span class="${cls}" data-tag="${fullTag}" title="${fullTag}">#${display}</span>`;
+        if (isParent) {
+          html += '<span class="tag-children">';
+          renderLevel(node[key], fullTag);
+          html += "</span>";
+        }
+      }
+    }
+    renderLevel(hierarchy, "");
+
+    container.innerHTML = html;
 
     container.querySelectorAll(".tag-pill").forEach((pill) => {
       pill.addEventListener("click", () => {
@@ -243,41 +282,68 @@
     const textQuery = tagFromSearch ? null : query;
 
     document.querySelectorAll(".tree-item").forEach((item) => {
-      const tags = (item.dataset.tags || "").split(",");
+      const tags = (item.dataset.tags || "").split(",").filter(Boolean);
       const title = item.textContent.toLowerCase();
 
       let visible = true;
-      if (filterTag && !tags.includes(filterTag)) visible = false;
+      if (filterTag && !tagMatches(tags, filterTag)) visible = false;
       if (textQuery && !title.includes(textQuery)) visible = false;
 
       item.classList.toggle("hidden", !visible);
+    });
+
+    document.querySelectorAll(".tree-folder").forEach((folder) => {
+      const hasVisible = folder.querySelector(".tree-item:not(.hidden)");
+      folder.classList.toggle("hidden", !hasVisible);
     });
   }
 
   // ── Tag Navigation (auto-generated for welcome page) ──
 
   function buildTagNavHTML() {
-    const tagGroups = {};
+    const topGroups = {};
+    const seen = new Set();
     for (const doc of allDocs) {
       for (const tag of doc.tags) {
         if (tag === "index") continue;
-        if (!tagGroups[tag]) tagGroups[tag] = [];
-        tagGroups[tag].push(doc);
+        const parts = tag.split("/");
+        const top = parts[0];
+        const sub = parts.length > 1 ? parts.slice(1).join("/") : null;
+
+        if (!topGroups[top]) topGroups[top] = {};
+        const key = sub || "__root__";
+        if (!topGroups[top][key]) topGroups[top][key] = [];
+
+        const uid = tag + "::" + doc.path;
+        if (!seen.has(uid)) {
+          seen.add(uid);
+          topGroups[top][key].push(doc);
+        }
       }
     }
 
-    const sortedTags = Object.keys(tagGroups).sort();
-    if (sortedTags.length === 0) return "";
+    const sortedTops = Object.keys(topGroups).sort();
+    if (sortedTops.length === 0) return "";
 
     let html = '<div class="tag-nav"><h2 id="导航">导航</h2>';
-    for (const tag of sortedTags) {
+    for (const top of sortedTops) {
       html += '<div class="tag-nav-group">';
-      html += `<h3><span class="tag-nav-pill" data-tag="${tag}">#${tag}</span></h3>`;
-      html += "<ul>";
-      for (const doc of tagGroups[tag]) {
-        html += `<li><a href="#${encodeURI(doc.path)}" class="tag-nav-link" data-path="${doc.path}">${doc.title}</a></li>`;
+      html += `<h3><span class="tag-nav-pill" data-tag="${top}">#${top}</span></h3>`;
+
+      const subs = topGroups[top];
+      const subKeys = Object.keys(subs).sort();
+      for (const sub of subKeys) {
+        if (sub !== "__root__") {
+          html += `<h4><span class="tag-nav-pill tag-nav-sub" data-tag="${top}/${sub}">#${sub}</span></h4>`;
+        }
+        html += "<ul>";
+        for (const doc of subs[sub]) {
+          html += `<li><a href="#${encodeURI(doc.path)}" class="tag-nav-link" data-path="${doc.path}">${doc.title}</a></li>`;
+        }
+        html += "</ul>";
       }
-      html += "</ul></div>";
+
+      html += "</div>";
     }
     html += "</div>";
     return html;

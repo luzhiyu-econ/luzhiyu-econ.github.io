@@ -1,8 +1,8 @@
 ---
 title: 网络代理的理论方法
 tags:
-  - methodology
-  - tools
+  - skills/methodology
+  - skills/tools
 ---
 
 
