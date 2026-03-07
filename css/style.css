@@ -345,6 +345,24 @@ img {
 }
 
 /* ===== Blog ===== */
+.wiki-link-hint {
+  font-size: 0.92rem;
+  color: var(--color-text-light);
+  margin-bottom: 18px;
+}
+
+.wiki-link-hint a {
+  color: var(--color-primary);
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--transition);
+}
+
+.wiki-link-hint a:hover {
+  border-bottom-color: var(--color-primary);
+}
+
 .blog-list {
   display: flex;
   flex-direction: column;
