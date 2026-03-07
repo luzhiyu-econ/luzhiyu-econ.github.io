@@ -189,10 +189,6 @@ a:hover {
   border-radius: 2px;
 }
 
-.tree-folder {
-  margin: 0;
-}
-
 .tree-folder-label {
   display: flex;
   align-items: center;
@@ -234,7 +230,7 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 5px 16px 5px 32px;
+  padding: 5px 16px 5px 30px;
   font-size: 0.82rem;
   color: rgba(255, 255, 255, 0.65);
   cursor: pointer;
@@ -253,10 +249,7 @@ a:hover {
   border-left-color: var(--color-sidebar-accent);
 }
 
-.tree-item.hidden {
-  display: none;
-}
-
+.tree-item.hidden,
 .tree-folder.hidden {
   display: none;
 }
@@ -311,7 +304,6 @@ a:hover {
 
 /* ── Markdown rendered content ── */
 
-/* Typography */
 .kb-content h1 {
   font-size: 1.75rem;
   font-weight: 700;
@@ -353,7 +345,6 @@ a:hover {
   font-size: 0.95rem;
 }
 
-/* Lists */
 .kb-content ul,
 .kb-content ol {
   margin: 8px 0 16px 24px;
@@ -371,7 +362,6 @@ a:hover {
   margin-bottom: 4px;
 }
 
-/* Code */
 .kb-content pre {
   background: #f5f6f8;
   border: 1px solid var(--color-border);
@@ -398,7 +388,6 @@ a:hover {
   word-break: break-word;
 }
 
-/* Blockquote */
 .kb-content blockquote {
   border-left: 3px solid var(--color-accent);
   padding: 10px 20px;
@@ -412,7 +401,6 @@ a:hover {
   margin-bottom: 0;
 }
 
-/* Tables */
 .kb-content table {
   width: 100%;
   border-collapse: collapse;
@@ -446,7 +434,6 @@ a:hover {
   background: #fafbfc;
 }
 
-/* Images */
 .kb-content img {
   max-width: 100%;
   height: auto;
@@ -460,14 +447,12 @@ a:hover {
   margin: 16px auto;
 }
 
-/* Horizontal Rule */
 .kb-content hr {
   border: none;
   border-top: 1px solid var(--color-border);
   margin: 28px 0;
 }
 
-/* Math (KaTeX) */
 .kb-content .katex-display {
   margin: 20px 0;
   overflow-x: auto;
@@ -479,7 +464,6 @@ a:hover {
   font-size: 1.05em;
 }
 
-/* Heading Anchors */
 .heading-anchor {
   position: relative;
   cursor: default;
@@ -494,7 +478,6 @@ a:hover {
   opacity: 0.5;
 }
 
-/* Inline #tags in rendered content */
 .inline-tag {
   display: inline-block;
   padding: 1px 8px;
@@ -512,80 +495,68 @@ a:hover {
   color: var(--color-tag-active-text);
 }
 
-/* ===== Tag Navigation (welcome page) ===== */
-.tag-nav {
+/* ===== Activity Heatmap ===== */
+.heatmap-wrap {
   margin-top: 32px;
 }
 
-.tag-nav h2 {
+.heatmap-wrap h2 {
   font-size: 1.35rem;
   font-weight: 600;
-  margin: 0 0 16px;
+  margin: 0 0 12px;
   padding-bottom: 6px;
   border-bottom: 1px solid var(--color-border);
   color: var(--color-text);
 }
 
-.tag-nav-group {
-  margin-bottom: 18px;
+.heatmap-months {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 14px;
+  gap: 3px;
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+  padding-left: 2px;
 }
 
-.tag-nav-group h3 {
-  margin: 0 0 6px;
+.heatmap-grid {
+  display: grid;
+  grid-template-rows: repeat(7, 14px);
+  grid-auto-flow: column;
+  grid-auto-columns: 14px;
+  gap: 3px;
 }
 
-.tag-nav-group h4 {
-  margin: 12px 0 4px 8px;
-  font-size: 0.9rem;
+.heatmap-cell {
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  background: #ebedf0;
 }
 
-.tag-nav-sub {
-  font-size: 0.8rem;
-  padding: 2px 10px;
+.heatmap-cell.empty {
+  background: transparent;
 }
 
-.tag-nav-pill {
-  display: inline-block;
-  padding: 3px 14px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  background: var(--color-tag-bg);
-  color: var(--color-tag-text);
-  border-radius: 999px;
-  cursor: pointer;
-  transition: all var(--transition);
-}
+.heatmap-cell.lv1 { background: #9be9a8; }
+.heatmap-cell.lv2 { background: #40c463; }
+.heatmap-cell.lv3 { background: #30a14e; }
+.heatmap-cell.lv4 { background: #216e39; }
 
-.tag-nav-pill:hover {
-  background: var(--color-tag-active-bg);
-  color: var(--color-tag-active-text);
-}
-
-.tag-nav-group ul {
-  list-style: none;
-  margin: 0 0 0 8px;
-  padding: 0;
-}
-
-.tag-nav-group li {
-  padding: 4px 0;
-  font-size: 0.93rem;
-}
-
-.tag-nav-group li::before {
-  content: "→";
-  margin-right: 8px;
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+  font-size: 0.72rem;
   color: var(--color-text-muted);
 }
 
-.tag-nav-link {
-  color: var(--color-accent);
-  text-decoration: none;
-  transition: color var(--transition);
-}
-
-.tag-nav-link:hover {
-  text-decoration: underline;
+.heatmap-legend .heatmap-cell {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
 }
 
 .mobile-only {
@@ -619,5 +590,9 @@ a:hover {
 
   .kb-topbar {
     padding: 10px 16px;
+  }
+
+  .heatmap-grid {
+    overflow-x: auto;
   }
 }

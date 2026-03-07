@@ -5,7 +5,6 @@
   let allDocs = [];
   let allTags = [];
   let activeTag = null;
-  let activeDocPath = null;
   const docCache = {};
 
   // ── Markdown ──
@@ -42,24 +41,18 @@
   function renderObsidianSyntax(md) {
     md = md.replace(/!\[\[([^\]|]+?)(\|([^\]]*))?\]\]/g, (_, file, __, alt) => {
       const raw = file.includes("/") ? file : ATTACHMENTS_DIR + file;
-      const src = encodeURI(raw);
-      return `![${alt || file}](${src})`;
+      return `![${alt || file}](${encodeURI(raw)})`;
     });
-
     md = md.replace(/(?<!!)\[\[([^\]|]+?)(\|([^\]]*))?\]\]/g, (_, target, __, display) => {
       const doc = resolveWikilink(target);
-      if (doc) {
-        return `[${display || doc.title || target}](#${encodeURI(doc.path)})`;
-      }
+      if (doc) return `[${display || doc.title || target}](#${encodeURI(doc.path)})`;
       return `[${display || target}](#)`;
     });
-
     return md;
   }
 
   function renderMarkdown(md) {
     if (typeof marked === "undefined") return `<pre>${md}</pre>`;
-
     md = stripFrontmatter(md);
     md = renderObsidianSyntax(md);
     const { text, blocks, inlines } = extractMath(md);
@@ -72,35 +65,27 @@
   function extractMath(md) {
     const blocks = [];
     const inlines = [];
-
     md = md.replace(/\$\$([\s\S]+?)\$\$/g, (_, tex) => {
       blocks.push(tex.trim());
       return `\n\nMATHBLOCK${blocks.length - 1}END\n\n`;
     });
-
     md = md.replace(/(?<!\$)\$(?!\$)([^\$\n]+?)\$(?!\$)/g, (_, tex) => {
       inlines.push(tex.trim());
       return `MATHINLINE${inlines.length - 1}END`;
     });
-
     return { text: md, blocks, inlines };
   }
 
   function restoreMath(html, blocks, inlines) {
     if (typeof katex === "undefined") return html;
-
     html = html.replace(/MATHBLOCK(\d+)END/g, (_, i) => {
-      try {
-        return katex.renderToString(blocks[+i], { displayMode: true, throwOnError: false });
-      } catch { return `<pre>${blocks[+i]}</pre>`; }
+      try { return katex.renderToString(blocks[+i], { displayMode: true, throwOnError: false }); }
+      catch { return `<pre>${blocks[+i]}</pre>`; }
     });
-
     html = html.replace(/MATHINLINE(\d+)END/g, (_, i) => {
-      try {
-        return katex.renderToString(inlines[+i], { displayMode: false, throwOnError: false });
-      } catch { return `<code>${inlines[+i]}</code>`; }
+      try { return katex.renderToString(inlines[+i], { displayMode: false, throwOnError: false }); }
+      catch { return `<code>${inlines[+i]}</code>`; }
     });
-
     return html;
   }
 
@@ -138,16 +123,16 @@
   }
 
   function getBasePath(filePath) {
-    const lastSlash = filePath.lastIndexOf("/");
-    return lastSlash >= 0 ? filePath.substring(0, lastSlash + 1) : "";
+    const idx = filePath.lastIndexOf("/");
+    return idx >= 0 ? filePath.substring(0, idx + 1) : "";
   }
 
   // ── Data ──
 
-  function flattenDocs(tree, breadcrumb) {
+  function flattenDocs(tree) {
     const docs = [];
     const seen = new Set();
-    function walk(nodes, crumbs) {
+    (function walk(nodes, crumbs) {
       for (const node of nodes) {
         if (node.type === "folder") {
           walk(node.children || [], [...crumbs, node.title]);
@@ -161,66 +146,51 @@
           });
         }
       }
-    }
-    walk(tree, breadcrumb);
+    })(tree, []);
     return docs;
   }
 
   function collectTags(docs) {
-    const tagSet = new Set();
-    for (const doc of docs) {
-      for (const t of doc.tags) {
-        if (t === "index") continue;
-        tagSet.add(t);
-      }
-    }
-    return Array.from(tagSet).sort();
+    const s = new Set();
+    for (const d of docs) for (const t of d.tags) if (t !== "index") s.add(t);
+    return Array.from(s).sort();
   }
 
-  function buildTagHierarchy(tags) {
-    const tree = {};
-    for (const t of tags) {
-      const parts = t.split("/");
-      let node = tree;
-      for (const part of parts) {
-        if (!node[part]) node[part] = {};
-        node = node[part];
-      }
-    }
-    return tree;
-  }
-
-  function tagMatches(docTags, filterTag) {
-    return docTags.some((t) => t === filterTag || t.startsWith(filterTag + "/"));
+  function tagMatches(docTags, filter) {
+    return docTags.some((t) => t === filter || t.startsWith(filter + "/"));
   }
 
   // ── Sidebar: Tag Cloud ──
 
+  function buildTagHierarchy(tags) {
+    const tree = {};
+    for (const t of tags) {
+      let node = tree;
+      for (const part of t.split("/")) node = node[part] || (node[part] = {});
+    }
+    return tree;
+  }
+
   function renderTagCloud() {
     const container = document.getElementById("tag-cloud");
     const hierarchy = buildTagHierarchy(allTags);
-
     let html = "";
-    function renderLevel(node, prefix) {
-      const keys = Object.keys(node).sort();
-      for (const key of keys) {
-        const fullTag = prefix ? prefix + "/" + key : key;
-        const isActive = activeTag === fullTag;
-        const isParent = Object.keys(node[key]).length > 0;
-        const cls = "tag-pill" + (isParent ? " tag-parent" : "") + (isActive ? " active" : "");
-        const display = prefix ? key : key;
-        html += `<span class="${cls}" data-tag="${fullTag}" title="${fullTag}">#${display}</span>`;
-        if (isParent) {
+
+    (function render(node, prefix) {
+      for (const key of Object.keys(node).sort()) {
+        const full = prefix ? prefix + "/" + key : key;
+        const hasChildren = Object.keys(node[key]).length > 0;
+        const cls = "tag-pill" + (hasChildren ? " tag-parent" : "") + (activeTag === full ? " active" : "");
+        html += `<span class="${cls}" data-tag="${full}" title="${full}">#${key}</span>`;
+        if (hasChildren) {
           html += '<span class="tag-children">';
-          renderLevel(node[key], fullTag);
+          render(node[key], full);
           html += "</span>";
         }
       }
-    }
-    renderLevel(hierarchy, "");
+    })(hierarchy, "");
 
     container.innerHTML = html;
-
     container.querySelectorAll(".tag-pill").forEach((pill) => {
       pill.addEventListener("click", () => {
         const tag = pill.dataset.tag;
@@ -231,27 +201,30 @@
     });
   }
 
-  // ── Sidebar: File Tree ──
+  // ── Sidebar: File Tree (depth-aware indentation) ──
 
   function renderFileTree() {
-    const container = document.getElementById("file-tree");
-    container.innerHTML = buildTreeHTML(manifest.tree);
-    bindTreeEvents(container);
+    const el = document.getElementById("file-tree");
+    el.innerHTML = buildTreeHTML(manifest.tree, 0);
+    bindTreeEvents(el);
   }
 
-  function buildTreeHTML(tree) {
+  function buildTreeHTML(tree, depth) {
     let html = "";
+    const folderPad = 16 + depth * 14;
+    const itemPad = 16 + depth * 14 + 14;
+
     for (const node of tree) {
       if (node.type === "folder") {
-        html += `<div class="tree-folder">
-          <div class="tree-folder-label"><span class="arrow">▼</span> ${node.title}</div>
-          <div class="tree-children">${buildTreeHTML(node.children || [])}</div>
-        </div>`;
+        html += `<div class="tree-folder">` +
+          `<div class="tree-folder-label" style="padding-left:${folderPad}px">` +
+          `<span class="arrow">▼</span> ${node.title}</div>` +
+          `<div class="tree-children">${buildTreeHTML(node.children || [], depth + 1)}</div>` +
+          `</div>`;
       } else {
         const tags = (node.tags || []).join(",");
-        html += `<div class="tree-item" data-path="${node.path}" data-tags="${tags}">
-          <span class="tree-item-icon">📄</span> ${node.title}
-        </div>`;
+        html += `<div class="tree-item" data-path="${node.path}" data-tags="${tags}" style="padding-left:${itemPad}px">` +
+          `<span class="tree-item-icon">📄</span> ${node.title}</div>`;
       }
     }
     return html;
@@ -264,11 +237,8 @@
         label.nextElementSibling.classList.toggle("collapsed");
       });
     });
-
     container.querySelectorAll(".tree-item").forEach((item) => {
-      item.addEventListener("click", () => {
-        loadDocument(item.dataset.path);
-      });
+      item.addEventListener("click", () => loadDocument(item.dataset.path));
     });
   }
 
@@ -276,7 +246,6 @@
 
   function applyFilter() {
     const query = document.getElementById("tag-search").value.trim().toLowerCase();
-
     const tagFromSearch = query.startsWith("#") ? query.slice(1) : null;
     const filterTag = activeTag || tagFromSearch;
     const textQuery = tagFromSearch ? null : query;
@@ -284,97 +253,111 @@
     document.querySelectorAll(".tree-item").forEach((item) => {
       const tags = (item.dataset.tags || "").split(",").filter(Boolean);
       const title = item.textContent.toLowerCase();
-
       let visible = true;
       if (filterTag && !tagMatches(tags, filterTag)) visible = false;
       if (textQuery && !title.includes(textQuery)) visible = false;
-
       item.classList.toggle("hidden", !visible);
     });
 
     document.querySelectorAll(".tree-folder").forEach((folder) => {
-      const hasVisible = folder.querySelector(".tree-item:not(.hidden)");
-      folder.classList.toggle("hidden", !hasVisible);
+      folder.classList.toggle("hidden", !folder.querySelector(".tree-item:not(.hidden)"));
     });
   }
 
-  // ── Tag Navigation (auto-generated for welcome page) ──
+  // ── Activity Heatmap (GitHub-style, for welcome page) ──
 
-  function buildTagNavHTML() {
-    const topGroups = {};
-    const seen = new Set();
-    for (const doc of allDocs) {
-      for (const tag of doc.tags) {
-        if (tag === "index") continue;
-        const parts = tag.split("/");
-        const top = parts[0];
-        const sub = parts.length > 1 ? parts.slice(1).join("/") : null;
+  function renderActivityHeatmap(container) {
+    const activity = manifest.activity;
+    if (!activity || Object.keys(activity).length === 0) return;
 
-        if (!topGroups[top]) topGroups[top] = {};
-        const key = sub || "__root__";
-        if (!topGroups[top][key]) topGroups[top][key] = [];
+    const today = new Date();
+    const weeks = 26;
+    const totalDays = weeks * 7;
 
-        const uid = tag + "::" + doc.path;
-        if (!seen.has(uid)) {
-          seen.add(uid);
-          topGroups[top][key].push(doc);
+    const startDate = new Date(today);
+    startDate.setDate(startDate.getDate() - totalDays + 1);
+    const startDay = startDate.getDay();
+    startDate.setDate(startDate.getDate() - startDay);
+
+    const counts = [];
+    const dates = [];
+    const d = new Date(startDate);
+    while (d <= today) {
+      const key = d.toISOString().slice(0, 10);
+      counts.push(activity[key] || 0);
+      dates.push(key);
+      d.setDate(d.getDate() + 1);
+    }
+
+    const maxCount = Math.max(...counts, 1);
+
+    function level(c) {
+      if (c === 0) return 0;
+      const ratio = c / maxCount;
+      if (ratio <= 0.25) return 1;
+      if (ratio <= 0.5) return 2;
+      if (ratio <= 0.75) return 3;
+      return 4;
+    }
+
+    const totalCols = Math.ceil(counts.length / 7);
+    const monthLabels = [];
+    let lastMonth = -1;
+    for (let col = 0; col < totalCols; col++) {
+      const idx = col * 7;
+      if (idx < dates.length) {
+        const m = new Date(dates[idx]).getMonth();
+        if (m !== lastMonth) {
+          monthLabels.push({ col, label: new Date(dates[idx]).toLocaleString("zh-CN", { month: "short" }) });
+          lastMonth = m;
         }
       }
     }
 
-    const sortedTops = Object.keys(topGroups).sort();
-    if (sortedTops.length === 0) return "";
-
-    let html = '<div class="tag-nav"><h2 id="导航">导航</h2>';
-    for (const top of sortedTops) {
-      html += '<div class="tag-nav-group">';
-      html += `<h3><span class="tag-nav-pill" data-tag="${top}">#${top}</span></h3>`;
-
-      const subs = topGroups[top];
-      const subKeys = Object.keys(subs).sort();
-      for (const sub of subKeys) {
-        if (sub !== "__root__") {
-          html += `<h4><span class="tag-nav-pill tag-nav-sub" data-tag="${top}/${sub}">#${sub}</span></h4>`;
-        }
-        html += "<ul>";
-        for (const doc of subs[sub]) {
-          html += `<li><a href="#${encodeURI(doc.path)}" class="tag-nav-link" data-path="${doc.path}">${doc.title}</a></li>`;
-        }
-        html += "</ul>";
-      }
-
-      html += "</div>";
+    let html = '<div class="heatmap-wrap"><h2>更新记录</h2>';
+    html += '<div class="heatmap-months">';
+    let prev = 0;
+    for (const ml of monthLabels) {
+      const gap = ml.col - prev;
+      if (gap > 0) html += `<span style="grid-column:span ${gap}"></span>`;
+      html += `<span>${ml.label}</span>`;
+      prev = ml.col + 1;
     }
-    html += "</div>";
-    return html;
-  }
+    html += '</div>';
 
-  function bindTagNavEvents(container) {
-    container.querySelectorAll(".tag-nav-link").forEach((link) => {
-      link.addEventListener("click", (e) => {
-        e.preventDefault();
-        loadDocument(link.dataset.path);
-      });
-    });
+    html += '<div class="heatmap-grid">';
+    for (let row = 0; row < 7; row++) {
+      for (let col = 0; col < totalCols; col++) {
+        const idx = col * 7 + row;
+        if (idx < counts.length) {
+          const lv = level(counts[idx]);
+          const dt = dates[idx];
+          const c = counts[idx];
+          const tip = `${dt}: ${c} 次更新`;
+          html += `<span class="heatmap-cell lv${lv}" title="${tip}"></span>`;
+        } else {
+          html += '<span class="heatmap-cell empty"></span>';
+        }
+      }
+    }
+    html += '</div>';
 
-    container.querySelectorAll(".tag-nav-pill").forEach((pill) => {
-      pill.addEventListener("click", () => {
-        activeTag = pill.dataset.tag;
-        renderTagCloud();
-        applyFilter();
-      });
-    });
+    html += '<div class="heatmap-legend"><span>少</span>';
+    for (let i = 0; i <= 4; i++) html += `<span class="heatmap-cell lv${i}"></span>`;
+    html += '<span>多</span></div></div>';
+
+    const wrap = document.createElement("div");
+    wrap.innerHTML = html;
+    container.appendChild(wrap);
   }
 
   // ── Document Loading ──
 
   async function loadDocument(path) {
-    activeDocPath = path;
-    setActiveTreeItem(path);
-
     const doc = allDocs.find((d) => d.path === path);
     if (doc) renderBreadcrumb(doc.breadcrumb);
 
+    setActiveTreeItem(path);
     const content = document.getElementById("kb-content");
 
     try {
@@ -391,8 +374,7 @@
       content.innerHTML = renderMarkdown(md);
 
       if (path.endsWith("welcome.md")) {
-        content.innerHTML += buildTagNavHTML();
-        bindTagNavEvents(content);
+        renderActivityHeatmap(content);
       }
 
       resolveAssetPaths(content, getBasePath(path));
@@ -409,15 +391,13 @@
       content.querySelectorAll('a[href^="#docs/"]').forEach((a) => {
         a.addEventListener("click", (e) => {
           e.preventDefault();
-          const docPath = decodeURI(a.getAttribute("href").slice(1));
-          loadDocument(docPath);
+          loadDocument(decodeURI(a.getAttribute("href").slice(1)));
         });
       });
 
       content.scrollTop = 0;
     } catch {
-      content.innerHTML =
-        '<div class="kb-welcome"><p>文档加载失败，请检查路径。</p></div>';
+      content.innerHTML = '<div class="kb-welcome"><p>文档加载失败，请检查路径。</p></div>';
     }
 
     closeSidebarMobile();
@@ -430,11 +410,8 @@
   }
 
   function renderBreadcrumb(parts) {
-    const el = document.getElementById("breadcrumb");
-    el.innerHTML = parts
-      .map((p, i) =>
-        i === parts.length - 1 ? `<span>${p}</span>` : p
-      )
+    document.getElementById("breadcrumb").innerHTML = parts
+      .map((p, i) => i === parts.length - 1 ? `<span>${p}</span>` : p)
       .join(" / ");
   }
 
@@ -444,35 +421,25 @@
     document.getElementById("sidebar").classList.remove("open");
   }
 
-  function initMobile() {
-    const openBtn = document.getElementById("sidebar-open");
-    const closeBtn = document.getElementById("sidebar-close");
-    const sidebar = document.getElementById("sidebar");
-
-    if (openBtn) {
-      openBtn.addEventListener("click", () => sidebar.classList.add("open"));
-    }
-    if (closeBtn) {
-      closeBtn.addEventListener("click", () => sidebar.classList.remove("open"));
-    }
-  }
-
   // ── Init ──
 
   async function init() {
     initMarked();
-    initMobile();
+
+    const openBtn = document.getElementById("sidebar-open");
+    const closeBtn = document.getElementById("sidebar-close");
+    const sidebar = document.getElementById("sidebar");
+    if (openBtn) openBtn.addEventListener("click", () => sidebar.classList.add("open"));
+    if (closeBtn) closeBtn.addEventListener("click", () => sidebar.classList.remove("open"));
 
     try {
-      const res = await fetch("manifest.json");
-      manifest = await res.json();
+      manifest = await (await fetch("manifest.json")).json();
     } catch {
-      document.getElementById("kb-content").innerHTML =
-        '<div class="kb-welcome"><p>知识库加载失败。</p></div>';
+      document.getElementById("kb-content").innerHTML = '<div class="kb-welcome"><p>知识库加载失败。</p></div>';
       return;
     }
 
-    allDocs = flattenDocs(manifest.tree, []);
+    allDocs = flattenDocs(manifest.tree);
     allTags = collectTags(allDocs);
 
     renderTagCloud();
@@ -480,14 +447,13 @@
 
     document.getElementById("tag-search").addEventListener("input", applyFilter);
 
-    const hash = window.location.hash.replace("#", "");
+    const hash = decodeURIComponent(window.location.hash.slice(1));
     if (hash) {
       const doc = allDocs.find((d) => d.path === hash || d.path.endsWith(hash));
-      if (doc) loadDocument(doc.path);
-    } else {
-      const welcome = allDocs.find((d) => d.path.endsWith("welcome.md"));
-      if (welcome) loadDocument(welcome.path);
+      if (doc) return loadDocument(doc.path);
     }
+    const welcome = allDocs.find((d) => d.path.endsWith("welcome.md"));
+    if (welcome) loadDocument(welcome.path);
   }
 
   if (document.readyState === "loading") {

@@ -14,6 +14,7 @@ Zero external dependencies (stdlib only).
 import json
 import os
 import re
+import subprocess
 import sys
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -203,6 +204,26 @@ def walk_docs(tree):
                 yield node
 
 
+def collect_activity():
+    """Collect per-day commit counts for files under kb/docs/ via git log."""
+    try:
+        result = subprocess.run(
+            ["git", "log", "--format=%ad", "--date=short", "--", "docs/"],
+            capture_output=True, text=True, cwd=KB_ROOT, timeout=30,
+        )
+        if result.returncode != 0:
+            return {}
+    except (OSError, FileNotFoundError, subprocess.TimeoutExpired):
+        return {}
+
+    counts = {}
+    for line in result.stdout.strip().splitlines():
+        date = line.strip()
+        if date:
+            counts[date] = counts.get(date, 0) + 1
+    return counts
+
+
 def main():
     if not os.path.isdir(DOCS_DIR):
         print(f"Error: docs directory not found at {DOCS_DIR}", file=sys.stderr)
@@ -210,14 +231,15 @@ def main():
 
     all_docs = collect_all_docs(DOCS_DIR)
     tree = build_tag_tree(all_docs)
-    manifest = {"tree": tree}
+    activity = collect_activity()
+    manifest = {"tree": tree, "activity": activity}
 
     with open(MANIFEST_PATH, "w", encoding="utf-8") as f:
         json.dump(manifest, f, ensure_ascii=False, indent=2)
         f.write("\n")
 
     doc_count = sum(1 for _ in walk_docs(tree))
-    print(f"manifest.json generated: {doc_count} unique doc(s) found.")
+    print(f"manifest.json generated: {doc_count} unique doc(s), {len(activity)} active day(s).")
 
 
 if __name__ == "__main__":
