@@ -1,5 +1,5 @@
 ---
-title: 如何申请国外虚拟信用卡？
+title: 如何申请国外虚拟信用卡
 tags:
   - skills/tools
 ---
