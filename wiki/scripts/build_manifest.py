@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-build_manifest.py — Auto-generate kb/manifest.json from docs/ folder structure.
+build_manifest.py — Auto-generate wiki/manifest.json from docs/ folder structure.
 
-Scans kb/docs/ recursively, reads YAML frontmatter from each .md file,
+Scans wiki/docs/ recursively, reads YAML frontmatter from each .md file,
 and builds a **tag-driven** virtual folder tree.  Hierarchical tags like
 ``skills/tools`` become nested folders (Skills > Tools) in the manifest.
 
@@ -205,7 +205,7 @@ def walk_docs(tree):
 
 
 def collect_activity():
-    """Collect per-day commit counts for files under kb/docs/ via git log."""
+    """Collect per-day commit counts for files under wiki/docs/ via git log."""
     try:
         result = subprocess.run(
             ["git", "log", "--format=%ad", "--date=short", "--", "docs/"],

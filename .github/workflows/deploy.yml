@@ -30,7 +30,7 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Build KB manifest
-        run: python3 kb/scripts/build_manifest.py
+        run: python3 wiki/scripts/build_manifest.py
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

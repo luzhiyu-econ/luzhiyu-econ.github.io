@@ -359,7 +359,7 @@
     if (doc) renderBreadcrumb(doc.breadcrumb);
 
     setActiveTreeItem(path);
-    const content = document.getElementById("kb-content");
+    const content = document.getElementById("wiki-content");
 
     try {
       let md;
@@ -398,7 +398,7 @@
 
       content.scrollTop = 0;
     } catch {
-      content.innerHTML = '<div class="kb-welcome"><p>文档加载失败，请检查路径。</p></div>';
+      content.innerHTML = '<div class="wiki-welcome"><p>文档加载失败，请检查路径。</p></div>';
     }
 
     closeSidebarMobile();
@@ -436,7 +436,7 @@
     try {
       manifest = await (await fetch("manifest.json")).json();
     } catch {
-      document.getElementById("kb-content").innerHTML = '<div class="kb-welcome"><p>知识库加载失败。</p></div>';
+      document.getElementById("wiki-content").innerHTML = '<div class="wiki-welcome"><p>知识库加载失败。</p></div>';
       return;
     }
 
