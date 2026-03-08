@@ -133,7 +133,7 @@
 
   // ── Section Loading ──
 
-  async function loadSection(name) {
+  async function loadSection(name, postId = null) {
     const url = SECTIONS[name];
     if (!url) return;
 
@@ -146,7 +146,7 @@
       container.classList.add("active");
 
       if (name === "blog") {
-        await initBlog();
+        await initBlog(postId);
       }
     } catch {
       container.innerHTML =
@@ -162,11 +162,13 @@
     });
   }
 
-  function navigateTo(section, pushState = true) {
+  function navigateTo(section, pushState = true, postId = null) {
     setActiveNav(section);
-    loadSection(section);
+    loadSection(section, postId);
     if (pushState) {
-      history.pushState({ section }, "", `#${section}`);
+      let url = section === "home" ? "/" : `/${section}`;
+      if (postId) url += `/${postId}`;
+      history.pushState({ section, postId }, "", url);
     }
   }
 
@@ -183,20 +185,38 @@
     });
 
     window.addEventListener("popstate", (e) => {
-      const section = e.state?.section || getSectionFromHash() || "home";
-      currentBlogView = "list";
-      navigateTo(section, false);
+      const state = e.state;
+      if (state && state.postId) {
+        currentBlogView = "post";
+        navigateTo("blog", false, state.postId);
+      } else if (state && state.section) {
+        currentBlogView = "list";
+        navigateTo(state.section, false);
+      } else {
+        const route = getRouteFromPath();
+        currentBlogView = route.postId ? "post" : "list";
+        navigateTo(route.section, false, route.postId);
+      }
     });
   }
 
-  function getSectionFromHash() {
-    const hash = window.location.hash.replace("#", "");
-    return SECTIONS[hash] ? hash : null;
+  function getRouteFromPath() {
+    const path = window.location.pathname.replace(/^\/+|\/+$/g, "");
+    if (!path) return { section: "home", postId: null };
+
+    const parts = path.split("/");
+    const section = parts[0];
+    if (!SECTIONS[section]) return { section: "home", postId: null };
+
+    if (section === "blog" && parts[1]) {
+      return { section: "blog", postId: parts[1] };
+    }
+    return { section, postId: null };
   }
 
   // ── Blog System ──
 
-  async function initBlog() {
+  async function initBlog(postId = null) {
     const listContainer = document.getElementById("blog-list-container");
     const postContainer = document.getElementById("blog-post-container");
     if (!listContainer || !postContainer) return;
@@ -207,6 +227,14 @@
         blogPosts = await res.json();
       } catch {
         listContainer.innerHTML = '<p class="blog-empty">暂无文章</p>';
+        return;
+      }
+    }
+
+    if (postId) {
+      const post = blogPosts.find((p) => p.id === postId);
+      if (post) {
+        await openBlogPost(post, listContainer, postContainer, false);
         return;
       }
     }
@@ -248,10 +276,14 @@
     });
   }
 
-  async function openBlogPost(post, listContainer, postContainer) {
+  async function openBlogPost(post, listContainer, postContainer, pushState = true) {
     currentBlogView = "post";
     listContainer.style.display = "none";
     postContainer.style.display = "";
+
+    if (pushState) {
+      history.pushState({ section: "blog", postId: post.id }, "", `/blog/${post.id}`);
+    }
 
     try {
       const raw = await fetchText(post.file);
@@ -270,6 +302,7 @@
       document.getElementById("blog-back").addEventListener("click", () => {
         currentBlogView = "list";
         showBlogList(listContainer, postContainer);
+        history.pushState({ section: "blog", postId: null }, "", "/blog");
       });
 
       window.scrollTo({ top: 0 });
@@ -284,8 +317,20 @@
   function init() {
     initMarked();
     initNav();
-    const initial = getSectionFromHash() || "home";
-    navigateTo(initial, false);
+
+    const hash = window.location.hash.replace("#", "");
+    if (hash && SECTIONS[hash]) {
+      const url = hash === "home" ? "/" : `/${hash}`;
+      history.replaceState({ section: hash, postId: null }, "", url);
+      navigateTo(hash, false);
+      return;
+    }
+
+    const route = getRouteFromPath();
+    if (route.postId) {
+      currentBlogView = "post";
+    }
+    navigateTo(route.section, false, route.postId);
   }
 
   if (document.readyState === "loading") {
