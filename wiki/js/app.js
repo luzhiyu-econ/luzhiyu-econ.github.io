@@ -128,6 +128,19 @@
     return idx >= 0 ? filePath.substring(0, idx + 1) : "";
   }
 
+  function docPathToUrl(docPath) {
+    return "/wiki/" + encodeURI(docPath.replace(/\.md$/, ""));
+  }
+
+  function getDocPathFromUrl() {
+    const pathname = decodeURIComponent(window.location.pathname);
+    const prefix = "/wiki/";
+    if (!pathname.startsWith(prefix)) return null;
+    const rest = pathname.slice(prefix.length).replace(/\/+$/, "");
+    if (!rest) return null;
+    return rest + ".md";
+  }
+
   // ── Data ──
 
   function flattenDocs(tree) {
@@ -354,11 +367,16 @@
 
   // ── Document Loading ──
 
-  async function loadDocument(path) {
+  async function loadDocument(path, pushState = true) {
     const doc = allDocs.find((d) => d.path === path);
     if (doc) renderBreadcrumb(doc.breadcrumb);
 
     setActiveTreeItem(path);
+
+    if (pushState) {
+      history.pushState({ docPath: path }, "", docPathToUrl(path));
+    }
+
     const content = document.getElementById("wiki-content");
 
     try {
@@ -448,13 +466,38 @@
 
     document.getElementById("tag-search").addEventListener("input", applyFilter);
 
+    window.addEventListener("popstate", (e) => {
+      const state = e.state;
+      if (state && state.docPath) {
+        loadDocument(state.docPath, false);
+      } else {
+        const docPath = getDocPathFromUrl();
+        if (docPath) {
+          const doc = allDocs.find((d) => d.path === docPath);
+          if (doc) { loadDocument(doc.path, false); return; }
+        }
+        const w = allDocs.find((d) => d.path.endsWith("welcome.md"));
+        if (w) loadDocument(w.path, false);
+      }
+    });
+
     const hash = decodeURIComponent(window.location.hash.slice(1));
     if (hash) {
       const doc = allDocs.find((d) => d.path === hash || d.path.endsWith(hash));
-      if (doc) return loadDocument(doc.path);
+      if (doc) {
+        history.replaceState({ docPath: doc.path }, "", docPathToUrl(doc.path));
+        return loadDocument(doc.path, false);
+      }
     }
+
+    const docPath = getDocPathFromUrl();
+    if (docPath) {
+      const doc = allDocs.find((d) => d.path === docPath);
+      if (doc) return loadDocument(doc.path, false);
+    }
+
     const welcome = allDocs.find((d) => d.path.endsWith("welcome.md"));
-    if (welcome) loadDocument(welcome.path);
+    if (welcome) loadDocument(welcome.path, false);
   }
 
   if (document.readyState === "loading") {

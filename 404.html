@@ -1,39 +1,15 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZHIYU LU (陆知雨)</title>
-    <meta name="description" content="Zhiyu Lu — Ph.D. Candidate in Public Finance at CUFE. Research in Public Finance, Political Economy, and Computational Social Science.">
-    <base href="/">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/styles/github.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css">
-</head>
+<html>
+<head><meta charset="UTF-8"></head>
 <body>
-
-    <div class="container">
-        <header class="site-header">
-            <h1 class="site-title">ZHIYU LU (陆知雨)</h1>
-        </header>
-
-        <nav class="site-nav">
-            <ul>
-                <li><a class="nav-link active" data-section="home">HOME</a></li>
-                <li><a class="nav-link" data-section="research">RESEARCH</a></li>
-                <!-- <li><a class="nav-link" data-section="cv">CV (EN)</a></li> -->
-                <!-- <li><a class="nav-link" data-section="cv-cn">中文简历</a></li> -->
-                <li><a class="nav-link" data-section="blog">BLOG</a></li>
-            </ul>
-        </nav>
-
-        <main id="main-content" class="content-section active">
-        </main>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/highlight.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js"></script>
-    <script src="js/main.js"></script>
+<script>
+  var p = window.location.pathname + window.location.search;
+  sessionStorage.setItem('spa-redirect', p);
+  if (window.location.pathname.indexOf('/wiki/') === 0) {
+    window.location.replace('/wiki/');
+  } else {
+    window.location.replace('/');
+  }
+</script>
 </body>
 </html>
