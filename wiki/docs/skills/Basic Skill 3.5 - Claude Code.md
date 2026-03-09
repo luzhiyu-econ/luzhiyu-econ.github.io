@@ -1,5 +1,5 @@
 ---
-title: "#3.5：Claude Code 从入门到多智能体协作"
+title: "#3.5：Claude Code 配置指南"
 tags:
   - skills/basic
 order: 5
@@ -186,7 +186,108 @@ cd claude-code-provider-proxy
 # 按 README 配置 .env 文件后运行
 ```
 
-### 3.3 验证连接
+### 3.3 cc-switch：一键切换 Provider 的桌面工具
+
+手动改环境变量太麻烦？[cc-switch](https://github.com/farion1231/cc-switch) 是一个跨平台的桌面 All-in-One 助手工具（25K+ Stars），支持 Claude Code、Codex、OpenCode、Gemini CLI 等多个 AI 编程工具的 Provider 一键切换。
+
+**核心功能**：
+
+| 功能 | 说明 |
+|---|---|
+| Provider 管理 | 添加、删除、列出、一键切换 API 提供商 |
+| MCP 服务器管理 | 跨应用统一管理 MCP 配置 |
+| 系统提示词预设 | 管理和切换不同的 system prompt |
+| 配置备份/导入/导出 | 换机器时一键迁移配置 |
+| API 延迟测速 | 测试不同 Provider 的响应速度 |
+| 中英双语 | 完整的中文界面支持 |
+
+**安装与使用**：
+
+```bash
+# 从 GitHub Releases 下载对应平台的安装包
+# https://github.com/farion1231/cc-switch/releases
+
+# 或者使用 CLI 版本（Rust 编写，速度极快）
+# 启动后进入交互式菜单
+# 选择 Provider → 输入 API Key → 一键切换
+# 支持 DeepSeek、Qwen、GLM、Kimi K2、MiniMax 等国产模型
+```
+
+cc-switch 的最大价值是：你不需要记住每个 Provider 的环境变量名称和格式，图形界面点几下就能在 Claude 官方 API、OpenRouter、国产模型之间自由切换。
+
+### 3.4 国产 Coding Plan：更低价格的替代方案
+
+2026 年，多家国产大模型厂商推出了**Coding Plan 订阅套餐**——用远低于 Claude 官方的价格，获得类似的 AI 编程体验。这些套餐通过 Claude Code 客户端直接使用（只需切换 Provider），非常适合预算有限的学生和研究者。
+
+#### 方案对比总览
+
+| 平台 | 入门价 | 核心模型 | 5小时额度 | 支持工具 | 亮点 |
+|---|---|---|---|---|---|
+| **Claude 官方** | $20/月（约¥145） | Opus 4.6, Sonnet 4.6 | 按订阅级别 | 全平台 | 模型质量最高 |
+| **MiniMax** | ¥29/月（约$4） | M2.5, M2.1 | 100 prompts | 10+ 工具 | 极致性价比 |
+| **智谱 GLM** | ¥49/月（约$7） | GLM-5, GLM-4.7 | ~80 prompts | 20+ 工具 | 免费 MCP 工具 |
+| **Kimi** | ~¥50/周 | Kimi K2.5 | 300-1200 calls | Kimi CLI 等 | 100 TPS 高速 |
+| **通义千问** | ¥72/月（约$10） | Qwen3.5-Plus 等 | 1200 requests | 多工具 | 多模型切换 |
+
+> **价格差距**：MiniMax 的入门套餐（¥29/月）约为 Claude 官方 Pro（$20/月 ≈ ¥145）的 **1/5**；GLM Lite（¥49/月）约为官方的 **1/3**。
+
+#### MiniMax Coding Plan 详解
+
+[MiniMax](https://platform.minimax.io) 以"Mini Price, Max Performance"为口号，提供极具性价比的编程套餐：
+
+| 套餐 | 月付 | 年付（省2个月） | 5小时额度 | 模型 |
+|---|---|---|---|---|
+| Starter | ¥29 | ¥290 | 100 prompts | M2.5（~50 TPS） |
+| Plus | ¥49 | ¥490 | 300 prompts | M2.5 |
+| Max | ¥119 | ¥1,190 | 1000 prompts | M2.5 |
+| Plus 极速 | ¥98 | ¥980 | 300 prompts | M2.5-highspeed（~100 TPS） |
+| Max 极速 | ¥199 | ¥1,990 | 1000 prompts | M2.5-highspeed |
+| Ultra 极速 | ¥899 | ¥8,990 | 2000 prompts | M2.5-highspeed |
+
+MiniMax 的推理速度（100+ TPS）是其核心卖点，体验非常流畅。适合需要大量代码生成但对模型"深度思考"要求不高的场景。
+
+#### 智谱 GLM Coding Plan 详解
+
+[智谱 GLM](https://z.ai) 的优势在于 GLM-5 模型在 SWE-bench Verified 上表现顶尖，且附带免费 MCP 工具：
+
+| 套餐 | 月付 | 包年月均 | 5小时额度 | 周额度 |
+|---|---|---|---|---|
+| Lite | ¥49 | ¥34 | ~80 prompts | ~400 |
+| Pro | ¥149 | ¥104 | ~400 prompts | ~2,000 |
+| Max | ¥469 | ¥328 | ~1,600 prompts | ~8,000 |
+
+**附带的免费 MCP 工具**：
+- 视觉理解（图片/UI/架构图识别）
+- 联网搜索（Lite 100次/月，Pro 1000次/月）
+- 网页读取（提取文档和教程）
+- 开源仓库访问（GitHub 代码和 Issue）
+
+这些 MCP 工具对科研场景很有价值——比如直接让 Claude Code 搜索文献、读取在线数据文档。
+
+#### 选择建议
+
+```
+你的需求是什么？
+  │
+  ├── 预算充裕 + 追求最强模型质量
+  │   └──▶ Claude 官方 Max（$100-200/月）
+  │
+  ├── 日常使用 + 偶尔需要深度推理
+  │   └──▶ Claude 官方 Pro（$20/月）+ 国产模型备用
+  │
+  ├── 预算有限 + 大量代码生成任务
+  │   └──▶ MiniMax Starter/Plus（¥29-49/月）
+  │
+  ├── 想要免费 MCP 工具 + 良好中文支持
+  │   └──▶ GLM Lite/Pro（¥49-149/月）
+  │
+  └── 想在多个模型间灵活切换
+      └──▶ 通义千问 Lite（¥72/月，支持 6+ 模型）
+```
+
+> **实用策略**：用 cc-switch 同时配置多个 Provider。日常编码用 MiniMax/GLM（省钱），遇到复杂的架构设计或论文写作时切到 Claude 官方 Opus（质量最好）。
+
+### 3.5 验证连接
 
 ```bash
 # 启动 Claude Code 后检查
