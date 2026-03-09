@@ -1,5 +1,5 @@
 ---
-title: "Basic Skill #3.5：Claude Code 从入门到多智能体协作"
+title: "#3.5：Claude Code 从入门到多智能体协作"
 tags:
   - skills/basic
 order: 5
