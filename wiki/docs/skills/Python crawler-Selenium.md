@@ -1,5 +1,5 @@
 ---
-title: Python 爬虫进阶：Selenium 完全配置指南
+title: Python Selenium 爬虫指南
 tags:
   - skills/crawler
 description: 从零开始配置 Selenium 环境，掌握浏览器自动化爬取动态网页的核心技巧，包含环境搭建、API 详解与实战要点。
