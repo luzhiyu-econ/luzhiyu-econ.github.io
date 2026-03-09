@@ -6,7 +6,7 @@ order: 5
 description: 掌握 Claude Code 的安装配置、换源、VS Code 集成与多 Agent 工作流，用 AI 加速科研编程。
 ---
 
-> Claude Code 不是聊天机器人——它是一个能**自主读写文件、执行命令、搜索代码库**的 AI Agent。你描述目标，它规划并执行。
+> Claude Code 是一个能**自主读写文件、执行命令、搜索代码库**的 AI Agent。你描述目标，它规划并执行。
 
 当你在 ChatGPT 或 Claude 网页版里粘贴代码让 AI 帮你改，你还在做**人工搬运**。Claude Code 直接运行在你的终端里，它能看到你的整个项目、运行你的脚本、修改你的文件——就像一个坐在你旁边的 pair programmer。
 
