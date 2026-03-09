@@ -5,7 +5,7 @@ tags:
 order: 5
 description: 掌握 Claude Code 的安装配置、换源、VS Code 集成与多 Agent 工作流，用 AI 加速科研编程。
 ---
-**本教程撰写于 2026 年 3 月 10 日，不代表 Claude Code 的最新状态。**
+**AI时代日新月异，本教程撰写于 2026 年 3 月 10 日，不代表 Claude Code 的最新状态。**
 
 > Claude Code 是一个能**自主读写文件、执行命令、搜索代码库**的 AI Agent。你描述目标，它规划并执行。
 
