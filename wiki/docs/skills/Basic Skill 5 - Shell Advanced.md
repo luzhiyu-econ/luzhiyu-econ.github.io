@@ -2,7 +2,7 @@
 title: "#5：Shell 进阶与效率提升"
 tags:
   - skills/basic
-order: 6
+order: 7
 description: 掌握 Shell 脚本、正则表达式、文本处理工具与进程管理，让终端能力翻倍。
 ---
 

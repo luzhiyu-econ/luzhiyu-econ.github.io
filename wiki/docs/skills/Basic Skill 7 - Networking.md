@@ -2,7 +2,7 @@
 title: "#7：网络基础与调试"
 tags:
   - skills/basic
-order: 8
+order: 9
 description: 理解 IP、端口、DNS、HTTP 等核心网络概念，掌握常用网络调试工具。
 ---
 

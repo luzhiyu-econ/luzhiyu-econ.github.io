@@ -2,7 +2,7 @@
 title: "#4：文件编码与数据格式"
 tags:
   - skills/basic
-order: 5
+order: 6
 description: 理解字符编码的本质，掌握 JSON、YAML、CSV、Markdown 等常见数据格式。
 ---
 

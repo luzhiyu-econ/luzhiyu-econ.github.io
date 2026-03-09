@@ -2,7 +2,7 @@
 title: "#6：SSH 与远程开发"
 tags:
   - skills/basic
-order: 7
+order: 8
 description: 掌握 SSH 密钥认证、远程连接、文件传输与终端复用，实现随时随地开发。
 ---
 
