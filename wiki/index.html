@@ -8,6 +8,7 @@
     <base href="/wiki/">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/styles/github.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css">
+    <link rel="stylesheet" href="../css/shared.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -34,7 +35,7 @@
         </div>
 
         <div class="wiki-body">
-            <article class="wiki-content" id="wiki-content">
+            <article class="wiki-content md-content" id="wiki-content">
                 <div class="wiki-welcome">
                     <p>加载中…</p>
                 </div>
@@ -44,9 +45,10 @@
     </main>
 
     <script>(function(){var r=sessionStorage.getItem('spa-redirect');if(r){sessionStorage.removeItem('spa-redirect');history.replaceState(null,'',r)}})()</script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@14/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/highlight.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js"></script>
+    <script src="../js/shared.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

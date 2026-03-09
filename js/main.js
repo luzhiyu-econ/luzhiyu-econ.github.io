@@ -4,8 +4,6 @@
   const SECTIONS = {
     home: "sections/home.html",
     research: "sections/research.html",
-    cv: "sections/cv-en.html",
-    "cv-cn": "sections/cv-cn.html",
     blog: "sections/blog.html",
   };
 
@@ -13,73 +11,13 @@
   let blogPosts = [];
   let currentBlogView = "list";
 
-  // ── Markdown + Math ──
-
-  function initMarked() {
-    if (typeof marked === "undefined") return;
-    marked.setOptions({
-      gfm: true,
-      breaks: true,
-      highlight: function (code, lang) {
-        if (typeof hljs !== "undefined" && lang && hljs.getLanguage(lang)) {
-          return hljs.highlight(code, { language: lang }).value;
-        }
-        return code;
-      },
-    });
-  }
+  // ── Markdown ──
 
   function renderMarkdown(md) {
     if (typeof marked === "undefined") return `<pre>${md}</pre>`;
-
-    const { text, blocks, inlines } = extractMath(md);
+    const { text, blocks, inlines } = SharedUtils.extractMath(md);
     let html = marked.parse(text);
-    html = restoreMath(html, blocks, inlines);
-    return html;
-  }
-
-  function extractMath(md) {
-    const blocks = [];
-    const inlines = [];
-
-    md = md.replace(/\$\$([\s\S]+?)\$\$/g, (_, tex) => {
-      blocks.push(tex.trim());
-      return `\n\nMATHBLOCK${blocks.length - 1}END\n\n`;
-    });
-
-    md = md.replace(/(?<!\$)\$(?!\$)([^\$\n]+?)\$(?!\$)/g, (_, tex) => {
-      inlines.push(tex.trim());
-      return `MATHINLINE${inlines.length - 1}END`;
-    });
-
-    return { text: md, blocks, inlines };
-  }
-
-  function restoreMath(html, blocks, inlines) {
-    if (typeof katex === "undefined") return html;
-
-    html = html.replace(/MATHBLOCK(\d+)END/g, (_, i) => {
-      try {
-        return katex.renderToString(blocks[+i], {
-          displayMode: true,
-          throwOnError: false,
-        });
-      } catch {
-        return `<pre class="math-error">${blocks[+i]}</pre>`;
-      }
-    });
-
-    html = html.replace(/MATHINLINE(\d+)END/g, (_, i) => {
-      try {
-        return katex.renderToString(inlines[+i], {
-          displayMode: false,
-          throwOnError: false,
-        });
-      } catch {
-        return `<code>${inlines[+i]}</code>`;
-      }
-    });
-
+    html = SharedUtils.restoreMath(html, blocks, inlines);
     return html;
   }
 
@@ -92,43 +30,6 @@
     const text = await res.text();
     sectionCache[url] = text;
     return text;
-  }
-
-  function resolveAssetPaths(container, base) {
-    if (!base) return;
-
-    container.querySelectorAll("img").forEach((img) => {
-      const src = img.getAttribute("src");
-      if (src && !src.startsWith("http") && !src.startsWith("/") && !src.startsWith("data:")) {
-        img.src = base + src;
-      }
-    });
-
-    container.querySelectorAll("a").forEach((a) => {
-      const href = a.getAttribute("href");
-      if (
-        href &&
-        !href.startsWith("http") &&
-        !href.startsWith("/") &&
-        !href.startsWith("#") &&
-        !href.startsWith("mailto:")
-      ) {
-        a.href = base + href;
-      }
-    });
-  }
-
-  function addHeadingAnchors(container) {
-    container.querySelectorAll("h1, h2, h3, h4").forEach((h) => {
-      const id =
-        h.textContent
-          .trim()
-          .toLowerCase()
-          .replace(/[^\w\u4e00-\u9fff]+/g, "-")
-          .replace(/^-|-$/g, "") || "heading";
-      h.id = id;
-      h.classList.add("heading-anchor");
-    });
   }
 
   let blogTocScrollHandler = null;
@@ -207,6 +108,7 @@
       const html = await fetchText(url);
       container.innerHTML = html;
       container.classList.remove("active");
+      // Force reflow so the CSS transition replays
       void container.offsetWidth;
       container.classList.add("active");
 
@@ -358,11 +260,11 @@
       postContainer.innerHTML = `
         <span class="blog-back-link" id="blog-back">&larr; 返回文章列表</span>
         <div class="post-meta">${post.date} · ${post.tags.join(", ")}</div>
-        <div class="post-body">${rendered}</div>`;
+        <div class="post-body md-content">${rendered}</div>`;
 
       const postBody = postContainer.querySelector(".post-body");
-      resolveAssetPaths(postBody, post.base);
-      addHeadingAnchors(postBody);
+      SharedUtils.resolveAssetPaths(postBody, post.base);
+      SharedUtils.addHeadingAnchors(postBody);
       buildBlogTOC(postBody);
 
       document.getElementById("blog-back").addEventListener("click", () => {
@@ -382,7 +284,7 @@
   // ── Init ──
 
   function init() {
-    initMarked();
+    SharedUtils.initMarked();
     initNav();
 
     const hash = window.location.hash.replace("#", "");

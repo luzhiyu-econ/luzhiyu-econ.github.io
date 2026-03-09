@@ -205,18 +205,27 @@ def walk_docs(tree):
 
 
 def collect_activity():
-    """Collect per-day commit counts for files under wiki/docs/ via git log."""
+    """Collect per-day commit counts for files under wiki/docs/ via git log,
+    merged with seed data from activity_seed.json (real git data wins)."""
+    seed_path = os.path.join(SCRIPT_DIR, "activity_seed.json")
+    counts = {}
+    if os.path.isfile(seed_path):
+        try:
+            with open(seed_path, "r", encoding="utf-8") as f:
+                counts = json.load(f)
+        except (OSError, json.JSONDecodeError):
+            counts = {}
+
     try:
         result = subprocess.run(
             ["git", "log", "--format=%ad", "--date=short", "--", "docs/"],
             capture_output=True, text=True, cwd=KB_ROOT, timeout=30,
         )
         if result.returncode != 0:
-            return {}
+            return counts
     except (OSError, FileNotFoundError, subprocess.TimeoutExpired):
-        return {}
+        return counts
 
-    counts = {}
     for line in result.stdout.strip().splitlines():
         date = line.strip()
         if date:

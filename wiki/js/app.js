@@ -7,21 +7,7 @@
   let activeTag = null;
   const docCache = {};
 
-  // ── Markdown ──
-
-  function initMarked() {
-    if (typeof marked === "undefined") return;
-    marked.setOptions({
-      gfm: true,
-      breaks: true,
-      highlight: function (code, lang) {
-        if (typeof hljs !== "undefined" && lang && hljs.getLanguage(lang)) {
-          return hljs.highlight(code, { language: lang }).value;
-        }
-        return code;
-      },
-    });
-  }
+  // ── Markdown (wiki-specific preprocessing, delegates to SharedUtils) ──
 
   function stripFrontmatter(md) {
     return md.replace(/^---\s*\n[\s\S]*?\n---\s*\n/, "");
@@ -56,37 +42,10 @@
     if (typeof marked === "undefined") return `<pre>${md}</pre>`;
     md = stripFrontmatter(md);
     md = renderObsidianSyntax(md);
-    const { text, blocks, inlines } = extractMath(md);
+    const { text, blocks, inlines } = SharedUtils.extractMath(md);
     let html = marked.parse(text);
-    html = restoreMath(html, blocks, inlines);
+    html = SharedUtils.restoreMath(html, blocks, inlines);
     html = renderInlineTags(html);
-    return html;
-  }
-
-  function extractMath(md) {
-    const blocks = [];
-    const inlines = [];
-    md = md.replace(/\$\$([\s\S]+?)\$\$/g, (_, tex) => {
-      blocks.push(tex.trim());
-      return `\n\nMATHBLOCK${blocks.length - 1}END\n\n`;
-    });
-    md = md.replace(/(?<!\$)\$(?!\$)([^\$\n]+?)\$(?!\$)/g, (_, tex) => {
-      inlines.push(tex.trim());
-      return `MATHINLINE${inlines.length - 1}END`;
-    });
-    return { text: md, blocks, inlines };
-  }
-
-  function restoreMath(html, blocks, inlines) {
-    if (typeof katex === "undefined") return html;
-    html = html.replace(/MATHBLOCK(\d+)END/g, (_, i) => {
-      try { return katex.renderToString(blocks[+i], { displayMode: true, throwOnError: false }); }
-      catch { return `<pre>${blocks[+i]}</pre>`; }
-    });
-    html = html.replace(/MATHINLINE(\d+)END/g, (_, i) => {
-      try { return katex.renderToString(inlines[+i], { displayMode: false, throwOnError: false }); }
-      catch { return `<code>${inlines[+i]}</code>`; }
-    });
     return html;
   }
 
@@ -97,35 +56,19 @@
     );
   }
 
-  function resolveAssetPaths(container, base) {
-    if (!base) return;
-    container.querySelectorAll("img").forEach((img) => {
-      const src = img.getAttribute("src");
-      if (src && !src.startsWith("http") && !src.startsWith("/") && !src.startsWith("data:") && !src.startsWith("docs/")) {
-        img.src = base + src;
-      }
-    });
-    container.querySelectorAll("a").forEach((a) => {
-      const href = a.getAttribute("href");
-      if (href && !href.startsWith("http") && !href.startsWith("/") && !href.startsWith("#") && !href.startsWith("mailto:") && !href.startsWith("docs/")) {
-        a.href = base + href;
-      }
-    });
-  }
+  // ── TOC (with scroll-listener cleanup) ──
 
-  function addHeadingAnchors(container) {
-    container.querySelectorAll("h1, h2, h3, h4").forEach((h) => {
-      const id = h.textContent.trim().toLowerCase()
-        .replace(/[^\w\u4e00-\u9fff]+/g, "-")
-        .replace(/^-|-$/g, "") || "heading";
-      h.id = id;
-      h.classList.add("heading-anchor");
-    });
-  }
+  let tocScrollHandler = null;
 
   function buildTOC(scrollContainer) {
     const tocEl = document.getElementById("toc");
     if (!tocEl) return;
+
+    // Clean up previous scroll listener to prevent leaks
+    if (tocScrollHandler) {
+      scrollContainer.removeEventListener("scroll", tocScrollHandler);
+      tocScrollHandler = null;
+    }
 
     const headings = scrollContainer.querySelectorAll("h2, h3, h4");
     if (headings.length < 2) { tocEl.innerHTML = ""; return; }
@@ -147,12 +90,13 @@
     });
 
     let ticking = false;
-    scrollContainer.addEventListener("scroll", () => {
+    tocScrollHandler = () => {
       if (!ticking) {
         requestAnimationFrame(() => { updateTOCActive(scrollContainer, tocEl); ticking = false; });
         ticking = true;
       }
-    });
+    };
+    scrollContainer.addEventListener("scroll", tocScrollHandler);
     updateTOCActive(scrollContainer, tocEl);
   }
 
@@ -170,6 +114,8 @@
     });
     links.forEach((a) => a.classList.toggle("active", a.getAttribute("href") === "#" + current));
   }
+
+  // ── Helpers ──
 
   function getBasePath(filePath) {
     const idx = filePath.lastIndexOf("/");
@@ -263,7 +209,7 @@
     });
   }
 
-  // ── Sidebar: File Tree (depth-aware indentation) ──
+  // ── Sidebar: File Tree ──
 
   function renderFileTree() {
     const el = document.getElementById("file-tree");
@@ -444,8 +390,8 @@
         renderActivityHeatmap(content);
       }
 
-      resolveAssetPaths(content, getBasePath(path));
-      addHeadingAnchors(content);
+      SharedUtils.resolveAssetPaths(content, getBasePath(path), ["docs/"]);
+      SharedUtils.addHeadingAnchors(content);
       buildTOC(content);
 
       content.querySelectorAll(".inline-tag").forEach((tag) => {
@@ -492,7 +438,7 @@
   // ── Init ──
 
   async function init() {
-    initMarked();
+    SharedUtils.initMarked();
 
     const openBtn = document.getElementById("sidebar-open");
     const closeBtn = document.getElementById("sidebar-close");
