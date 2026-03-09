@@ -682,7 +682,73 @@ img {
   font-size: 0.82rem;
 }
 
+/* ===== Blog Table of Contents ===== */
+.blog-toc {
+  position: fixed;
+  top: 160px;
+  left: calc(50% + var(--container-width) / 2 + 40px);
+  width: 200px;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.blog-toc:empty {
+  display: none;
+}
+
+.blog-toc .toc-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-muted);
+  padding-bottom: 10px;
+}
+
+.blog-toc .toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.blog-toc .toc-list li {
+  margin: 0;
+}
+
+.blog-toc .toc-list a {
+  display: block;
+  padding: 4px 0 4px 12px;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: all 0.2s ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.blog-toc .toc-list a:hover {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.blog-toc .toc-list a.active {
+  color: var(--color-accent);
+  border-left-color: var(--color-accent);
+}
+
+.blog-toc .toc-list .toc-h3 { padding-left: 24px; }
+.blog-toc .toc-list .toc-h4 { padding-left: 36px; }
+
 /* ===== Responsive ===== */
+@media (max-width: 1200px) {
+  .blog-toc {
+    display: none;
+  }
+}
+
 @media (max-width: 768px) {
   .site-title {
     font-size: 1.8rem;

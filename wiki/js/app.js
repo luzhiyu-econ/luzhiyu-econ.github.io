@@ -123,6 +123,54 @@
     });
   }
 
+  function buildTOC(scrollContainer) {
+    const tocEl = document.getElementById("toc");
+    if (!tocEl) return;
+
+    const headings = scrollContainer.querySelectorAll("h2, h3, h4");
+    if (headings.length < 2) { tocEl.innerHTML = ""; return; }
+
+    let html = '<div class="toc-title">目录</div><ul class="toc-list">';
+    headings.forEach((h) => {
+      const level = h.tagName.toLowerCase();
+      html += `<li><a href="#${h.id}" class="toc-${level}">${h.textContent}</a></li>`;
+    });
+    html += "</ul>";
+    tocEl.innerHTML = html;
+
+    tocEl.querySelectorAll("a").forEach((a) => {
+      a.addEventListener("click", (e) => {
+        e.preventDefault();
+        const target = scrollContainer.querySelector(a.getAttribute("href"));
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
+    let ticking = false;
+    scrollContainer.addEventListener("scroll", () => {
+      if (!ticking) {
+        requestAnimationFrame(() => { updateTOCActive(scrollContainer, tocEl); ticking = false; });
+        ticking = true;
+      }
+    });
+    updateTOCActive(scrollContainer, tocEl);
+  }
+
+  function updateTOCActive(scrollContainer, tocEl) {
+    const headings = scrollContainer.querySelectorAll("h2, h3, h4");
+    const links = tocEl.querySelectorAll("a");
+    if (!headings.length) return;
+
+    let current = headings[0].id;
+    const offset = 80;
+    headings.forEach((h) => {
+      if (h.getBoundingClientRect().top - scrollContainer.getBoundingClientRect().top < offset) {
+        current = h.id;
+      }
+    });
+    links.forEach((a) => a.classList.toggle("active", a.getAttribute("href") === "#" + current));
+  }
+
   function getBasePath(filePath) {
     const idx = filePath.lastIndexOf("/");
     return idx >= 0 ? filePath.substring(0, idx + 1) : "";
@@ -398,6 +446,7 @@
 
       resolveAssetPaths(content, getBasePath(path));
       addHeadingAnchors(content);
+      buildTOC(content);
 
       content.querySelectorAll(".inline-tag").forEach((tag) => {
         tag.addEventListener("click", () => {

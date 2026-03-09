@@ -131,11 +131,76 @@
     });
   }
 
+  let blogTocScrollHandler = null;
+
+  function buildBlogTOC(postBody) {
+    let tocEl = document.querySelector(".blog-toc");
+    if (!tocEl) {
+      tocEl = document.createElement("nav");
+      tocEl.className = "blog-toc";
+      document.body.appendChild(tocEl);
+    }
+
+    const headings = postBody.querySelectorAll("h2, h3, h4");
+    if (headings.length < 2) { tocEl.innerHTML = ""; return; }
+
+    let html = '<div class="toc-title">目录</div><ul class="toc-list">';
+    headings.forEach((h) => {
+      const level = h.tagName.toLowerCase();
+      html += `<li><a href="#${h.id}" class="toc-${level}">${h.textContent}</a></li>`;
+    });
+    html += "</ul>";
+    tocEl.innerHTML = html;
+
+    tocEl.querySelectorAll("a").forEach((a) => {
+      a.addEventListener("click", (e) => {
+        e.preventDefault();
+        const target = document.getElementById(a.getAttribute("href").slice(1));
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
+    if (blogTocScrollHandler) window.removeEventListener("scroll", blogTocScrollHandler);
+    let ticking = false;
+    blogTocScrollHandler = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => { updateBlogTOCActive(postBody, tocEl); ticking = false; });
+        ticking = true;
+      }
+    };
+    window.addEventListener("scroll", blogTocScrollHandler);
+    updateBlogTOCActive(postBody, tocEl);
+  }
+
+  function updateBlogTOCActive(postBody, tocEl) {
+    const headings = postBody.querySelectorAll("h2, h3, h4");
+    const links = tocEl.querySelectorAll("a");
+    if (!headings.length) return;
+
+    let current = headings[0].id;
+    const offset = 80;
+    headings.forEach((h) => {
+      if (h.getBoundingClientRect().top < offset) current = h.id;
+    });
+    links.forEach((a) => a.classList.toggle("active", a.getAttribute("href") === "#" + current));
+  }
+
+  function removeBlogTOC() {
+    const tocEl = document.querySelector(".blog-toc");
+    if (tocEl) tocEl.innerHTML = "";
+    if (blogTocScrollHandler) {
+      window.removeEventListener("scroll", blogTocScrollHandler);
+      blogTocScrollHandler = null;
+    }
+  }
+
   // ── Section Loading ──
 
   async function loadSection(name, postId = null) {
     const url = SECTIONS[name];
     if (!url) return;
+
+    removeBlogTOC();
 
     const container = document.getElementById("main-content");
     try {
@@ -298,9 +363,11 @@
       const postBody = postContainer.querySelector(".post-body");
       resolveAssetPaths(postBody, post.base);
       addHeadingAnchors(postBody);
+      buildBlogTOC(postBody);
 
       document.getElementById("blog-back").addEventListener("click", () => {
         currentBlogView = "list";
+        removeBlogTOC();
         showBlogList(listContainer, postContainer);
         history.pushState({ section: "blog", postId: null }, "", "/blog");
       });
