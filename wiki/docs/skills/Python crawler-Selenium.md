@@ -2,6 +2,7 @@
 title: Python Selenium 爬虫指南
 tags:
   - skills/crawler
+  - skills/python
 description: 从零开始配置 Selenium 环境，掌握浏览器自动化爬取动态网页的核心技巧，包含环境搭建、API 详解与实战要点。
 ---
 > 本文配套 Jupyter Notebook 可直接运行，文末附下载链接。
