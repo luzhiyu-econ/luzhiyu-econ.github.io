@@ -500,15 +500,3 @@ git config --global --unset http.proxy
 网络知识的学习是渐进式的——不需要一次理解所有细节，遇到问题时知道**去哪里查、用什么工具排查**，就已经超越了大部分初学者。
 
 ---
-
-> 恭喜你读完了 Basic Skill 全系列！这 8 篇文章覆盖了从操作系统到网络调试的核心基础技能。掌握它们不会让你立刻成为编程高手，但会让你在学习任何编程语言和框架时**不再被环境和工具绊倒**。
->
-> 回顾全系列：
-> - [[Basic Skill 1 - Operating System|#1 操作系统的本质区别]]
-> - [[Basic Skill 2 - Terminal|#2 终端与命令行基础]]
-> - [[Basic Skill 3 - Git|#3 Git 版本控制]]
-> - [[Basic Skill 4 - Dev Environment|#4 开发环境搭建]]
-> - [[Basic Skill 5 - Encoding and Formats|#5 文件编码与数据格式]]
-> - [[Basic Skill 6 - Shell Advanced|#6 Shell 进阶与效率提升]]
-> - [[Basic Skill 7 - SSH|#7 SSH 与远程开发]]
-> - [[Basic Skill 8 - Networking|#8 网络基础与调试]]
