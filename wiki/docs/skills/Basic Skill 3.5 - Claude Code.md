@@ -1000,13 +1000,13 @@ Claude Code 的核心思想是：**把你从"搬运工"变成"决策者"**。你
 ---
 
 > **进阶系列**：本篇为 Claude Code 入门指南。如果你已经掌握基础操作，推荐继续阅读 **Claude Code 深度教程系列**（7 章完整体系）：
-> - [[AI CLI Tools/Claude Code/1 - How Claude Code Works|#1：运行原理深度解析]]
-> - [[AI CLI Tools/Claude Code/2 - Configuration Deep Dive|#2：配置方法论]]
-> - [[AI CLI Tools/Claude Code/3 - Agent Architecture|#3：Agent 设计方法论]]
-> - [[AI CLI Tools/Claude Code/4 - Skills for Economics|#4：Skills 设计——经济学研究技能包]]
-> - [[AI CLI Tools/Claude Code/5 - Data Science Workflows|#5：数据科学处理实战]]
-> - [[AI CLI Tools/Claude Code/6 - Project Architecture|#6：项目架构设计方法论]]
-> - [[AI CLI Tools/Claude Code/7 - Feature Catalog and Resources|#7：功能全景与资源索引]]
+> - [[Claude Code 1 - How Claude Code Works|#1：运行原理深度解析]]
+> - [[Claude Code 2 - Configuration Deep Dive|#2：配置方法论]]
+> - [[Claude Code 3 - Agent Architecture|#3：Agent 设计方法论]]
+> - [[Claude Code 4 - Skills for Economics|#4：Skills 设计——经济学研究技能包]]
+> - [[Claude Code 5 - Data Science Workflows|#5：数据科学处理实战]]
+> - [[Claude Code 6 - Project Architecture|#6：项目架构设计方法论]]
+> - [[Claude Code 7 - Feature Catalog and Resources|#7：功能全景与资源索引]]
 
 ---
 

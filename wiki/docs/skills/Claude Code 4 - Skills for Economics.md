@@ -566,7 +566,7 @@ econ-replication/
 
 ```bash
 # 方法 1：从教程下载目录复制
-cp -r "wiki/docs/skills/AI CLI Tools/Claude Code/downloads/econ-replication" .claude/skills/
+cp -r "wiki/docs/skills/downloads/econ-replication" .claude/skills/
 
 # 方法 2：直接克隆（如果有远程仓库）
 # git clone <repo-url> .claude/skills/econ-replication
@@ -782,5 +782,5 @@ my-plugin/
 
 ---
 
-> **上一篇**：[[3 - Agent Architecture|#3：Agent 设计方法论]]
-> **下一篇**：[[5 - Data Science Workflows|#5：数据科学处理实战]]
+> **上一篇**：[[Claude Code 3 - Agent Architecture|#3：Agent 设计方法论]]
+> **下一篇**：[[Claude Code 5 - Data Science Workflows|#5：数据科学处理实战]]

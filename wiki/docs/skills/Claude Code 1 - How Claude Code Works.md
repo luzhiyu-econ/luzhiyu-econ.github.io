@@ -971,4 +971,4 @@ claude -w feature-viz
 
 ---
 
-**下一篇 →** [#2：Claude Code 配置深度解析](./2%20-%20Configuration%20Deep%20Dive.md)：CLAUDE.md 编写、.claude/rules/、Auto Memory、权限模型与环境变量全面指南。
+**下一篇 →** [#2：Claude Code 配置深度解析](./Claude%20Code%202%20-%20Configuration%20Deep%20Dive.md)：CLAUDE.md 编写、.claude/rules/、Auto Memory、权限模型与环境变量全面指南。
