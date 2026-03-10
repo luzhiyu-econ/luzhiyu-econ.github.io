@@ -2,7 +2,7 @@
 title: "#7：功能全景与资源索引"
 tags:
   - skills/claude-code
-order: 7
+order: 8
 description: Claude Code 全部功能的分类索引、新兴功能速览、社区资源和官方文档链接。本章作为持续更新的入口。
 ---
 **AI时代日新月异，本教程撰写于 2026 年 3 月 10 日，不代表 Claude Code 的最新状态。**
@@ -442,20 +442,6 @@ Claude Code 更新频繁。保持跟进的方法：
 3. **Homebrew 更新**：`brew upgrade claude-code`
 4. **Native 安装**：自动后台更新
 
----
-
-## 六、本教程系列导航
-
-| 章节 | 标题 | 核心内容 |
-|---|---|---|
-| 入门 | [Basic Skill 3.5](../Basic%20Skill%203.5%20-%20Claude%20Code.md) | 安装、认证、换源、VS Code、基本文件体系 |
-| 第 1 章 | [运行原理深度解析](Claude%20Code%201%20-%20How%20Claude%20Code%20Works.md) | Agentic Loop、工具、上下文、Token 经济学 |
-| 第 2 章 | [配置方法论](Claude%20Code%202%20-%20Configuration%20Deep%20Dive.md) | CLAUDE.md、Rules、Hooks、MCP、Permissions |
-| 第 3 章 | [Agent 设计方法论](Claude%20Code%203%20-%20Agent%20Architecture.md) | 自定义 Agent、编排模式、Git Worktree |
-| 第 4 章 | [Skills 设计](Claude%20Code%204%20-%20Skills%20for%20Economics.md) | Skills 系统、经济学技能包、Continuous Learning |
-| 第 5 章 | [数据科学处理实战](Claude%20Code%205%20-%20Data%20Science%20Workflows.md) | 数据清洗、DID/IV/RDD、可视化、验证循环 |
-| 第 6 章 | [项目架构设计方法论](Claude%20Code%206%20-%20Project%20Architecture.md) | CLAUDE.md 体系、Session 管理、Token 优化 |
-| 第 7 章 | 本章 | 功能全景、资源索引（持续更新入口） |
 
 ---
 

@@ -2,7 +2,7 @@
 title: "#5：数据科学处理实战"
 tags:
   - skills/claude-code
-order: 5
+order: 6
 description: 掌握 Claude Code 在数据清洗、因果推断（DID/IV/RDD）、可视化、跨语言互操作和验证循环中的实战技巧。
 ---
 **AI时代日新月异，本教程撰写于 2026 年 3 月 10 日，不代表 Claude Code 的最新状态。**

@@ -2,7 +2,7 @@
 title: "#2：Claude Code 配置方法"
 tags:
   - skills/claude-code
-order: 2
+order: 3
 description: 全面掌握 Claude Code 的多平台入口选择、CLAUDE.md 设计哲学、Rules 系统、记忆层级、Hooks 自动化、MCP 配置、权限模型与 Settings 体系，打造经济学研究专属的 AI 编程环境。
 ---
 **AI时代日新月异，本教程撰写于 2026 年 3 月 10 日，不代表 Claude Code 的最新状态。**

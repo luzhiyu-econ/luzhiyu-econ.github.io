@@ -2,7 +2,7 @@
 title: "#6：项目架构设计"
 tags:
   - skills/claude-code
-order: 6
+order: 7
 description: 掌握 CLAUDE.md 体系设计方法论、Session 管理策略、Token 优化技巧，构建从零到完整的经济学研究项目。
 ---
 **AI时代日新月异，本教程撰写于 2026 年 3 月 10 日，不代表 Claude Code 的最新状态。**
