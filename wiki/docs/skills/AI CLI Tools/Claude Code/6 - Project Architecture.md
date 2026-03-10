@@ -1,7 +1,7 @@
 ---
 title: "#6：项目架构设计方法论"
 tags:
-  - skills/ai-cli
+  - skills/AI CLI Tools/Claude Code
 order: 6
 description: 掌握 CLAUDE.md 体系设计方法论、Session 管理策略、Token 优化技巧，构建从零到完整的经济学研究项目。
 ---
@@ -394,7 +394,53 @@ Claude 读 150 行模块：~1K token，读 1 次就够 = 1K token
 差距：30 倍
 ```
 
-### 4.4 月成本估算
+### 4.4 mgrep 替代 grep 减少 Token
+
+Claude Code 内置的 `Grep` 工具（mgrep）比 `Bash(grep)` 更高效：
+
+```
+Bash(grep "pattern" -r .)
+  → 返回所有匹配的完整行
+  → 大型代码库可能返回数千行（数万 token）
+  → Claude 被迫消化大量无关上下文
+
+mgrep（内置 Grep 工具）
+  → 智能截断，只返回最相关的匹配
+  → 自动排除 node_modules/、.git/ 等噪声
+  → 返回量通常是 grep 的 1/5 到 1/10
+```
+
+**最佳实践**：在 CLAUDE.md 中添加规则：
+
+```markdown
+## 搜索规范
+- 搜索代码时优先使用内置 Grep 工具，不要用 Bash(grep)
+- 使用 Glob 而非 Bash(find) 查找文件
+- 搜索范围尽可能精确：指定目录和文件类型
+```
+
+### 4.5 System Prompt 瘦身
+
+Claude Code 的内置 system prompt 约占 ~18K token。虽然你无法直接修改它，但可以通过以下方式减少总的 prompt 开销：
+
+```
+System prompt 构成                    优化方向
+────────────────                      ─────────
+内置 system prompt    ~18K token      无法修改
+CLAUDE.md             ~2-5K token     ← 精简到 200 行以内
+.claude/rules/        ~1-3K token     ← 用 paths: 限制加载范围
+Auto Memory           ~1-2K token     ← 定期清理过时记忆
+MCP 工具定义          ~2-10K token    ← 启用 Tool Search 惰性加载
+────────────────
+总计                  ~24-38K token   → 优化后 ~20-25K token
+```
+
+**立竿见影的优化**：
+1. MCP Tool Search 惰性加载：从 ~10K 降到 ~0.5K（仅加载工具名和描述）
+2. Rules 路径限制：编辑 Python 时不加载 LaTeX rules
+3. CLAUDE.md 精简：删除 Claude 已经知道的常识性规则
+
+### 4.6 月成本估算
 
 | 使用模式 | 模型 | 预估月成本 |
 |---|---|---|
@@ -460,6 +506,52 @@ claude                                 claude
 
 ---
 
+### 5.3 End-to-End 搭建详细步骤
+
+以下是一个经济学 DID 项目从零搭建的完整命令序列：
+
+```bash
+# Step 1: 初始化项目
+mkdir econ-did-project && cd econ-did-project
+git init
+claude  # 启动 Claude Code
+
+# Step 2: 让 Claude 生成初始结构
+"创建标准经济学研究项目结构：data/raw、data/processed、src/clean、
+ src/analysis、src/viz、output/tables、output/figures、paper/、tests/"
+
+# Step 3: 生成 CLAUDE.md
+/init  # Claude 分析项目并生成初始 CLAUDE.md
+
+# Step 4: 手动编辑 CLAUDE.md（添加项目特有规则）
+
+# Step 5: 创建 Rules
+"为 src/analysis/ 下的 Python 文件创建规则：
+ 标准误默认聚类到地级市层级，回归使用 linearmodels，
+ 保存到 .claude/rules/analysis-python.md"
+
+# Step 6: 创建 Agents
+"创建 data-cleaner 和 stats-reviewer 两个自定义 Agent"
+
+# Step 7: 安装 Skills
+cp -r path/to/econ-replication .claude/skills/
+
+# Step 8: 配置权限（保护原始数据）
+"在 .claude/settings.json 中禁止修改 data/raw/ 目录"
+
+# Step 9: 提交初始配置
+git add . && git commit -m "init: project structure and Claude Code config"
+
+# Step 10: 开始工作
+"读取 data/raw/ 中的数据，开始数据清洗"
+```
+
+### 动手练习
+
+用上面的 10 步流程从零搭建你的下一个研究项目。
+
+---
+
 ## 六、团队协作
 
 ### 6.1 共享配置 via Git
@@ -472,6 +564,24 @@ claude                                 claude
 ├── .claude/agents/
 ├── .claude/skills/
 └── .mcp.json
+```
+
+**冲突处理**：当团队成员对 CLAUDE.md 有不同偏好时：
+
+```
+共享层（CLAUDE.md）：           只放所有人都同意的规则
+  ├── 目录约定
+  ├── 代码规范
+  └── 常用命令
+
+个人层（CLAUDE.local.md）：     个人偏好覆盖
+  ├── 模型偏好（我习惯用 Opus）
+  ├── 格式偏好（tab vs space）
+  └── 个人快捷方式
+
+.claude/settings.local.json：  个人工具设置
+  ├── 权限放宽（我信任 Claude）
+  └── 本地 MCP 服务器配置
 ```
 
 ### 6.2 GitHub Actions 自动化
@@ -491,7 +601,53 @@ jobs:
           model: sonnet
 ```
 
-> 参考：[GitHub Actions](https://code.claude.com/docs/en/github-actions)，[GitLab CI/CD](https://code.claude.com/docs/en/gitlab-ci-cd)
+**实际用法**：在 PR 评论中 `@claude` 可以触发自动代码审查、bug 修复、甚至直接创建修复 PR。
+
+> 参考：[GitHub Actions](https://code.claude.com/docs/en/github-actions)
+
+### 6.3 GitLab CI/CD
+
+```yaml
+# .gitlab-ci.yml
+claude-review:
+  image: anthropics/claude-code:latest
+  script:
+    - claude -p "Review the changes in this MR, focus on statistical methodology"
+      --output-format json > review.json
+  artifacts:
+    paths:
+      - review.json
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+```
+
+> 参考：[GitLab CI/CD](https://code.claude.com/docs/en/gitlab-ci-cd)
+
+### 6.4 Slack 集成
+
+将 Claude Code 接入团队 Slack，实现：
+
+```
+Slack 频道中发消息
+  │
+  ├── @claude 运行回归并报告结果
+  │   → Claude Code 执行分析
+  │   → 进度更新发回 Slack
+  │   → 最终结果（表格/图表）发回 Slack
+  │
+  └── @claude 审查这个 PR
+      → Claude Code 审查代码
+      → 审查意见发回 Slack
+      → 可选：自动创建修复 PR
+```
+
+**配置方式**：
+
+1. 在 Anthropic 控制台启用 Slack 集成
+2. 在 Slack workspace 安装 Claude Code 应用
+3. 配置 Code + Chat 模式（Claude 自动判断是否需要执行代码）
+
+> 参考：[Slack 集成](https://code.claude.com/docs/en/slack)
 
 ---
 

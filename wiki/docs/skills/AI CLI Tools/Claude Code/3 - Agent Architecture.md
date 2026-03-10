@@ -1,7 +1,7 @@
 ---
 title: "#3：Agent 设计方法论"
 tags:
-  - skills/ai-cli
+  - skills/AI CLI Tools/Claude Code
 order: 3
 description: 掌握 Claude Code 的内置 Agent 体系、自定义 Agent 设计原则、并行编排模式与 Git Worktree 工作流，构建高效的经济学多 Agent 研究系统。
 ---
@@ -388,11 +388,64 @@ claude -w feature-auth               # 简写
 
 # 自动生成名称
 claude --worktree                    # 自动命名
-
-# 在已有 Claude 会话中
-# 子 Agent 可以使用 worktree 隔离
-# isolation: worktree 让子 Agent 拥有独立的工作副本
 ```
+
+### 5.3 子 Agent 的 isolation: worktree
+
+在自定义 Agent 的 frontmatter 中设置 `isolation: worktree`，让子 Agent 在独立的 worktree 中运行——它的文件修改不会影响主工作目录：
+
+```markdown
+# .claude/agents/risky-refactor.md
+---
+name: risky-refactor
+description: 在独立 worktree 中执行可能破坏性的重构
+tools: Read, Write, Edit, Bash, Glob, Grep
+model: sonnet
+isolation: worktree
+---
+
+在独立工作目录中执行重构。
+完成后运行测试确认无破坏。
+如果测试通过，提交到 worktree 分支。
+如果测试失败，报告问题但不影响主分支。
+```
+
+**工作原理**：
+
+```
+主工作目录（你正在工作）
+    │
+    ├── 启动 risky-refactor Agent
+    │   → Claude 自动创建 worktree
+    │   → Agent 在 worktree 中修改文件
+    │   → 运行测试
+    │   └── 返回结果到主对话
+    │
+    主工作目录完全不受影响
+```
+
+### 5.4 /tasks 命令：管理并行实例
+
+当你同时运行多个 Claude 实例时，`/tasks` 帮你追踪所有活跃的会话：
+
+```bash
+# 查看所有活跃的 Claude 实例
+/tasks
+
+# 输出示例：
+#  ID   Name              Status    Branch
+#  1    data-cleaning     active    worktree-data-clean
+#  2    regression        idle      worktree-regression
+#  3    visualization     active    worktree-viz
+
+# 配合 /rename 使用
+/rename data-cleaning     # 给当前会话命名
+```
+
+**最佳实践**：
+- 启动每个新实例后立即 `/rename`
+- 定期用 `/tasks` 检查所有实例状态
+- 完成的实例及时关闭，释放资源
 
 ### 5.3 并行工作流
 
@@ -474,7 +527,32 @@ git merge worktree-analysis
 | Git | 各自分支，完成后 merge | 代码修改任务 |
 | tmux | 多面板在同一终端中管理 | 需要同时监控 |
 
-### 6.3 tmux 多实例管理
+### 6.3 文件系统协调详解
+
+多个 Claude 实例可以通过共享文件进行协调：
+
+```
+项目根目录/
+├── tmp/
+│   ├── progress.md            ← 各实例更新进度
+│   ├── data-clean-done.flag   ← 完成标记文件
+│   └── handoff-notes.md       ← 交接笔记
+```
+
+**协调模式示例**（数据清洗 → 回归分析的串联）：
+
+```
+实例 1（data-cleaning）：
+  "清洗 data/raw/panel.csv，输出到 data/processed/panel_clean.csv。
+   完成后创建 tmp/data-clean-done.flag 文件，
+   内容写明清洗了哪些变量、删了多少行、注意事项。"
+
+实例 2（regression）：
+  "等待 tmp/data-clean-done.flag 出现后，
+   读取其中的说明，然后基于 data/processed/panel_clean.csv 运行回归。"
+```
+
+### 6.4 tmux 多实例管理
 
 ```bash
 # 创建 tmux 会话，3 个面板
@@ -484,19 +562,47 @@ tmux split-window -v
 
 # 面板 1：数据处理
 cd ~/research/project && claude
+/rename data-cleaning
 
 # 面板 2：回归分析
 cd ~/research/project && claude
+/rename regression
 
 # 面板 3：论文更新
 cd ~/research/project && claude
+/rename paper-update
+
+# 快捷键导航
+# Ctrl+b → 方向键   在面板间切换
+# Ctrl+b → z        全屏/还原当前面板
+```
+
+### 6.5 经济学多实例协调案例
+
+一个完整的 DID 论文项目，用 3 个实例并行推进：
+
+```
+实例 1: data-pipeline              实例 2: analysis             实例 3: writing
+/rename data-pipeline              /rename analysis             /rename writing
+
+"清洗城市面板数据，构造            "等数据就绪后：               "搜索最新 DID 文献，
+ DID 变量，输出到                   运行 M1-M6 基准回归，        更新文献综述，
+ data/processed/"                   输出 LaTeX 表格"            初稿 introduction"
+
+完成后：创建                       完成后：创建                  完成后：提交
+tmp/data-done.flag                tmp/regression-done.flag      paper/ 更新
+
+       └──────────┐                     │
+                   ▼                     ▼
+              实例 2 读取 flag       实例 3 等待表格
+              继续执行分析           整合到论文正文
 ```
 
 > **成本注意**：每个实例独立消耗 token。只有任务真的独立时才用并行——简单顺序任务用单个会话更经济。
 
 ### 动手练习
 
-如果你有一个需要"数据清洗 + 回归分析 + 画图"的项目，尝试用 tmux 开 3 个 Claude 实例并行处理。注意每个实例的 `/rename` 命名。
+如果你有一个需要"数据清洗 + 回归分析 + 画图"的项目，尝试用 tmux 开 3 个 Claude 实例并行处理。注意每个实例的 `/rename` 命名，以及用 flag 文件做交接。
 
 ---
 

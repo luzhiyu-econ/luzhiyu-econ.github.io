@@ -1,7 +1,7 @@
 ---
 title: "#7：功能全景与资源索引"
 tags:
-  - skills/ai-cli
+  - skills/AI CLI Tools/Claude Code
 order: 7
 description: Claude Code 全部功能的分类索引、新兴功能速览、社区资源和官方文档链接。本章作为持续更新的入口。
 ---
@@ -69,125 +69,269 @@ Claude Code
 
 ### 2.1 Remote Control — 远程控制
 
-从任何设备（手机、平板、浏览器）继续本地 Claude Code 会话。会话始终运行在本地机器上。
+从任何设备（手机、平板、浏览器）继续本地 Claude Code 会话。
 
 ```bash
-# 启动
+# 启动远程控制
 claude remote-control
 
 # 或在现有会话中
 /remote-control  # 简写 /rc
 ```
 
-- **原理**：本地执行 + 远程查看，E2E 加密
-- **设备**：claude.ai/code, iOS app, Android app
-- **QR 码**：扫描终端中的二维码快速连接
-- **文档**：[Remote Control](https://code.claude.com/docs/en/remote-control)
+**工作原理**：
+
+```
+你的电脑（本地）                       你的手机/平板（远程）
+┌─────────────────────┐              ┌─────────────────┐
+│  Claude Code 运行中  │◄── E2E ───►│ claude.ai/code  │
+│  代码执行在本地       │   加密连接   │ 或 iOS/Android  │
+│  文件操作在本地       │              │ 只做查看和输入   │
+└─────────────────────┘              └─────────────────┘
+```
+
+**经济学场景**：在服务器上跑长时间的大数据处理，用手机实时监控进度和结果。
+
+**配置步骤**：
+1. 在终端运行 `claude remote-control`
+2. 扫描终端显示的 QR 码
+3. 在手机浏览器或 App 中打开连接
+4. 通过远程界面继续对话、查看输出
+
+> **文档**：[Remote Control](https://code.claude.com/docs/en/remote-control)
 
 ### 2.2 Teleport — 会话漫游
 
-在不同环境间无缝转移工作会话。
+在不同环境间无缝转移工作会话——把终端里的工作搬到桌面应用，或反过来。
 
 ```bash
-# 将终端会话交接到桌面应用
+# 将当前终端会话交接到桌面应用
 /desktop
 
-# 将 Web 上的长时间任务拉入本地终端
+# 将 Web/App 上的会话拉入本地终端
 /teleport
 ```
 
+**典型场景**：
+- 白天在办公室用终端 CLI 编码，晚上回家用 Desktop App 继续
+- 在 Web 上启动了一个长时间任务，需要在本地终端接管以获得完整工具权限
+- 在手机上规划了分析思路，回到电脑上 teleport 过来执行
+
+**注意**：Teleport 转移的是对话上下文和状态，不是文件。两端需要访问同一个项目目录（通过 Git 同步或共享文件系统）。
+
 ### 2.3 Chrome 集成
 
-连接 Chrome 浏览器进行 Web 应用测试和调试。
+连接本地 Chrome 浏览器，让 Claude 具备浏览器操作能力。
 
 ```bash
 # 启用 Chrome 集成
 claude --chrome
-
-# 让 Claude 在浏览器中操作
-"在 Chrome 中打开 localhost:8080，测试表单提交"
 ```
 
-- **功能**：页面导航、元素交互、表单填写、截图对比
-- **文档**：[Chrome](https://code.claude.com/docs/en/chrome)
+**核心能力**：
+
+| 功能 | 说明 | 经济学场景 |
+|---|---|---|
+| 页面导航 | 打开 URL、点击链接 | 访问数据下载页面 |
+| 元素交互 | 点击、滚动、填写表单 | 自动填写数据申请表 |
+| 截图 | 捕获当前页面截图 | 检查生成的图表效果 |
+| 截图对比 | 对比两张截图差异 | 验证图表一致性 |
+| 控制台 | 执行 JavaScript | 调试 Web 可视化 |
+
+**图表调试工作流**：
+
+```
+1. Claude 生成 matplotlib 图表 → 保存为 PNG
+2. "在 Chrome 中打开 output/figures/event_study.png"
+3. Claude 截图并分析："标题字号偏小，建议改为 16pt"
+4. 修改后重新生成 → 再次截图对比
+```
+
+> **文档**：[Chrome](https://code.claude.com/docs/en/chrome)
 
 ### 2.4 Slack 集成
 
-从 Slack 聊天直接触发 Claude Code 任务。
+将 Claude Code 接入团队 Slack workspace，团队成员可以直接在聊天中触发代码操作。
 
-- **模式**：Code + Chat（Claude 决定路由）或 Code only
-- **工作流**：Slack 消息 → Claude Code 会话 → 进度更新回 Slack → PR 创建
-- **文档**：[Slack](https://code.claude.com/docs/en/slack)
+**两种模式**：
+- **Code + Chat**：Claude 自动判断消息是需要执行代码还是简单回答
+- **Code only**：所有消息都触发 Claude Code 会话
+
+**完整工作流**：
+
+```
+团队成员在 Slack 中发送消息
+    │
+    ├── "@claude 跑一下上个月的 DID 回归，用最新数据"
+    │   → Claude Code 启动会话
+    │   → 执行数据更新和回归
+    │   → 进度更新发回 Slack 频道
+    │   → 最终结果（系数表格）发回 Slack
+    │
+    └── "@claude 审查 PR #42 的统计方法"
+        → Claude Code 读取 PR 内容
+        → 生成审查意见
+        → 发回 Slack + 在 PR 中留评论
+```
+
+**适用团队**：多人合作的研究项目，导师可以在 Slack 中直接要求 Claude 运行分析。
+
+> **文档**：[Slack](https://code.claude.com/docs/en/slack)
 
 ### 2.5 Desktop App
 
-独立桌面应用，提供可视化操作界面。
+独立桌面应用，提供可视化的 Claude Code 操作界面。
 
-- **特色**：自动 worktree 隔离、可视化 diff、App 预览、PR 监控
-- **平台**：macOS (Intel + Apple Silicon), Windows
-- **文档**：[Desktop](https://code.claude.com/docs/en/desktop)，[Desktop Quickstart](https://code.claude.com/docs/en/desktop-quickstart)
+**核心特色**：
+- **自动 Worktree 隔离**：每个新会话自动创建独立 worktree，修改互不干扰
+- **可视化 Diff**：实时查看 Claude 对文件的每次修改
+- **App 预览**：对 Web 应用实时预览效果
+- **PR 监控**：Dashboard 查看所有活跃 PR 状态
+- **会话管理**：可视化管理多个并行会话
+
+**平台支持**：macOS (Intel + Apple Silicon), Windows
+
+**经济学场景**：不熟悉命令行的合作者（如导师）可以通过 Desktop App 使用 Claude Code 的全部能力。
+
+> **文档**：[Desktop](https://code.claude.com/docs/en/desktop)，[Desktop Quickstart](https://code.claude.com/docs/en/desktop-quickstart)
 
 ### 2.6 GitHub Actions / GitLab CI/CD
 
-在 CI/CD 流程中自动化 Claude Code。
+在 CI/CD 流程中自动化 Claude Code——每次 PR 自动代码审查，甚至自动修复。
+
+**GitHub Actions 典型用法**：
 
 ```yaml
-# PR 中 @claude 触发自动代码审查
-# 自动创建 PR、修复 bug、回答问题
+# .github/workflows/claude-review.yml
+name: Claude Code Review
+on: [pull_request]
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Claude Code Review
+        uses: anthropics/claude-code-action@v1
+        with:
+          model: sonnet
 ```
 
-- **GitHub**：[GitHub Actions](https://code.claude.com/docs/en/github-actions)
-- **GitLab**：[GitLab CI/CD](https://code.claude.com/docs/en/gitlab-ci-cd)
+**触发方式**：
+- 在 PR 评论中 `@claude` 即可触发
+- 可以要求审查代码、修复 bug、回答问题
+- Claude 可以直接推送修复 commit
+
+**GitLab 等效配置**参见 [GitLab CI/CD 文档](https://code.claude.com/docs/en/gitlab-ci-cd)。
+
+> **文档**：[GitHub Actions](https://code.claude.com/docs/en/github-actions)
 
 ### 2.7 Agent SDK
 
-编程化调用 Claude Code，构建自定义 Agent。
+编程化调用 Claude Code，将其嵌入自定义脚本和应用。
 
 ```python
-# Python SDK
+# Python SDK 示例
 from claude_code import AgentSDK
-agent = AgentSDK()
-result = agent.run("analyze data/raw/census.csv")
+
+agent = AgentSDK(model="sonnet")
+result = agent.run(
+    prompt="分析 data/raw/census.csv 的变量结构",
+    allowed_tools=["Read", "Bash(python *)"],
+    output_format="json"
+)
+print(result)
 ```
 
-- **语言**：Python, TypeScript
-- **文档**：[Agent SDK](https://code.claude.com/docs/en/sdk)，[Headless Mode](https://code.claude.com/docs/en/headless)
+```typescript
+// TypeScript SDK 示例
+import { AgentSDK } from '@anthropic-ai/claude-code';
+
+const agent = new AgentSDK({ model: 'sonnet' });
+const result = await agent.run({
+  prompt: 'Run DID regression on processed data',
+  allowedTools: ['Read', 'Bash(python *)'],
+});
+```
+
+**经济学应用**：构建自动化研究管道——定时拉取数据、运行分析、生成报告，全程无需人工干预。
+
+**Headless Mode**：无需终端界面的服务器端运行模式。
+
+> **文档**：[Agent SDK](https://code.claude.com/docs/en/sdk)，[Headless Mode](https://code.claude.com/docs/en/headless)
 
 ### 2.8 Plugins & Marketplace
 
-一键安装社区扩展。
+一键安装社区开发的扩展包。
 
 ```bash
-/plugin  # 浏览和安装插件
+# 浏览可用插件
+/plugin
+
+# 安装特定插件
+/plugin install code-intelligence
 ```
 
-- **文档**：[Plugins](https://code.claude.com/docs/en/plugins)，[Discover Plugins](https://code.claude.com/docs/en/discover-plugins)
+**推荐类型**：
+- **Code Intelligence**：类型检查、跳转定义、自动错误检测
+- **Language Support**：特定语言的增强支持
+- **Workflow Plugins**：特定领域的工作流自动化
+
+**插件组成**：一个插件可以打包 Skills + Hooks + Agents + MCP 服务器，一次安装配置全部到位。
+
+> **文档**：[Plugins](https://code.claude.com/docs/en/plugins)，[Discover Plugins](https://code.claude.com/docs/en/discover-plugins)
 
 ### 2.9 Sandboxing
 
-OS 级别的文件系统和网络隔离。
+OS 级别的文件系统和网络隔离，确保 Claude Code 在安全的沙箱中运行。
 
 ```bash
-/sandbox  # 启用沙箱模式
+# 启用沙箱模式
+/sandbox
+
+# 在沙箱中运行（适合自动化场景）
+claude --sandbox --dangerously-skip-permissions
 ```
 
-- **文档**：[Sandboxing](https://code.claude.com/docs/en/sandboxing)
+**隔离范围**：
+- **文件系统**：只能访问项目目录及其子目录
+- **网络**：可配置允许的域名白名单
+- **进程**：限制可执行的命令
+
+**何时使用**：运行不信任的代码（如第三方复制包）、自动化流水线中跳过权限确认。
+
+> **文档**：[Sandboxing](https://code.claude.com/docs/en/sandboxing)
 
 ### 2.10 Fast Mode
 
-更快的 Opus 4.6 响应速度。
+Opus 4.6 的加速模式——更快的响应速度，适合需要快速迭代的编码场景。
 
-- **文档**：[Fast Mode](https://code.claude.com/docs/en/fast-mode)
+**原理**：在保持 Opus 推理质量的同时，通过优化推理路径减少延迟。
+
+**何时开启**：
+- 快速原型开发
+- 交互式调试（需要频繁来回）
+- 代码审查（大量文件快速扫描）
+
+> **文档**：[Fast Mode](https://code.claude.com/docs/en/fast-mode)
 
 ### 2.11 Scheduled Tasks
 
-定时运行 prompt 或设置提醒。
+定时运行任务或设置提醒。
 
 ```bash
-/loop "every 30m check build status"  # 定时轮询
+# 每 30 分钟检查构建状态
+/loop "every 30m check build status and report"
+
+# 每小时检查数据更新
+/loop "every 1h check if data/raw/ has new files, if so run cleaning pipeline"
 ```
 
-- **文档**：[Scheduled Tasks](https://code.claude.com/docs/en/scheduled-tasks)
+**经济学场景**：
+- 定时检查数据平台（如 CSMAR、WIND）是否有数据更新
+- 监控长时间回归的运行状态
+- 提醒你定期 commit 和备份
+
+> **文档**：[Scheduled Tasks](https://code.claude.com/docs/en/scheduled-tasks)
 
 ---
 

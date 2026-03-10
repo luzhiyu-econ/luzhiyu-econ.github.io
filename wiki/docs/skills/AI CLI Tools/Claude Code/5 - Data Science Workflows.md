@@ -1,7 +1,7 @@
 ---
 title: "#5：数据科学处理实战"
 tags:
-  - skills/ai-cli
+  - skills/AI CLI Tools/Claude Code
 order: 5
 description: 掌握 Claude Code 在数据清洗、因果推断（DID/IV/RDD）、可视化、跨语言互操作和验证循环中的实战技巧。
 ---
@@ -261,27 +261,174 @@ data/raw/transaction_records.csv 有 500 万行，直接读取会超出内存。
 - 添加均值标记线
 ```
 
-### 3.3 Chrome 集成预览
+### 3.3 完整 Event Study 图代码模板
 
-如果你开发了 Web 可视化或需要检查图表效果：
+以下是一个生产级别的 Python 模板，可以直接使用或让 Claude Code 基于此修改：
+
+```python
+import matplotlib.pyplot as plt
+import matplotlib
+import numpy as np
+import pandas as pd
+
+matplotlib.rcParams.update({
+    'font.family': 'Times New Roman',
+    'font.size': 12,
+    'axes.linewidth': 0.8,
+    'xtick.major.width': 0.8,
+    'ytick.major.width': 0.8,
+})
+
+def plot_event_study(
+    periods, coefficients, ci_lower, ci_upper,
+    title="Event Study", base_period=-1,
+    output_prefix="output/figures/event_study"
+):
+    fig, ax = plt.subplots(figsize=(8, 5))
+
+    ax.axhline(y=0, color='black', linestyle='--', linewidth=0.8)
+    ax.axvline(x=base_period + 0.5, color='red', linestyle=':', linewidth=0.7)
+
+    ax.fill_between(periods, ci_lower, ci_upper,
+                     alpha=0.15, color='steelblue')
+    ax.plot(periods, coefficients, 'o-', color='steelblue',
+            markersize=5, linewidth=1.5)
+
+    ax.set_xlabel('Years relative to policy', fontsize=12)
+    ax.set_ylabel('Coefficient (ATT)', fontsize=12)
+    ax.set_title(title, fontsize=14, fontweight='bold')
+    ax.set_xticks(periods)
+
+    plt.tight_layout()
+    plt.savefig(f'{output_prefix}.pdf', dpi=300, bbox_inches='tight')
+    plt.savefig(f'{output_prefix}.png', dpi=300, bbox_inches='tight')
+    plt.close()
+
+# 用法示例
+periods = np.arange(-4, 5)
+coefs = [0.01, -0.02, 0.00, 0.0, 0.0, 0.08, 0.12, 0.15, 0.14]
+se = [0.03, 0.03, 0.02, 0.0, 0.0, 0.04, 0.04, 0.05, 0.05]
+ci_lo = [c - 1.96*s for c, s in zip(coefs, se)]
+ci_hi = [c + 1.96*s for c, s in zip(coefs, se)]
+
+plot_event_study(periods, coefs, ci_lo, ci_hi,
+                 title="Event Study: Policy Effect on Manufacturing Upgrading")
+```
+
+### 3.4 Coefficient Plot 代码模板
+
+```python
+def plot_coefficients(
+    labels, coefficients, ci_lower, ci_upper,
+    title="Coefficient Plot",
+    output_prefix="output/figures/coef_plot"
+):
+    fig, ax = plt.subplots(figsize=(7, len(labels) * 0.6 + 1))
+
+    y_pos = np.arange(len(labels))
+    ax.axvline(x=0, color='black', linestyle='--', linewidth=0.8)
+
+    ax.errorbar(coefficients, y_pos, fmt='o',
+                xerr=[np.array(coefficients) - np.array(ci_lower),
+                      np.array(ci_upper) - np.array(coefficients)],
+                color='steelblue', capsize=4, markersize=6, linewidth=1.5)
+
+    ax.set_yticks(y_pos)
+    ax.set_yticklabels(labels, fontsize=11)
+    ax.set_xlabel('Coefficient Estimate', fontsize=12)
+    ax.set_title(title, fontsize=14, fontweight='bold')
+    ax.invert_yaxis()
+
+    plt.tight_layout()
+    plt.savefig(f'{output_prefix}.pdf', dpi=300, bbox_inches='tight')
+    plt.savefig(f'{output_prefix}.png', dpi=300, bbox_inches='tight')
+    plt.close()
+
+# 用法示例
+labels = ['M1: No FE', 'M2: Unit FE', 'M3: + Time FE',
+          'M4: + Controls', 'M5: + Region×Year', 'M6: + Unit Trend']
+coefs = [-0.15, -0.13, -0.14, -0.12, -0.11, -0.12]
+ci_lo = [-0.22, -0.19, -0.20, -0.18, -0.18, -0.19]
+ci_hi = [-0.08, -0.07, -0.08, -0.06, -0.04, -0.05]
+
+plot_coefficients(labels, coefs, ci_lo, ci_hi,
+                  title="Robustness: DID Coefficient Across Specifications")
+```
+
+### 3.5 Kernel Density 对比图模板
+
+```python
+def plot_density_comparison(
+    df, var, group_var, period_var, treat_period,
+    output_prefix="output/figures/density"
+):
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+    for ax, (period_label, mask) in zip(axes, [
+        ('Pre-treatment', df[period_var] < treat_period),
+        ('Post-treatment', df[period_var] >= treat_period)
+    ]):
+        for group, color, label in [
+            (1, 'steelblue', 'Treated'),
+            (0, 'coral', 'Control')
+        ]:
+            subset = df[mask & (df[group_var] == group)][var].dropna()
+            subset.plot.kde(ax=ax, color=color, label=label,
+                           linewidth=1.5, alpha=0.7)
+            ax.axvline(subset.mean(), color=color, linestyle=':',
+                       linewidth=0.8)
+
+        ax.set_title(period_label, fontsize=13, fontweight='bold')
+        ax.set_xlabel(var, fontsize=12)
+        ax.legend(fontsize=10)
+
+    plt.tight_layout()
+    plt.savefig(f'{output_prefix}.pdf', dpi=300, bbox_inches='tight')
+    plt.savefig(f'{output_prefix}.png', dpi=300, bbox_inches='tight')
+    plt.close()
+```
+
+### 3.6 Chrome 集成图表调试
+
+Claude Code 的 Chrome 集成可以用于可视化调试——生成图表后在浏览器中即时预览和调整。
 
 ```bash
 # 启用 Chrome 集成
 claude --chrome
-
-# 然后可以让 Claude 在浏览器中预览图表
-"在 Chrome 中打开生成的图表，检查是否符合学术标准"
 ```
+
+**工作流**：
+
+```
+Step 1: 生成图表
+  Claude 运行 Python 生成 PNG
+
+Step 2: 浏览器预览
+  "在 Chrome 中打开 output/figures/event_study.png，
+   截图给我看效果"
+
+Step 3: 迭代调整
+  "标题字号太小了，改成 16pt。
+   X 轴标签的负号不够明显，加粗。
+   CI 阴影颜色换成更浅的灰色。"
+
+Step 4: 对比检查
+  "打开 output/figures/expected_es.png 和刚生成的图，
+   并排对比，检查系数点和 CI 是否一致"
+```
+
+**截图对比功能**：Claude 可以截取当前页面截图，与预期结果进行视觉比对，特别适合检查图表细节（字体、对齐、颜色等打印效果相关的问题）。
 
 > 参考：[Chrome 集成](https://code.claude.com/docs/en/chrome)
 
 ### 动手练习
 
-生成一张你项目的 event study 图，使用上面的标准：
+使用上面的 `plot_event_study` 模板，把你的回归系数填入，生成一张学术论文级别的 event study 图：
 
 ```
-读取我的回归结果，生成学术论文级别的 event study 图。
-使用 Times New Roman 字体，300 DPI，PDF + PNG 双格式。
+读取 output/tables/event_study_coefs.csv，
+使用 3.3 的 plot_event_study 函数模板生成事件研究图。
+保存到 output/figures/event_study_baseline.pdf
 ```
 
 ---
@@ -323,7 +470,68 @@ df.to_stata("data/processed/clean_panel.dta", write_index=False)
 | `xtset id year` | `df = df.set_index(["id","year"])` | 设置面板 |
 | `winsor2 x, cut(1 99)` | `scipy.stats.mstats.winsorize` | Winsorize |
 
-### 4.3 整文件翻译 Prompt
+### 4.3 R → Python 常用命令映射
+
+很多经济学复制包使用 R 编写。以下是常见 R 函数到 Python 的映射：
+
+**回归分析**：
+
+| R | Python | 包 |
+|---|---|---|
+| `lm(y ~ x, data=df)` | `sm.OLS.from_formula("y ~ x", df).fit()` | statsmodels |
+| `felm(y ~ x \| id + year, df)` | `PanelOLS.from_formula("y ~ x + EntityEffects + TimeEffects", df)` | linearmodels |
+| `feols(y ~ x \| id + year, df)` | `PanelOLS.from_formula(...)` | linearmodels |
+| `ivreg(y ~ x \| z, data=df)` | `IV2SLS.from_formula("y ~ 1 + [x ~ z]", df)` | linearmodels |
+| `rdrobust(y, x, c=0)` | `rdrobust(y, x, c=0)` | rdrobust |
+| `coeftest(m, vcov=vcovCL)` | `model.fit(cov_type="clustered", ...)` | linearmodels |
+
+**数据操作（tidyverse → pandas）**：
+
+| R (tidyverse) | Python (pandas) |
+|---|---|
+| `read_csv("file.csv")` | `pd.read_csv("file.csv")` |
+| `readRDS("file.rds")` | `pyreadr.read_r("file.rds")[None]` |
+| `df %>% filter(x > 0)` | `df[df["x"] > 0]` |
+| `df %>% mutate(z = x + y)` | `df.assign(z=df["x"] + df["y"])` |
+| `df %>% group_by(id) %>% summarise(m = mean(x))` | `df.groupby("id")["x"].agg("mean")` |
+| `df %>% arrange(desc(x))` | `df.sort_values("x", ascending=False)` |
+| `df %>% select(x, y)` | `df[["x", "y"]]` |
+| `df %>% left_join(df2, by = "id")` | `pd.merge(df, df2, on="id", how="left")` |
+| `df %>% pivot_wider(names_from, values_from)` | `df.pivot_table(...)` |
+| `df %>% pivot_longer(cols, names_to, values_to)` | `df.melt(...)` |
+
+**R 数据格式读写**：
+
+```python
+# 读取 .rds 文件
+import pyreadr
+result = pyreadr.read_r("data/raw/panel.rds")
+df = result[None]  # None 是默认 key
+
+# 读取 .RData 文件（可能含多个对象）
+result = pyreadr.read_r("data/raw/workspace.RData")
+for name, data in result.items():
+    print(f"{name}: {data.shape}")
+
+# 读取 .feather 文件（R arrow 格式，跨语言高效）
+df = pd.read_feather("data/raw/panel.feather")
+```
+
+**可视化（ggplot2 → matplotlib）**：
+
+| R (ggplot2) | Python (matplotlib) |
+|---|---|
+| `ggplot(df, aes(x, y))` | `fig, ax = plt.subplots()` |
+| `geom_point()` | `ax.scatter(x, y)` |
+| `geom_line()` | `ax.plot(x, y)` |
+| `geom_smooth(method="lm")` | `np.polyfit + ax.plot` |
+| `geom_errorbar(aes(ymin, ymax))` | `ax.errorbar(x, y, yerr=...)` |
+| `geom_ribbon(aes(ymin, ymax))` | `ax.fill_between(x, ymin, ymax)` |
+| `facet_wrap(~group)` | `fig, axes = plt.subplots(nrows, ncols)` |
+| `theme_minimal()` | `plt.style.use('seaborn-v0_8-whitegrid')` |
+| `ggsave("fig.pdf")` | `plt.savefig("fig.pdf", dpi=300)` |
+
+### 4.4 整文件翻译 Prompt
 
 ```
 把 code/analysis.do 翻译成等效的 Python 脚本：
@@ -335,9 +543,20 @@ df.to_stata("data/processed/clean_panel.dta", write_index=False)
 输出到 code/analysis.py
 ```
 
+R 翻译的 prompt 类似：
+
+```
+把 code/analysis.R 翻译成等效的 Python 脚本：
+- tidyverse 操作替换为 pandas
+- fixest::feols 替换为 linearmodels PanelOLS
+- ggplot2 替换为 matplotlib（保持学术论文风格）
+- 保留原 R 注释（翻译为中文）
+输出到 code/analysis.py
+```
+
 ### 动手练习
 
-找一个简单的 Stata .do 文件（10-30 行），让 Claude Code 翻译为 Python，然后对比两者的输出是否一致。
+找一个简单的 Stata .do 文件或 R 脚本（10-30 行），让 Claude Code 翻译为 Python，然后对比两者的输出是否一致。
 
 ---
 
@@ -380,7 +599,49 @@ Checkpoint-Based（基于检查点）            Continuous（持续验证）
 - 用 **pass@k** 当你只需要一个正确结果（发送多次取最好的）
 - 用 **pass^k** 当你需要稳定一致的输出（如自动化流水线）
 
-### 5.3 经济学验证策略
+### 5.3 Grader 类型
+
+验证结果需要"评分器"（Grader）。三种 Grader 各有适用场景：
+
+| Grader 类型 | 原理 | 速度 | 成本 | 适用场景 |
+|---|---|---|---|---|
+| **Code-Based** | 写脚本自动比对结果 | 极快 | 几乎为零 | 数值结果、文件存在性、格式检查 |
+| **Model-Based** | 用另一个 LLM 判断质量 | 中等 | token 成本 | 代码质量、文本合理性、主观评估 |
+| **Human** | 人工检查 | 慢 | 人力 | 最终质量把关、论文审稿级检查 |
+
+**经济学研究的 Grader 选型**：
+
+```
+回归系数数值精度    → Code-Based（直接比较数值，容差判定）
+图表是否符合规范    → Model-Based（"这张图是否符合学术标准？"）
+论文表述是否准确    → Human（导师/审稿人最终审查）
+复制包可运行性      → Code-Based（端到端运行 + 检查 exit code）
+```
+
+**Code-Based Grader 示例**（经济学回归结果验证）：
+
+```python
+import pandas as pd
+import sys
+
+expected = pd.read_csv("output/expected_results.csv")
+actual = pd.read_csv("output/actual_results.csv")
+
+merged = expected.merge(actual, on=["table", "variable"], suffixes=("_exp", "_act"))
+merged["coef_diff"] = abs(merged["coefficient_exp"] - merged["coefficient_act"])
+merged["se_diff"] = abs(merged["std_error_exp"] - merged["std_error_act"])
+
+failures = merged[(merged["coef_diff"] > 0.01) | (merged["se_diff"] > 0.005)]
+if len(failures) > 0:
+    print(f"FAIL: {len(failures)} results exceed tolerance")
+    print(failures[["table", "variable", "coef_diff", "se_diff"]])
+    sys.exit(1)
+else:
+    print(f"PASS: All {len(merged)} results within tolerance")
+    sys.exit(0)
+```
+
+### 5.4 经济学验证策略
 
 ```
 # 数值结果验证

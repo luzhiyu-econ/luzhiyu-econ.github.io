@@ -1,7 +1,7 @@
 ---
 title: "#4：Skills 设计——经济学研究技能包"
 tags:
-  - skills/ai-cli
+  - skills/AI CLI Tools/Claude Code
 order: 4
 description: 掌握 Claude Code Skills 系统的原理与设计方法，构建经济学研究专用技能包，实现工作流复用与自动化。
 ---
@@ -397,6 +397,115 @@ disable-model-invocation: true
 6. 确认随机种子已固定
 ```
 
+### 3.7 文献综述辅助
+
+```markdown
+# .claude/skills/literature-review/SKILL.md
+---
+name: literature-review
+description: 文献调研和综述辅助。搜索相关文献、提取核心信息、管理 BibTeX 引用。
+disable-model-invocation: true
+---
+
+对主题 $ARGUMENTS 进行文献调研。
+
+## 工作流程
+
+### Step 1: 文献搜索
+1. 根据主题关键词搜索相关学术文献
+2. 优先搜索以下来源：
+   - Google Scholar（通过 WebSearch）
+   - NBER Working Papers
+   - SSRN
+   - 顶刊近 5 年发表（AER, QJE, Econometrica, JPE, REStud）
+3. 收集 15-20 篇最相关文献
+
+### Step 2: 信息提取
+对每篇文献提取：
+- 标题、作者、年份、期刊
+- 核心研究问题（一句话）
+- 识别策略 / 主要方法
+- 关键发现（1-2 句）
+- 与当前研究的关联
+
+### Step 3: 文献分类
+按以下维度整理：
+- **直接相关**：研究同一问题或使用同一方法
+- **方法论参考**：提供方法论支撑
+- **背景文献**：提供制度背景或理论框架
+
+### Step 4: 输出
+1. 结构化笔记 → `paper/literature_notes.md`
+2. BibTeX 条目 → `paper/references.bib`（追加模式）
+3. 研究空白分析 → 当前文献中哪些问题未被充分研究
+
+### BibTeX 格式规范
+```bibtex
+@article{AuthorYear,
+  author  = {Last, First and Last2, First2},
+  title   = {Full Title},
+  journal = {Journal Name},
+  year    = {2024},
+  volume  = {114},
+  number  = {3},
+  pages   = {1-45},
+  doi     = {10.xxxx/xxxxx}
+}
+```
+```
+
+### 3.8 论文结构脚手架
+
+```markdown
+# .claude/skills/paper-structure/SKILL.md
+---
+name: paper-structure
+description: 生成学术论文的标准结构框架和 LaTeX 模板。
+disable-model-invocation: true
+---
+
+为主题 $ARGUMENTS 创建论文结构脚手架。
+
+## 标准经济学论文结构
+
+生成以下文件：
+
+### paper/main.tex
+LaTeX 主文件，包含：
+- 文档类设置（12pt, a4paper）
+- 常用宏包（amsmath, booktabs, graphicx, natbib, hyperref）
+- 标题页（标题、作者、摘要、JEL 分类、关键词）
+- \input 各章节文件
+
+### paper/sections/
+按标准结构创建各节文件：
+1. `01_introduction.tex` — 引言（研究问题、贡献、结构）
+2. `02_background.tex` — 制度背景与文献综述
+3. `03_data.tex` — 数据描述与变量定义
+4. `04_identification.tex` — 识别策略
+5. `05_results.tex` — 主要结果
+6. `06_robustness.tex` — 稳健性检验
+7. `07_mechanism.tex` — 机制分析
+8. `08_conclusion.tex` — 结论与政策建议
+9. `09_appendix.tex` — 附录
+
+### 每节模板内容
+每个 .tex 文件包含：
+- 节标题
+- 子节结构（占位标题）
+- 表格/图表引用占位符（\ref{tab:xxx}, \ref{fig:xxx}）
+- 关键写作提示（以 LaTeX 注释形式）
+
+### paper/references.bib
+空的 BibTeX 文件，含格式示例。
+
+### 写作规范提示
+在每节文件开头以注释形式提供：
+- 该节的标准长度（页数）
+- 核心要素清单
+- 顶刊范例写法建议
+```
+
 ### 动手练习
 
 选择一个 Skill，复制到项目中并测试：
@@ -406,6 +515,14 @@ mkdir -p .claude/skills/regression-diagnostics
 # 复制上面的 SKILL.md 内容到该目录
 # 然后在 Claude Code 中运行：
 /regression-diagnostics DID
+```
+
+也可以试试文献综述：
+
+```bash
+mkdir -p .claude/skills/literature-review
+# 复制 3.7 的 SKILL.md
+/literature-review "heterogeneous treatment effects in DID"
 ```
 
 ---
