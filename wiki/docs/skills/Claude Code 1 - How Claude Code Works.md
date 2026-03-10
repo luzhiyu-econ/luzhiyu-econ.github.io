@@ -1,5 +1,5 @@
 ---
-title: "#1：Claude Code 工作原理解析"
+title: "#1：Claude Code 工作原理"
 tags:
   - skills/Claude Code
 order: 1

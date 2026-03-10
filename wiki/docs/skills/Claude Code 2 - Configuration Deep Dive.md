@@ -1272,5 +1272,5 @@ echo "check data/processed/*.csv" | claude-data -p  # 管道检查数据
 
 ---
 
-> **上一篇**：[[Claude Code 1 - How Claude Code Works|#1：Claude Code 工作原理解析]]
+> **上一篇**：[[Claude Code 1 - How Claude Code Works|#1：Claude Code 工作原理]]
 > **下一篇**：[[Claude Code 3 - Agent Architecture|#3：Agent 设计方法]]
