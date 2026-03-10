@@ -811,4 +811,4 @@ Prompt 14: "生成复制包目录结构"
 ---
 
 > **上一篇**：[[Claude Code 4 - Skills for Economics|#4：Skills 设计——经济学研究技能包]]
-> **下一篇**：[[Claude Code 6 - Project Architecture|#6：项目架构设计方法论]]
+> **下一篇**：[[Claude Code 6 - Project Architecture|#6：项目架构设计方法]]

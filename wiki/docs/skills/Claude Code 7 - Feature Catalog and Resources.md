@@ -459,5 +459,4 @@ Claude Code 更新频繁。保持跟进的方法：
 
 ---
 
-> **上一篇**：[[Claude Code 6 - Project Architecture|#6：项目架构设计方法论]]
-> **入门指南**：[[Basic Skill 3.5 - Claude Code|Basic Skill 3.5：Claude Code 配置指南]]
+> **上一篇**：[[Claude Code 6 - Project Architecture|#6：项目架构设计方法]]

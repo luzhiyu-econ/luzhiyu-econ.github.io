@@ -5,6 +5,9 @@ tags:
 order: 1
 description: 理解 Claude Code 的机制。
 ---
+在开始阅读本系列之前，可以先了解一下Claude Code 的基本介绍。
+> **入门指南**：[[Basic Skill 3.5 - Claude Code|Basic Skill 3.5：Claude Code 配置指南]]
+---
 **AI时代日新月异，本教程撰写于 2026 年 3 月 10 日，不代表 Claude Code 的最新状态。**
 
 > 了解工具的人使用工具，了解原理的人驾驭工具。  

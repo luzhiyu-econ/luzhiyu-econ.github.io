@@ -1,5 +1,5 @@
 ---
-title: "#6：项目架构设计方法论"
+title: "#6：项目架构设计"
 tags:
   - skills/Claude Code
 order: 6
