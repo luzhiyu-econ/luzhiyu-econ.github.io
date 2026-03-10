@@ -1,5 +1,5 @@
 ---
-title: "#3.5：Claude Code 配置指南"
+title: "#4.5：Claude Code 配置指南"
 tags:
   - skills/basic
 order: 5
@@ -1010,5 +1010,5 @@ Claude Code 的核心思想是：**把你从"搬运工"变成"决策者"**。你
 
 ---
 
-> **上一篇**：[[Basic Skill 3 - Dev Environment|开发环境搭建指南]]
-> **下一篇**：[[Basic Skill 4 - Encoding and Formats|文件编码与数据格式]]
+> **上一篇**：[[Basic Skill 4 - Dev Environment|开发环境搭建指南]]
+> **下一篇**：[[Basic Skill 5 - Encoding and Formats|文件编码与数据格式]]

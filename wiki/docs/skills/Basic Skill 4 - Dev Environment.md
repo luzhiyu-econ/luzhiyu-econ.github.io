@@ -1,12 +1,12 @@
 ---
-title: "#3：开发环境搭建指南"
+title: "#4：开发环境搭建指南"
 tags:
   - skills/basic
 order: 4
 description: 从包管理器到编辑器，配置一个高效、美观的开发环境。
 ---
 
-> 工欲善其事，必先利其器。好的开发环境不会让你变聪明，但会让你不浪费聪明。
+> 工欲善其事，必先利其器。好的开发环境是一切工作的前提。
 
 很多初学者把大量时间花在"配环境"上，踩了无数坑。本篇把搭建开发环境这件事系统化，帮你一次走通。
 
@@ -418,4 +418,4 @@ git config --global core.autocrlf input
 
 ---
 
-> **下一篇**：[[Basic Skill 4 - Encoding and Formats|文件编码与数据格式]] —— 理解乱码的本质，认识 JSON、YAML 等常见格式。
+> **下一篇**：[[Basic Skill 5 - Encoding and Formats|文件编码与数据格式]]

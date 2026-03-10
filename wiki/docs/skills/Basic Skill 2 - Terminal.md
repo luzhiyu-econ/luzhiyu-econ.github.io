@@ -1,5 +1,5 @@
 ---
-title: "#1：终端与命令行基础"
+title: "#2：终端与命令行基础"
 tags:
   - skills/basic
 order: 2
@@ -411,4 +411,4 @@ tar -czf myproject.tar.gz myproject/
 
 ---
 
-> **下一篇**：[[Basic Skill 2 - Git|Git 版本控制从入门到工作流]] —— 让你的代码拥有时光机。
+> **下一篇**：[[Basic Skill 3 - Git|Git 版本控制从入门到工作流]]

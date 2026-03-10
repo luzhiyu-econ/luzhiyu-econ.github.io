@@ -1,5 +1,5 @@
 ---
-title: "#5：Shell 进阶与效率提升"
+title: "#6：Shell 进阶与效率提升"
 tags:
   - skills/basic
 order: 7
@@ -522,4 +522,4 @@ Shell 的进阶技能不需要一次全部掌握。建议的学习路径：**先
 
 ---
 
-> **下一篇**：[[Basic Skill 6 - SSH|SSH 与远程开发]] —— 安全连接远程服务器，随时随地写代码。
+> **下一篇**：[[Basic Skill 7 - SSH|SSH 与远程开发]]

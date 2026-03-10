@@ -1,5 +1,5 @@
 ---
-title: "#4：文件编码与数据格式"
+title: "#5：文件编码与数据格式"
 tags:
   - skills/basic
 order: 6
@@ -407,4 +407,4 @@ file data.xlsx
 
 ---
 
-> **下一篇**：[[Basic Skill 5 - Shell Advanced|Shell 进阶与效率提升]] —— 用脚本和工具让终端能力翻倍。
+> **下一篇**：[[Basic Skill 6 - Shell Advanced|Shell 进阶与效率提升]] —— 用脚本和工具让终端能力翻倍。

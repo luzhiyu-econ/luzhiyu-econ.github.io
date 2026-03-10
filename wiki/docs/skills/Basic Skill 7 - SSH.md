@@ -1,5 +1,5 @@
 ---
-title: "#6：SSH 与远程开发"
+title: "#7：SSH 与远程开发"
 tags:
   - skills/basic
 order: 8
@@ -462,4 +462,4 @@ SSH 是连接"本地"和"远程"的桥梁。掌握了它，你就不再局限于
 
 ---
 
-> **下一篇**：[[Basic Skill 7 - Networking|网络基础与调试]] —— 理解 HTTP、DNS、端口等概念，掌握网络问题排查技能。
+> **下一篇**：[[Basic Skill 8 - Networking|网络基础与调试]]
