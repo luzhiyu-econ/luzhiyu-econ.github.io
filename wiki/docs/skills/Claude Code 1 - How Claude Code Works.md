@@ -1,18 +1,17 @@
 ---
-title: "#1：Claude Code 工作原理深度解析"
+title: "#1：Claude Code 工作原理解析"
 tags:
   - skills/Claude Code
 order: 1
-description: 深入理解 Claude Code 的 Agentic Loop、内置工具、模型选择、上下文窗口、Compaction 机制、Token 经济学与 Checkpoint/Session 管理。
+description: 理解 Claude Code 的机制。
 ---
 **AI时代日新月异，本教程撰写于 2026 年 3 月 10 日，不代表 Claude Code 的最新状态。**
 
 > 了解工具的人使用工具，了解原理的人驾驭工具。  
-> ——本章的目标不是教你"怎么打字"，而是让你看清 Claude Code 在收到你的指令后**究竟发生了什么**。
 
 ---
 
-## 一、Agentic Loop：Claude Code 的运行引擎
+## 一、Agentic Loop：Claude Code 的运行逻辑
 
 Claude Code 和 ChatGPT 网页版最本质的区别不是"它能访问文件"——而是它运行在一个 **Agentic Loop**（智能体循环）中。普通聊天机器人收到消息后生成一段文本就结束了；Claude Code 收到消息后会**持续行动**，直到任务完成或需要你确认。
 
@@ -100,7 +99,7 @@ Claude 的内部推理链（简化）：
     └── 运行结果：测试通过 ✓
 ```
 
-### 1.4 真实案例："修复失败的单元测试"
+### 1.4 案例："修复失败的单元测试"
 
 假设你正在做一个面板数据分析项目，测试突然挂了。你输入：
 
@@ -136,8 +135,6 @@ Round 5 — VERIFY
 
 → 返回给用户: "已修复 3 个失败的测试，主要问题是..."
 ```
-
-注意 Claude 在 Round 3 发现修了一个但还有两个没修——它**没有停下来问你**，而是继续调查和修复。这就是 Agentic Loop 的威力。
 
 ### 1.5 动手练习
 
