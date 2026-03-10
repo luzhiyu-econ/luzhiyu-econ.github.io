@@ -1,5 +1,23 @@
 [
   {
+    "id": "claude-code-intro",
+    "title": "Claude Code 系列导读",
+    "date": "2026-03-10",
+    "excerpt": "Claude Code 系列教程篇首语：核心原则、关键实践与系列章节导航。",
+    "tags": ["Claude Code", "教程", "Vibe Coding"],
+    "file": "blog/posts/claude-code-intro/index.md",
+    "base": "blog/posts/claude-code-intro/"
+  },
+  {
+    "id": "basic-skill-intro",
+    "title": "Basic Skill 系列导读",
+    "date": "2026-03-10",
+    "excerpt": "计算机基础系列教程篇首语：理解操作系统、终端、Git、开发环境等核心技能。",
+    "tags": ["计算机基础", "教程"],
+    "file": "blog/posts/basic-skill-intro/index.md",
+    "base": "blog/posts/basic-skill-intro/"
+  },
+  {
     "id": "jrnldaily",
     "title": "构建属于自己的经济学文献库",
     "date": "2026-01-10",
