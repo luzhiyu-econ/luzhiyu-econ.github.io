@@ -699,11 +699,40 @@ claude config set autoCompact false
 
 ### 6.1 Token 定价回顾
 
-| 模型 | 输入 (\$/M tokens) | 输出 (\$/M tokens) | 缓存写入 | 缓存读取 |
-|---|---|---|---|---|
-| Haiku 3.5 | \$0.80 | \$4.00 | \$1.00 | \$0.08 |
-| Sonnet 4 | \$3.00 | \$15.00 | \$3.75 | \$0.30 |
-| Opus 4 | \$15.00 | \$75.00 | \$18.75 | \$1.50 |
+<table>
+  <thead>
+    <tr>
+      <th>模型</th>
+      <th>输入 (USD/M tokens)</th>
+      <th>输出 (USD/M tokens)</th>
+      <th>缓存写入</th>
+      <th>缓存读取</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Haiku 3.5</td>
+      <td>0.80</td>
+      <td>4.00</td>
+      <td>1.00</td>
+      <td>0.08</td>
+    </tr>
+    <tr>
+      <td>Sonnet 4</td>
+      <td>3.00</td>
+      <td>15.00</td>
+      <td>3.75</td>
+      <td>0.30</td>
+    </tr>
+    <tr>
+      <td>Opus 4</td>
+      <td>15.00</td>
+      <td>75.00</td>
+      <td>18.75</td>
+      <td>1.50</td>
+    </tr>
+  </tbody>
+</table>
 
 > 来源：[Anthropic Pricing](https://docs.anthropic.com/en/docs/about-claude/pricing)
 
