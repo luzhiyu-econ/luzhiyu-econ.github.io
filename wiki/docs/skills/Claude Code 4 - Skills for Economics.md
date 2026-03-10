@@ -565,8 +565,8 @@ econ-replication/
 ### 4.3 安装方法
 
 ```bash
-# 方法 1：从教程下载目录复制
-cp -r "wiki/docs/skills/downloads/econ-replication" .claude/skills/
+# 方法 1：从本教程仓库的 attachments 目录复制
+cp -r "wiki/attachments/econ-replication" .claude/skills/
 
 # 方法 2：直接克隆（如果有远程仓库）
 # git clone <repo-url> .claude/skills/econ-replication
@@ -626,7 +626,7 @@ Step 5: 报告生成
     └── 可选：生成微信推文草稿
 ```
 
-> **下载地址**：本技能包可在本教程系列的 `downloads/econ-replication/` 目录获取。
+> **下载地址**：本技能包位于教程仓库的 [`wiki/attachments/econ-replication/`](https://github.com/luzhiyu-econ/luzhiyu-econ.github.io/tree/master/wiki/attachments/econ-replication) 目录，克隆仓库后即可直接复制使用。
 
 ### 动手练习
 
