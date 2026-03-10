@@ -7,7 +7,7 @@ description: 掌握 CLAUDE.md 体系设计方法论、Session 管理策略、Tok
 ---
 **AI时代日新月异，本教程撰写于 2026 年 3 月 10 日，不代表 Claude Code 的最新状态。**
 
-> 一个精心设计的项目架构，能让 Claude Code 从"偶尔帮忙"变成"全程驱动"。架构是乘数，好的架构让每一次 prompt 都事半功倍。
+> 架构是乘数，好的架构让每一次 prompt 都事半功倍。
 
 前五章讲了 Claude Code 的原理、配置、Agent、Skills 和数据科学工作流。本章把所有东西整合在一起：**如何从零设计一个让 Claude Code 发挥最大效能的经济学研究项目**。
 
