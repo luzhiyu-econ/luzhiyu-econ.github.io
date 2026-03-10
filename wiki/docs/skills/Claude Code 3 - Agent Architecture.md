@@ -1,5 +1,5 @@
 ---
-title: "#3：Agent 设计方法论"
+title: "#3：Agent 设计方法"
 tags:
   - skills/Claude Code
 order: 3
@@ -840,5 +840,5 @@ Tier 2: 需要经验（掌握 Tier 1 后再尝试）
 
 ---
 
-> **上一篇**：[[Claude Code 2 - Configuration Deep Dive|#2：Claude Code 配置方法论]]
+> **上一篇**：[[Claude Code 2 - Configuration Deep Dive|#2：Claude Code 配置方法]]
 > **下一篇**：[[Claude Code 4 - Skills for Economics|#4：Skills 设计——经济学研究技能包]]
