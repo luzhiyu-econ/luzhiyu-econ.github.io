@@ -1,7 +1,7 @@
 ---
 title: "#1：Claude Code 工作原理"
 tags:
-  - skills/Claude Code
+  - skills/claude-code
 order: 1
 description: 理解 Claude Code 的机制。
 ---

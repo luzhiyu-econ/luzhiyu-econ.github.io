@@ -1,7 +1,7 @@
 ---
 title: "#4：Skills 设计"
 tags:
-  - skills/Claude Code
+  - skills/claude-code
 order: 4
 description: 掌握 Claude Code Skills 系统的原理与设计方法，构建经济学研究专用技能包，实现工作流复用与自动化。
 ---

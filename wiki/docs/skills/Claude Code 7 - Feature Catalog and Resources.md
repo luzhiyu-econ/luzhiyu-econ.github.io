@@ -1,7 +1,7 @@
 ---
 title: "#7：功能全景与资源索引"
 tags:
-  - skills/Claude Code
+  - skills/claude-code
 order: 7
 description: Claude Code 全部功能的分类索引、新兴功能速览、社区资源和官方文档链接。本章作为持续更新的入口。
 ---
