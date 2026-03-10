@@ -26,11 +26,11 @@ description: 理解 Claude Code 的机制。
 
 | 章节 | 标题 | 核心内容 |
 | --- | --- | --- |
-| 入门 | [[Basic Skill 3.5 - Claude Code\|Basic Skill 3.5]] | 安装、认证、换源、VS Code、基本文件体系 |
-| 第 1 章 | [[Claude Code 1 - How Claude Code Works\|运行原理深度解析]] | Agentic Loop、工具、上下文、Token 经济学 |
-| 第 2 章 | [[Claude Code 2 - Configuration Deep Dive\|配置方法论]] | CLAUDE.md、Rules、Hooks、MCP、Permissions |
-| 第 3 章 | [[Claude Code 3 - Agent Architecture\|Agent 设计方法论]] | 自定义 Agent、编排模式、Git Worktree |
-| 第 4 章 | [[Claude Code 4 - Skills for Economics\|Skills 设计]] | Skills 系统、经济学技能包、Continuous Learning |
-| 第 5 章 | [[Claude Code 5 - Data Science Workflows\|数据科学处理实战]] | 数据清洗、DID/IV/RDD、可视化、验证循环 |
-| 第 6 章 | [[Claude Code 6 - Project Architecture\|项目架构设计方法论]] | CLAUDE.md 体系、Session 管理、Token 优化 |
-| 第 7 章 | [[Claude Code 7 - Feature Catalog and Resources\|功能全景与资源索引]] | 功能全景、资源索引（持续更新入口） |
+| 入门 | [[Basic Skill 3.5 - Claude Code|Basic Skill 3.5]] | 安装、认证、换源、VS Code、基本文件体系 |
+| 第 1 章 | [[Claude Code 1 - How Claude Code Works|#1：Claude Code 工作原理]] | Agentic Loop、工具、上下文、Token 经济学 |
+| 第 2 章 | [[Claude Code 2 - Configuration Deep Dive|#2：Claude Code 配置方法]] | CLAUDE.md、Rules、Hooks、MCP、Permissions |
+| 第 3 章 | [[Claude Code 3 - Agent Architecture|#3：Agent 设计方法论]] | 自定义 Agent、编排模式、Git Worktree |
+| 第 4 章 | [[Claude Code 4 - Skills for Economics|#4：Skills 设计]] | Skills 系统、经济学技能包、Continuous Learning |
+| 第 5 章 | [[Claude Code 5 - Data Science Workflows|#5：数据科学处理实战]] | 数据清洗、DID/IV/RDD、可视化、验证循环 |
+| 第 6 章 | [[Claude Code 6 - Project Architecture|#6：项目架构设计方法论]] | CLAUDE.md 体系、Session 管理、Token 优化 |
+| 第 7 章 | [[Claude Code 7 - Feature Catalog and Resources|#7：功能全景与资源索引]] | 功能全景、资源索引（持续更新入口） |
