@@ -165,7 +165,14 @@ Claude Code 自带几个开箱即用的 Skill：
 
 ## 三、经济学专用 Skills 设计
 
-以下是 6 个生产级别的经济学 Skill 定义，可以直接复制使用。
+<div style="margin: 16px 0; display: flex; gap: 12px; flex-wrap: wrap;">
+  <a href="/wiki/assets/downloads/econ-skills-all.zip" download="econ-skills-all.zip" style="display: inline-block; padding: 10px 20px; background-color: #0366d6; color: white; text-decoration: none; border-radius: 6px; font-weight: 500; font-size: 14px;">📦 下载全部经济学 Skills (.zip, 18 KB)</a>
+  <a href="/wiki/assets/downloads/econ-replication.zip" download="econ-replication.zip" style="display: inline-block; padding: 10px 20px; background-color: #28a745; color: white; text-decoration: none; border-radius: 6px; font-weight: 500; font-size: 14px;">🔬 下载 econ-replication 完整包 (.zip, 9 KB)</a>
+</div>
+
+> **一键安装**：下载解压后，将 `skills/` 目录下的文件夹复制到你项目的 `.claude/skills/` 即可使用。全部 Skills 包含 8 个单文件 Skill + econ-replication 完整工作流包。
+
+以下是 8 个生产级别的经济学 Skill 定义，可以直接复制使用，也可以通过上方按钮一键下载。
 
 ### 3.1 回归诊断工作流
 
@@ -508,20 +515,16 @@ LaTeX 主文件，包含：
 
 ### 动手练习
 
-选择一个 Skill，复制到项目中并测试：
+点击上方 📦 按钮下载全部 Skills，解压后安装并测试：
 
 ```bash
-mkdir -p .claude/skills/regression-diagnostics
-# 复制上面的 SKILL.md 内容到该目录
-# 然后在 Claude Code 中运行：
+# 解压到项目目录
+unzip econ-skills-all.zip -d .claude/
+
+# 测试回归诊断
 /regression-diagnostics DID
-```
 
-也可以试试文献综述：
-
-```bash
-mkdir -p .claude/skills/literature-review
-# 复制 3.7 的 SKILL.md
+# 测试文献综述
 /literature-review "heterogeneous treatment effects in DID"
 ```
 
@@ -564,12 +567,13 @@ econ-replication/
 
 ### 4.3 安装方法
 
-```bash
-# 方法 1：从本教程仓库的 attachments 目录复制
-cp -r "wiki/attachments/econ-replication" .claude/skills/
+<div style="margin: 12px 0;">
+  <a href="/wiki/assets/downloads/econ-replication.zip" download="econ-replication.zip" style="display: inline-block; padding: 10px 20px; background-color: #28a745; color: white; text-decoration: none; border-radius: 6px; font-weight: 500; font-size: 14px;">🔬 下载 econ-replication (.zip, 9 KB)</a>
+</div>
 
-# 方法 2：直接克隆（如果有远程仓库）
-# git clone <repo-url> .claude/skills/econ-replication
+```bash
+# 下载后解压并安装到项目
+unzip econ-replication.zip -d .claude/skills/
 ```
 
 ### 4.4 使用方式
@@ -626,7 +630,7 @@ Step 5: 报告生成
     └── 可选：生成微信推文草稿
 ```
 
-> **下载地址**：本技能包位于教程仓库的 [`wiki/attachments/econ-replication/`](https://github.com/luzhiyu-econ/luzhiyu-econ.github.io/tree/master/wiki/attachments/econ-replication) 目录，克隆仓库后即可直接复制使用。
+> **安装提示**：点击上方绿色按钮一键下载 zip，解压后将 `econ-replication/` 目录放入项目的 `.claude/skills/` 即可。源文件也可在 [GitHub 仓库](https://github.com/luzhiyu-econ/luzhiyu-econ.github.io/tree/master/wiki/attachments/econ-replication) 浏览。
 
 ### 动手练习
 
