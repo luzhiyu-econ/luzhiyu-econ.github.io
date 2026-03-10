@@ -770,7 +770,7 @@ my-plugin/
 | $ARGUMENTS | 接收调用参数，如 `/skill-name file.csv` |
 | disable-model-invocation | 设为 true 防止自动调用（有副作用的 Skill 必须设） |
 | 内置 Skills | /batch（并行修改）、/debug（诊断）、/simplify（优化） |
-| Continuous Learning | /learn 手动提取 + Stop Hook 自动评估 |
+| Continuous Learning | /learn 手动提取 + Stop Hook 自i ki
 | Plugins | Skills + Hooks + Agents + MCP 的打包发行单元 |
 
 ### 进阶阅读
