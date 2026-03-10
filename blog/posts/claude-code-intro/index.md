@@ -1,7 +1,5 @@
 # Claude Code 系列导读
 
-在开始阅读本系列之前，建议先完成基础配置：[Basic Skill 3.5：Claude Code 配置指南](/wiki/docs/skills/Basic%20Skill%204.5%20-%20Claude%20Code)
-
 ## 核心原则
 
 > 对于 Vibe Coding 的方法论，最重要的是**先计划再实施，先思考再动手**。这不仅是对模型的要求，也是对使用者的要求。
