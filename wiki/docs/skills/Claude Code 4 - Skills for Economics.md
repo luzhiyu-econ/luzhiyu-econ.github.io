@@ -165,10 +165,8 @@ Claude Code 自带几个开箱即用的 Skill：
 
 ## 三、经济学专用 Skills 设计
 
-<div style="margin: 16px 0; display: flex; gap: 12px; flex-wrap: wrap;">
-  <a href="/wiki/assets/downloads/econ-skills-all.zip" download="econ-skills-all.zip" style="display: inline-block; padding: 10px 20px; background-color: #0366d6; color: white; text-decoration: none; border-radius: 6px; font-weight: 500; font-size: 14px;">📦 下载全部经济学 Skills (.zip, 18 KB)</a>
-  <a href="/wiki/assets/downloads/econ-replication.zip" download="econ-replication.zip" style="display: inline-block; padding: 10px 20px; background-color: #28a745; color: white; text-decoration: none; border-radius: 6px; font-weight: 500; font-size: 14px;">🔬 下载 econ-replication 完整包 (.zip, 9 KB)</a>
-</div>
+- [下载全部经济学 Skills（.zip，18 KB）](/wiki/assets/downloads/econ-skills-all.zip)
+- [下载 econ-replication 完整包（.zip，9 KB）](/wiki/assets/downloads/econ-replication.zip)
 
 > **一键安装**：下载解压后，将 `skills/` 目录下的文件夹复制到你项目的 `.claude/skills/` 即可使用。全部 Skills 包含 8 个单文件 Skill + econ-replication 完整工作流包。
 
@@ -567,9 +565,7 @@ econ-replication/
 
 ### 4.3 安装方法
 
-<div style="margin: 12px 0;">
-  <a href="/wiki/assets/downloads/econ-replication.zip" download="econ-replication.zip" style="display: inline-block; padding: 10px 20px; background-color: #28a745; color: white; text-decoration: none; border-radius: 6px; font-weight: 500; font-size: 14px;">🔬 下载 econ-replication (.zip, 9 KB)</a>
-</div>
+[下载 econ-replication（.zip，9 KB）](/wiki/assets/downloads/econ-replication.zip)
 
 ```bash
 # 下载后解压并安装到项目
