@@ -1,7 +1,7 @@
 ---
 title: "#1：Claude Code 工作原理深度解析"
 tags:
-  - skills/AI CLI Tools/Claude Code
+  - skills/Claude Code
 order: 1
 description: 深入理解 Claude Code 的 Agentic Loop、内置工具、模型选择、上下文窗口、Compaction 机制、Token 经济学与 Checkpoint/Session 管理。
 ---

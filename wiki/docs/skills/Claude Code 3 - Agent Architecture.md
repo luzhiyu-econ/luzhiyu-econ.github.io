@@ -1,7 +1,7 @@
 ---
 title: "#3：Agent 设计方法论"
 tags:
-  - skills/AI CLI Tools/Claude Code
+  - skills/Claude Code
 order: 3
 description: 掌握 Claude Code 的内置 Agent 体系、自定义 Agent 设计原则、并行编排模式与 Git Worktree 工作流，构建高效的经济学多 Agent 研究系统。
 ---

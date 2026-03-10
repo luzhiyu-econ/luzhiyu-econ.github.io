@@ -1,7 +1,7 @@
 ---
 title: "#6：项目架构设计方法论"
 tags:
-  - skills/AI CLI Tools/Claude Code
+  - skills/Claude Code
 order: 6
 description: 掌握 CLAUDE.md 体系设计方法论、Session 管理策略、Token 优化技巧，构建从零到完整的经济学研究项目。
 ---
