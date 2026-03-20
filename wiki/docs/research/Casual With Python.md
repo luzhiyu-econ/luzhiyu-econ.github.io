@@ -8,6 +8,8 @@ description: 如何使用 PyFixest 进行计量回归。
 
 # ALL in Python：如何使用 PyFixest 进行实证分析
 
+> 本文基于 PyFixest 0.40+ 官方文档，系统性地对照 Stata `reghdfe`  语法。
+
 ---
 
 ## 目录
@@ -104,9 +106,12 @@ pf.etable([fit1, fit2])
 ```stata
 reg Y X1
 reg Y X1 X2
+* 或等价的 reghdfe 语法:
+reghdfe Y X1, noabsorb
+reghdfe Y X1 X2, noabsorb
 ```
 
-是的，就这么简单。PyFixest 的 `feols()` 对应 Stata 的 `reg` / `reghdfe`，公式写在第一个参数里，用字符串传入。
+> **对齐说明：** PyFixest 的 `feols()` 在底层对齐的是 `reghdfe`（Sergio Correia 的包），不是 `reg` 或 `xtreg`。在无固定效应的纯 OLS 场景下，`reg` 和 `reghdfe` 结果完全一致，所以用哪个都行。但本文统一推荐 `reghdfe` 语法，因为你写论文时大概率全程用它。
 
 ### 查看结果
 
@@ -127,7 +132,7 @@ fit1.predict()          # 拟合值
 **Stata 对照（回归后取结果）：**
 
 ```stata
-reg Y X1
+reghdfe Y X1, noabsorb
 matrix list e(b)        // 系数
 matrix list e(V)        // 方差协方差矩阵
 predict yhat, xb        // 拟合值
@@ -152,13 +157,10 @@ fit_fe1.summary()
 **Stata 对照：**
 
 ```stata
-* 方法 1: xtreg
-xtset f1
-xtreg Y X1 X2, fe
-
-* 方法 2: reghdfe（推荐）
 reghdfe Y X1 X2, absorb(f1)
 ```
+
+> **⚠️ 关于 `xtreg, fe`：** PyFixest 对齐的是 `reghdfe`，**不是** `xtreg`。两者的点估计一致，但标准误可能不同——`xtreg` 在自由度计算中将所有固定效应水平计为已估计参数（等价于 PyFixest 的 `k_fixef="full"`），而 `reghdfe` 和 PyFixest 默认不计入（`k_fixef="none"`）。如果你在对比 PyFixest 和 Stata 结果时发现标准误有微小差异，请确认你在 Stata 端用的是 `reghdfe` 而非 `xtreg`。
 
 ### 多维固定效应
 
@@ -240,12 +242,10 @@ fit = pf.feols("Y ~ X1 + X2", data=data, vcov="HC1")
 **Stata 对照：**
 
 ```stata
-reg Y X1 X2, robust
-* 或
-reg Y X1 X2, vce(robust)
+reghdfe Y X1 X2, noabsorb vce(robust)
 ```
 
-PyFixest 还支持 `HC2` 和 `HC3`：
+PyFixest 还支持 `HC2` 和 `HC3`（**仅限无吸收固定效应的模型**，见踩坑指南 16.2）：
 
 ```python
 fit_hc3 = pf.feols("Y ~ X1 + X2", data=data, vcov="HC3")
@@ -328,7 +328,7 @@ fit.wildboottest(param="X1", reps=999)
 ```stata
 * 需安装 boottest
 * ssc install boottest
-reg Y X1, cluster(group_id)
+reghdfe Y X1, noabsorb cluster(group_id)
 boottest X1, reps(999)
 ```
 
@@ -346,6 +346,7 @@ fit.ritest(resampvar="X1=0", reps=1000, cluster="group_id")
 * 需安装 ritest
 * ssc install ritest
 ritest X1 _b[X1], reps(1000) cluster(group_id): reg Y X1
+* 注：ritest 内部命令可用 reg 或 reghdfe，无 FE 时结果一致
 ```
 
 ### 5.8 Causal Cluster Variance Estimator (CCV)
@@ -535,7 +536,7 @@ multi_fit.etable()
 **Stata 对照（需要手动写三次）：**
 
 ```stata
-reg Y X1, robust
+reghdfe Y X1, noabsorb vce(robust)
 eststo m1
 
 reghdfe Y X1, absorb(f1) vce(robust)
@@ -865,11 +866,11 @@ reghdfe lwage expersq union married hours, absorb(nr year) cluster(nr year)
 
 ## 15. 速查对照表
 
-| 任务 | Stata | PyFixest |
-|------|-------|----------|
-| OLS | `reg Y X1 X2` | `pf.feols("Y ~ X1 + X2", data=df)` |
-| 稳健标准误 | `reg Y X1, robust` | `pf.feols("Y ~ X1", data=df, vcov="HC1")` |
-| 聚类标准误 | `reg Y X1, cluster(id)` | `pf.feols("Y ~ X1", data=df, vcov={"CRV1":"id"})` |
+| 任务 | Stata (`reghdfe` 系) | PyFixest |
+|------|---------------------|----------|
+| OLS | `reghdfe Y X1 X2, noabsorb` | `pf.feols("Y ~ X1 + X2", data=df)` |
+| 稳健标准误 | `reghdfe Y X1, noabsorb vce(robust)` | `pf.feols("Y ~ X1", data=df, vcov="HC1")` |
+| 聚类标准误 | `reghdfe Y X1, noabsorb vce(cluster id)` | `pf.feols("Y ~ X1", data=df, vcov={"CRV1":"id"})` |
 | 单维 FE | `reghdfe Y X1, absorb(id)` | `pf.feols("Y ~ X1 \| id", data=df)` |
 | 双维 FE | `reghdfe Y X1, absorb(id year)` | `pf.feols("Y ~ X1 \| id + year", data=df)` |
 | FE + 聚类 | `reghdfe Y X1, absorb(id) cluster(id)` | `pf.feols("Y ~ X1 \| id", data=df, vcov={"CRV1":"id"})` |
