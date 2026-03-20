@@ -53,11 +53,13 @@
   }
 
   function addHeadingAnchors(container) {
+    const idCount = {};
     container.querySelectorAll("h1, h2, h3, h4").forEach((h) => {
-      const id = h.textContent.trim().toLowerCase()
+      const base = h.textContent.trim().toLowerCase()
         .replace(/[^\w\u4e00-\u9fff]+/g, "-")
         .replace(/^-|-$/g, "") || "heading";
-      h.id = id;
+      idCount[base] = (idCount[base] || 0) + 1;
+      h.id = idCount[base] === 1 ? base : base + "-" + idCount[base];
       h.classList.add("heading-anchor");
     });
   }

@@ -84,7 +84,7 @@
     tocEl.querySelectorAll("a").forEach((a) => {
       a.addEventListener("click", (e) => {
         e.preventDefault();
-        const target = scrollContainer.querySelector(a.getAttribute("href"));
+        const target = document.getElementById(a.getAttribute("href").slice(1));
         if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
       });
     });
