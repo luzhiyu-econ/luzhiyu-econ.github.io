@@ -1,12 +1,12 @@
 ---
-title: "如何使用 PyFixest 进行计量回归"
+title: "使用 Python 取代 Stata进行实证分析"
 tags:
   - skills/python
   - research/casual-analysis
 description: 如何使用 PyFixest 进行计量回归。
 ---
 
-# ALL in Python：如何使用 PyFixest 进行计量回归
+# ALL in Python：如何使用 PyFixest 进行实证分析
 
 ---
 
@@ -27,6 +27,7 @@ description: 如何使用 PyFixest 进行计量回归。
 13. [回归表输出与可视化](#13-回归表输出与可视化)
 14. [完整实战：面板数据因果推断](#14-完整实战面板数据因果推断)
 15. [速查对照表](#15-速查对照表)
+16. [踩坑指南：经过代码验证的 Gotchas](#16-踩坑指南经过代码验证的-gotchas)
 
 ---
 
@@ -52,6 +53,9 @@ description: 如何使用 PyFixest 进行计量回归。
 
 ```bash
 pip install pyfixest
+
+# Wild Bootstrap / Romano-Wolf 需要额外安装:
+pip install wildboottest
 ```
 
 ### 加载与准备数据
@@ -435,7 +439,9 @@ ppmlhdfe Y X1, absorb(group_id) cluster(group_id)
 
 ## 8. 广义线性模型 (GLM)：Logit、Probit
 
-PyFixest 通过 `feglm()` 支持带高维固定效应的 GLM 估计。
+PyFixest 通过 `feglm()` 支持 GLM 估计。
+
+> **⚠️ 重要提示 (v0.40)：** `feglm()` 当前版本**不支持** `|` 语法吸收固定效应。如需控制固定效应，请使用 `C()` 生成哑变量。官方文档展示的 `| f1` 语法是未来版本的计划功能。
 
 **PyFixest：**
 
@@ -444,14 +450,14 @@ PyFixest 通过 `feglm()` 支持带高维固定效应的 GLM 估计。
 data_glm = pf.get_data()
 data_glm["Y"] = np.where(data_glm["Y"] > 0, 1, 0)
 
-# Logit
-fit_logit  = pf.feglm("Y ~ X1 + X2 | f1", data=data_glm, family="logit")
+# Logit（使用 C() 控制固定效应）
+fit_logit  = pf.feglm("Y ~ X1 + X2 + C(f1)", data=data_glm, family="logit")
 
 # Probit
-fit_probit = pf.feglm("Y ~ X1 + X2 | f1", data=data_glm, family="probit")
+fit_probit = pf.feglm("Y ~ X1 + X2 + C(f1)", data=data_glm, family="probit")
 
 # Gaussian（作为对照）
-fit_gauss  = pf.feglm("Y ~ X1 + X2 | f1", data=data_glm, family="gaussian")
+fit_gauss  = pf.feglm("Y ~ X1 + X2 + C(f1)", data=data_glm, family="gaussian")
 
 pf.etable([fit_gauss, fit_logit, fit_probit])
 ```
@@ -462,11 +468,8 @@ pf.etable([fit_gauss, fit_logit, fit_probit])
 * 生成二值变量
 gen Y_bin = (Y > 0)
 
-* Logit with FE (slow but exact)
+* Logit with categorical dummies
 logit Y_bin X1 X2 i.f1
-
-* 或用 feglm 的 Stata 等价（近似）
-* ppmlhdfe 不支持 logit，需手动 absorb 或用其他包
 ```
 
 ### 预测与边际效应
@@ -872,7 +875,7 @@ reghdfe lwage expersq union married hours, absorb(nr year) cluster(nr year)
 | FE + 聚类 | `reghdfe Y X1, absorb(id) cluster(id)` | `pf.feols("Y ~ X1 \| id", data=df, vcov={"CRV1":"id"})` |
 | IV/2SLS | `ivreghdfe Y (X1=Z1 Z2), absorb(id)` | `pf.feols("Y ~ 1 \| id \| X1 ~ Z1 + Z2", data=df)` |
 | Poisson | `ppmlhdfe Y X1, absorb(id)` | `pf.fepois("Y ~ X1 \| id", data=df)` |
-| Logit w/ FE | `logit Y X1 i.id` | `pf.feglm("Y ~ X1 \| id", data=df, family="logit")` |
+| Logit w/ FE | `logit Y X1 i.id` | `pf.feglm("Y ~ X1 + C(id)", data=df, family="logit")` ⚠️ |
 | 分位数回归 | `qreg Y X1, q(0.5)` | `pf.quantreg("Y ~ X1", data=df, quantile=0.5)` |
 | Wild Bootstrap | `boottest X1` | `fit.wildboottest(param="X1", reps=999)` |
 | 随机化推断 | `ritest X1 _b[X1]: reg Y X1` | `fit.ritest(resampvar="X1=0", reps=1000)` |
@@ -888,9 +891,120 @@ reghdfe lwage expersq union married hours, absorb(nr year) cluster(nr year)
 
 ---
 
+---
+
+## 16. 踩坑指南：经过代码验证的 Gotchas
+
+以下每一条都经过 PyFixest 0.40.1 的实际代码运行验证，是你从 Stata 迁移时最容易踩的坑。
+
+### 16.1 `feglm()` 不支持 `|` 吸收固定效应
+
+这是最容易中招的一个。官方 Quickstart 文档展示了 `feglm("Y ~ X1 | f1", family="logit")` 语法，但在 v0.40 中运行会直接报 `NotImplementedError`。
+
+```python
+# ❌ 报错：NotImplementedError: Fixed effects are not yet supported for GLMs.
+pf.feglm("Y ~ X1 + X2 | f1", data=df, family="logit")
+
+# ✅ 正确做法：用 C() 生成哑变量
+pf.feglm("Y ~ X1 + X2 + C(f1)", data=df, family="logit")
+```
+
+这意味着 `feglm()` 目前无法高效处理高维固定效应（如个体 FE）。如果 FE 维度很高（>1000 个水平），考虑使用 `fepois()` 替代（Poisson 支持 `|` FE），或者等待未来版本更新。
+
+### 16.2 HC2/HC3 不兼容吸收固定效应
+
+```python
+# ❌ 报错：VcovTypeNotSupportedError
+pf.feols("Y ~ X1 | f1", data=df, vcov="HC3")
+
+# ✅ 替代方案 1：使用 CRV3（基于 jackknife 的聚类稳健标准误）
+pf.feols("Y ~ X1 | f1", data=df, vcov={"CRV3": "f1"})
+
+# ✅ 替代方案 2：用 C() 而非 | ，就可以用 HC3
+pf.feols("Y ~ X1 + C(f1)", data=df.dropna(subset=["f1"]), vcov="HC3")
+```
+
+在 Stata 中，`reghdfe Y X1, absorb(f1) vce(robust)` 只对应 `HC1`，不是 `HC3`。所以这个限制在实际研究中影响不大——大多数实证论文使用 CRV1 或 HC1。
+
+### 16.3 聚类变量不能含缺失值
+
+Stata 会静默丢弃聚类变量中的缺失值；PyFixest 会直接报错。
+
+```python
+# ❌ 如果 f1 有 NaN，会报错
+pf.feols("Y ~ X1", data=df, vcov={"CRV1": "f1"})
+
+# ✅ 先手动丢弃
+df_clean = df.dropna(subset=["f1"])
+pf.feols("Y ~ X1", data=df_clean, vcov={"CRV1": "f1"})
+```
+
+### 16.4 `C()` 不能嵌套在 `sw()` / `csw()` 里
+
+公式解析器会将 `C()` 的括号当作 `sw()` 分组的一部分，导致语法错误。
+
+```python
+# ❌ 报错：FormulaSyntaxError
+pf.feols("Y ~ X1 + sw0(X2, C(f1))", data=df)
+
+# ✅ 解决方案：预先生成哑变量列
+df = pd.get_dummies(df, columns=["f1"], prefix="f1", drop_first=True)
+# 然后在公式中直接引用哑变量列名
+```
+
+或者更优雅的方式——把带 `C()` 的模型单独跑，不走 `sw()` 语法。
+
+### 16.5 `wildboottest()` 和 `rwolf()` 需要单独安装依赖
+
+```bash
+pip install wildboottest
+```
+
+没有安装时，`fit.wildboottest()` 和 `pf.rwolf()` 会抛出 `UnboundLocalError`，而不是一个清晰的"缺少依赖"错误提示。
+
+### 16.6 IV 公式中无外生变量时必须写 `1`
+
+```python
+# ❌ 语法错误——Part 1 不能为空
+pf.feols("Y ~ | f1 | X1 ~ Z1", data=df)
+
+# ✅ 用 1 作为占位
+pf.feols("Y ~ 1 | f1 | X1 ~ Z1", data=df)
+```
+
+### 16.7 `i()` 的 `ref` 必须匹配数据类型
+
+如果你的相对时间变量是 `float64`（从 Stata `.dta` 读入常见此情况），`ref` 也必须是浮点数：
+
+```python
+# ❌ 如果 rel_year 是 float 类型，ref=-1 (int) 不匹配 → 所有系数都会被估计
+pf.feols("Y ~ i(rel_year, ref=-1) | id + year", data=df)
+
+# ✅ 使用 float
+pf.feols("Y ~ i(rel_year, ref=-1.0) | id + year", data=df)
+
+# ✅ 或者先转换类型
+df["rel_year"] = df["rel_year"].astype(int)
+pf.feols("Y ~ i(rel_year, ref=-1) | id + year", data=df)
+```
+
+### 16.8 小样本校正 (SSC) 默认值与 Stata 不同
+
+这不是 bug，但会让你在比对结果时困惑。两个关键差异：
+
+| 场景 | PyFixest 默认 | Stata 默认 | 复现 Stata 的设置 |
+|------|-------------|-----------|-----------------|
+| HC3 标准误 | `k_adj=True` | `k_adj=False` | `ssc=pf.ssc(k_adj=False)` |
+| 双维聚类 | `G_df="min"` | `G_df="conventional"` | `ssc=pf.ssc(G_df="conventional")` |
+
+单维聚类 (`CRV1`) 和 `HC1` 的默认值与 Stata 完全一致，无需调整。
+
+---
+
 ## 写在最后
 
 PyFixest 的设计哲学很明确：**让熟悉 `fixest` / `reghdfe` 的研究者以最低成本迁移到 Python**。它没有试图重新发明语法，而是忠实地复现了 R `fixest` 包的公式体系，同时提供了与 Stata `reghdfe` / `ppmlhdfe` / `ivreghdfe` 数值上一致的结果。
+
 
 **推荐阅读：**
 
