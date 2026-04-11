@@ -43,7 +43,7 @@ description: 如何使用 PyFixest 进行计量回归。
 - **高维固定效应的高效求解**——底层采用与 `reghdfe` 相同的迭代去均值 (alternating projection) 算法，支持任意多维固定效应。
 - **一行代码批量估计**——`sw()`, `csw()`, `csw0()` 语法让你一次跑完基准回归、逐步加变量回归，无需循环。
 - **完整的推断工具箱**——HC1-HC3、CRV1/CRV3 聚类、Wild Bootstrap、随机化推断 (Randomization Inference)、Romano-Wolf 多重检验校正，全部内置。
-- **与 Python 数据科学生态无缝衔接**——Pandas 数据框进出，matplotlib / lets-plot 可视化，Jupyter Notebook 交互式分析。
+- **与 Python 数据科学生态兼容**——Pandas 数据框进出，matplotlib / lets-plot 可视化，Jupyter Notebook 交互式分析。
 - **GPU 加速**——通过 CuPy 或 JAX 后端，大数据集可获得数倍加速。
 - **完全免费、开源**——MIT 许可证，无 license 费用。
 
