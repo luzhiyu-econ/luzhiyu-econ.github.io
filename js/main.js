@@ -5,6 +5,7 @@
     home: "sections/home.html",
     research: "sections/research.html",
     blog: "sections/blog.html",
+    software: "sections/software.html",
   };
 
   const sectionCache = {};
