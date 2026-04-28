@@ -1,5 +1,5 @@
 # Claude Code Windows 通用安装脚本
-# 支持任意 API Token + Base URL，其余逻辑与官方安装流程一致
+# 支持任意 API Key + Base URL，其余逻辑与官方安装流程一致
 #
 # 用法：
 #   交互式：irm https://你的域名/install-claude-win.ps1 | iex
@@ -33,15 +33,15 @@ Write-Host ""
 # ── Token ──
 $CLAUDE_TOKEN = $env:CLAUDE_CLIENT_TOKEN
 if (-not $CLAUDE_TOKEN) {
-    Write-Host "[INPUT] 请输入 API Token：" -ForegroundColor Yellow
-    $CLAUDE_TOKEN = Read-Host "       Token"
+    Write-Host "[INPUT] 请输入 API Key：" -ForegroundColor Yellow
+    $CLAUDE_TOKEN = Read-Host "       Key"
     if (-not $CLAUDE_TOKEN) {
-        Write-Host "[ERROR] Token 不能为空，请重新运行并输入有效 Token" -ForegroundColor Red
+        Write-Host "[ERROR] Key 不能为空，请重新运行并输入有效 Key" -ForegroundColor Red
         Read-Host "按 Enter 退出"
         exit 1
     }
 } else {
-    Write-Host "[OK]    已从环境变量读取 Token" -ForegroundColor Green
+    Write-Host "[OK]    已从环境变量读取 Key" -ForegroundColor Green
 }
 
 # ── API URL ──
@@ -60,7 +60,7 @@ if (-not $CLAUDE_API_URL) {
 
 Write-Host ""
 Write-Host "[CONFIRM] 配置确认：" -ForegroundColor Cyan
-Write-Host "  Token  : $($CLAUDE_TOKEN.Substring(0, [Math]::Min(12, $CLAUDE_TOKEN.Length)))...（已隐藏）" -ForegroundColor White
+Write-Host "  Key    : $($CLAUDE_TOKEN.Substring(0, [Math]::Min(12, $CLAUDE_TOKEN.Length)))...（已隐藏）" -ForegroundColor White
 Write-Host "  API URL: $CLAUDE_API_URL" -ForegroundColor White
 Write-Host ""
 
@@ -397,7 +397,7 @@ Write-Host "    $settingsPath" -ForegroundColor Yellow
 Write-Host "    $claudeJsonPath" -ForegroundColor Yellow
 Write-Host ""
 Write-Host "  API URL : $CLAUDE_API_URL" -ForegroundColor Gray
-Write-Host "  Token   : 已自动配置" -ForegroundColor Gray
+Write-Host "  Key     : 已自动配置" -ForegroundColor Gray
 Write-Host ""
 Write-Host "  启动方式：在新终端运行 claude" -ForegroundColor Cyan
 Write-Host ""

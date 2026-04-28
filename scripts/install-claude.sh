@@ -4,7 +4,7 @@ set -e
 
 # ──────────────────────────────────────────────────────────────
 # Claude Code 通用一键安装脚本
-# 支持任意 API 中转地址 + Token，其余逻辑与官方安装流程一致
+# 支持任意 API 中转地址 + Key，其余逻辑与官方安装流程一致
 # 用法：
 #   交互式：bash install-claude.sh
 #   静默式：CLAUDE_TOKEN="sk-xxx" CLAUDE_API_URL="https://..." bash install-claude.sh
@@ -55,19 +55,19 @@ show_progress(){ printf "${colorBright}${colorBlue}🔄 ${1}${colorReset}\n"; }
 # ──────────────────────────────────────────────────────────────
 show_banner
 
-show_step "0" "API 配置" "输入你的 API Token 和 Base URL（两项均为必填）"
+show_step "0" "API 配置" "输入你的 API Key 和 Base URL（两项均为必填）"
 
 # ── Token ──
 if [ -z "$CLAUDE_TOKEN" ]; then
-    printf "${colorBright}${colorYellow}请输入 API Token${colorReset}\n"
+    printf "${colorBright}${colorYellow}请输入 API Key${colorReset}\n"
     printf "${colorCyan}> ${colorReset}"
     read -r CLAUDE_TOKEN
     if [ -z "$CLAUDE_TOKEN" ]; then
-        show_error "Token 不能为空，请重新运行并输入有效 Token"
+        show_error "Key 不能为空，请重新运行并输入有效 Key"
         exit 1
     fi
 else
-    show_success "已从环境变量读取 Token"
+    show_success "已从环境变量读取 Key"
 fi
 
 # ── API URL ──
@@ -85,7 +85,7 @@ fi
 
 printf "\n"
 printf "${colorBright}${colorGreen}配置确认：${colorReset}\n"
-printf "  ${colorCyan}Token  :${colorReset} ${CLAUDE_TOKEN:0:12}...（已隐藏）\n"
+printf "  ${colorCyan}Key    :${colorReset} ${CLAUDE_TOKEN:0:12}...（已隐藏）\n"
 printf "  ${colorCyan}API URL:${colorReset} $CLAUDE_API_URL\n"
 printf "\n"
 
@@ -391,7 +391,7 @@ fi
 # ──────────────────────────────────────────────────────────────
 # 步骤 4：写入配置文件
 # ──────────────────────────────────────────────────────────────
-show_step "4" "创建配置文件" "将 Token 和 API URL 写入 ~/.claude/settings.json"
+show_step "4" "创建配置文件" "将 Key 和 API URL 写入 ~/.claude/settings.json"
 
 mkdir -p "$HOME/.claude"
 SETTINGS_FILE="$HOME/.claude/settings.json"
