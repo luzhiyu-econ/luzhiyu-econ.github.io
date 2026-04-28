@@ -123,13 +123,13 @@ ensure_claude_in_path() {
     # 3. bun 全局 bin（通过 BUN_INSTALL 环境变量）
     local search_dirs=("$HOME/.local/bin" "$HOME/.bun/bin")
     if command -v bun >/dev/null 2>&1; then
+        # bun 可执行文件所在目录（应对 homebrew/nix/apt 等非默认安装）
         local _bun_bin_dir
         _bun_bin_dir="$(dirname "$(command -v bun)")"
         search_dirs+=("$_bun_bin_dir")
-        # bun 有时把全局 bin 放在与自身相同的目录
-        local _bun_install_bin
-        _bun_install_bin="$(bun --eval "process.stdout.write(process.env.BUN_INSTALL || (process.env.HOME + '/.bun'))" 2>/dev/null)/bin"
-        [ "$_bun_install_bin" != "/bin" ] && search_dirs+=("$_bun_install_bin")
+        # bun 全局 bin：遵循 BUN_INSTALL 规范，默认 ~/.bun/bin
+        local _bun_install_bin="${BUN_INSTALL:-$HOME/.bun}/bin"
+        search_dirs+=("$_bun_install_bin")
     fi
 
     for dir in "${search_dirs[@]}"; do
@@ -354,11 +354,9 @@ else
     show_warning "官方脚本安装失败，切换到 Bun 安装..."
     if bun install -g @anthropic-ai/claude-code; then
         show_success "Claude Code 安装成功（通过 Bun）！"
-        # 让 bun 的全局 bin 立即生效（应对 bun 安装在非默认位置的情况）
-        if command -v bun >/dev/null 2>&1; then
-            _bun_global_bin="$(bun --eval "process.stdout.write(process.env.BUN_INSTALL || (process.env.HOME + '/.bun'))" 2>/dev/null)/bin"
-            [ -d "$_bun_global_bin" ] && export PATH="$_bun_global_bin:$PATH"
-        fi
+        # 让 bun 的全局 bin 立即生效，遵循 BUN_INSTALL 规范，默认 ~/.bun/bin
+        _bun_global_bin="${BUN_INSTALL:-$HOME/.bun}/bin"
+        export PATH="$_bun_global_bin:$PATH"
 
         show_progress "运行 postinstall 脚本下载 native binary..."
         global_install="$HOME/.bun/install/global/node_modules/@anthropic-ai/claude-code/install.cjs"
