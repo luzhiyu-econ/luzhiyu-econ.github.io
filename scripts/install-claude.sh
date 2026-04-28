@@ -55,7 +55,7 @@ show_progress(){ printf "${colorBright}${colorBlue}🔄 ${1}${colorReset}\n"; }
 # ──────────────────────────────────────────────────────────────
 show_banner
 
-show_step "0" "API 配置" "输入你的 API Token 和 Base URL（直接回车使用括号内默认值）"
+show_step "0" "API 配置" "输入你的 API Token 和 Base URL（两项均为必填）"
 
 # ── Token ──
 if [ -z "$CLAUDE_TOKEN" ]; then
