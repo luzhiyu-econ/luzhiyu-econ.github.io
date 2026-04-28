@@ -18,36 +18,14 @@
       then writes the config file with your chosen Token and API endpoint.
     </p>
 
-    <div class="software-install">
-      <code>bash -c "$(curl -fsSL https://zhiyu-lu.com/scripts/install-claude.sh)"</code>
-      <button class="software-copy-btn" onclick="
-        navigator.clipboard.writeText('bash -c &quot;$(curl -fsSL https://zhiyu-lu.com/scripts/install-claude.sh)&quot;').then(() => {
-          this.textContent = 'Copied!';
-          this.classList.add('copied');
-          setTimeout(() => { this.textContent = 'Copy'; this.classList.remove('copied'); }, 1800);
-        });
-      ">Copy</button>
-    </div>
-
     <div class="software-code-example">
       <div class="software-code-example-label">macOS / Linux</div>
-      <pre><span style="color:#6a737d"># Interactive</span>
-bash -c "$(curl -fsSL https://zhiyu-lu.com/scripts/install-claude.sh)"
-
-<span style="color:#6a737d"># Silent</span>
-CLAUDE_TOKEN="sk-xxx" CLAUDE_API_URL="https://your-api.com" \
-bash -c "$(curl -fsSL https://zhiyu-lu.com/scripts/install-claude.sh)"</pre>
+      <pre>bash -c "$(curl -fsSL https://zhiyu-lu.com/scripts/install-claude.sh)"</pre>
     </div>
 
     <div class="software-code-example">
       <div class="software-code-example-label">Windows (PowerShell)</div>
-      <pre><span style="color:#6a737d"># Interactive</span>
-irm https://zhiyu-lu.com/scripts/install-claude-win.ps1 | iex
-
-<span style="color:#6a737d"># Silent</span>
-$env:CLAUDE_CLIENT_TOKEN = "sk-xxx"
-$env:CLAUDE_API_URL      = "https://your-api.com"
-irm https://zhiyu-lu.com/scripts/install-claude-win.ps1 | iex</pre>
+      <pre>irm https://zhiyu-lu.com/scripts/install-claude-win.ps1 | iex</pre>
     </div>
 
     <div class="software-footer">
