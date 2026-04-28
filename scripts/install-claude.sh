@@ -163,7 +163,7 @@ ensure_claude_in_path() {
     # 最后手段：在 bun 相关目录下广域搜索
     show_progress "在候选目录中未找到 claude，尝试广域搜索..."
     local found
-    found=$(find "$HOME/.bun" "$HOME/.local" -maxdepth 6 -name "claude" -type f -perm /111 2>/dev/null | head -1)
+    found=$(find "$HOME/.bun" "$HOME/.local" -maxdepth 6 -name "claude" -type f 2>/dev/null | head -1)
     if [ -n "$found" ]; then
         local found_dir
         found_dir="$(dirname "$found")"
@@ -376,7 +376,7 @@ else
         # bun 有时仍不自动创建 ~/.bun/bin/claude 符号链接
         if [ ! -x "$_bun_global_bin/claude" ]; then
             show_progress "检测到 bun 未自动创建符号链接，手动修复..."
-            _claude_bin=$(find "$_pkg_dir/bin" -name "claude*" -type f -perm /111 2>/dev/null | head -1)
+            _claude_bin=$(find "$_pkg_dir/bin" -name "claude*" -type f 2>/dev/null | head -1)
             if [ -n "$_claude_bin" ]; then
                 ln -sf "$_claude_bin" "$_bun_global_bin/claude"
                 show_success "符号链接已创建: $_bun_global_bin/claude -> $_claude_bin"
