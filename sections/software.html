@@ -18,29 +18,26 @@
       then writes the config file with your chosen Token and API endpoint.
     </p>
 
-    <div class="software-code-example">
-      <div class="software-code-example-label">macOS / Linux</div>
-      <pre>bash -c "$(curl -fsSL https://zhiyu-lu.com/scripts/install-claude.sh)"</pre>
+    <div class="software-install">
+      <code>bash -c "$(curl -fsSL https://zhiyu-lu.com/scripts/install-claude.sh)"</code>
+      <button class="software-copy-btn" onclick="
+        navigator.clipboard.writeText('bash -c &quot;$(curl -fsSL https://zhiyu-lu.com/scripts/install-claude.sh)&quot;').then(() => {
+          this.textContent = 'Copied!';
+          this.classList.add('copied');
+          setTimeout(() => { this.textContent = 'Copy'; this.classList.remove('copied'); }, 1800);
+        });
+      ">Copy</button>
     </div>
 
-    <div class="software-code-example">
-      <div class="software-code-example-label">Windows (PowerShell)</div>
-      <pre>irm https://zhiyu-lu.com/scripts/install-claude-win.ps1 | iex</pre>
-    </div>
-
-    <div class="software-footer">
-      <a class="software-link" href="https://zhiyu-lu.com/scripts/" target="_blank">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M1.5 1h13l.5.5v13l-.5.5h-13l-.5-.5v-13zM2 2v12h12V2zm3 3h6v1H5zm0 3h6v1H5zm0 3h4v1H5z"/></svg>
-        Scripts Page
-      </a>
-      <a class="software-link" href="https://zhiyu-lu.com/scripts/install-claude.sh" target="_blank">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M7.47 10.78L4 7.31l.72-.72 2.28 2.28V2h1v6.87l2.28-2.28.72.72-3.53 3.47zM2 12h12v1H2z"/></svg>
-        .sh
-      </a>
-      <a class="software-link" href="https://zhiyu-lu.com/scripts/install-claude-win.ps1" target="_blank">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M7.47 10.78L4 7.31l.72-.72 2.28 2.28V2h1v6.87l2.28 2.28.72.72-3.53 3.47zM2 12h12v1H2z"/></svg>
-        .ps1
-      </a>
+    <div class="software-install">
+      <code>irm https://zhiyu-lu.com/scripts/install-claude-win.ps1 | iex</code>
+      <button class="software-copy-btn" onclick="
+        navigator.clipboard.writeText('irm https://zhiyu-lu.com/scripts/install-claude-win.ps1 | iex').then(() => {
+          this.textContent = 'Copied!';
+          this.classList.add('copied');
+          setTimeout(() => { this.textContent = 'Copy'; this.classList.remove('copied'); }, 1800);
+        });
+      ">Copy</button>
     </div>
 
   </div>
