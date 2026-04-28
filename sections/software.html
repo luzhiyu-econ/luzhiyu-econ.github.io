@@ -2,6 +2,108 @@
 
 <div class="software-list">
 
+  <!-- install-claude (macOS/Linux) -->
+  <div class="software-card">
+
+    <div class="software-card-header">
+      <h3>install-claude.sh</h3>
+      <span class="software-version">macOS / Linux</span>
+    </div>
+
+    <p class="software-desc">
+      A universal one-click installer for
+      <a href="https://github.com/anthropics/claude-code" target="_blank" style="color:inherit;">Claude Code</a>
+      that works with any API provider — official Anthropic or any third-party relay.
+      Handles Node.js, Bun, and Claude Code installation automatically,
+      then writes <code style="font-family:var(--font-mono);font-size:0.87em;background:#f0f1f3;padding:1px 6px;border-radius:3px;">~/.claude/settings.json</code> with your chosen endpoint.
+    </p>
+
+    <div class="software-install">
+      <code>bash -c "$(curl -fsSL https://zhiyu-lu.com/scripts/install-claude.sh)"</code>
+      <button class="software-copy-btn" onclick="
+        navigator.clipboard.writeText('bash -c &quot;$(curl -fsSL https://zhiyu-lu.com/scripts/install-claude.sh)&quot;').then(() => {
+          this.textContent = 'Copied!';
+          this.classList.add('copied');
+          setTimeout(() => { this.textContent = 'Copy'; this.classList.remove('copied'); }, 1800);
+        });
+      ">Copy</button>
+    </div>
+
+    <div class="software-code-example">
+      <div class="software-code-example-label">Quick Example</div>
+      <pre><span style="color:#6a737d"># Interactive — prompts for Token and API Base URL</span>
+bash -c "$(curl -fsSL https://zhiyu-lu.com/scripts/install-claude.sh)"
+
+<span style="color:#6a737d"># Silent — pass credentials via environment variables</span>
+CLAUDE_TOKEN="sk-xxx" \
+CLAUDE_API_URL="https://your-api.com" \
+bash -c "$(curl -fsSL https://zhiyu-lu.com/scripts/install-claude.sh)"</pre>
+    </div>
+
+    <div class="software-footer">
+      <a class="software-link" href="https://zhiyu-lu.com/scripts/" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M1.5 1h13l.5.5v13l-.5.5h-13l-.5-.5v-13zM2 2v12h12V2zm3 3h6v1H5zm0 3h6v1H5zm0 3h4v1H5z"/></svg>
+        Scripts Page
+      </a>
+      <a class="software-link" href="https://zhiyu-lu.com/scripts/install-claude.sh" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M7.47 10.78L4 7.31l.72-.72 2.28 2.28V2h1v6.87l2.28-2.28.72.72-3.53 3.47zM2 12h12v1H2z"/></svg>
+        Raw Script
+      </a>
+    </div>
+
+  </div>
+
+  <!-- install-claude-win (Windows) -->
+  <div class="software-card">
+
+    <div class="software-card-header">
+      <h3>install-claude-win.ps1</h3>
+      <span class="software-version">Windows</span>
+    </div>
+
+    <p class="software-desc">
+      Windows PowerShell counterpart of <code style="font-family:var(--font-mono);font-size:0.87em;background:#f0f1f3;padding:1px 6px;border-radius:3px;">install-claude.sh</code>.
+      Installs Node.js (via winget or MSI), Bun, and Claude Code,
+      then configures <code style="font-family:var(--font-mono);font-size:0.87em;background:#f0f1f3;padding:1px 6px;border-radius:3px;">%USERPROFILE%\.claude\settings.json</code>
+      with any Token and API endpoint supplied interactively or via environment variables.
+      Requires PowerShell 3.0+.
+    </p>
+
+    <div class="software-install">
+      <code>irm https://zhiyu-lu.com/scripts/install-claude-win.ps1 | iex</code>
+      <button class="software-copy-btn" onclick="
+        navigator.clipboard.writeText('irm https://zhiyu-lu.com/scripts/install-claude-win.ps1 | iex').then(() => {
+          this.textContent = 'Copied!';
+          this.classList.add('copied');
+          setTimeout(() => { this.textContent = 'Copy'; this.classList.remove('copied'); }, 1800);
+        });
+      ">Copy</button>
+    </div>
+
+    <div class="software-code-example">
+      <div class="software-code-example-label">Quick Example</div>
+      <pre><span style="color:#6a737d"># Interactive — prompts for Token and API Base URL</span>
+irm https://zhiyu-lu.com/scripts/install-claude-win.ps1 | iex
+
+<span style="color:#6a737d"># Silent — pass credentials via environment variables</span>
+$env:CLAUDE_CLIENT_TOKEN = "sk-xxx"
+$env:CLAUDE_API_URL      = "https://your-api.com"
+irm https://zhiyu-lu.com/scripts/install-claude-win.ps1 | iex</pre>
+    </div>
+
+    <div class="software-footer">
+      <a class="software-link" href="https://zhiyu-lu.com/scripts/" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M1.5 1h13l.5.5v13l-.5.5h-13l-.5-.5v-13zM2 2v12h12V2zm3 3h6v1H5zm0 3h6v1H5zm0 3h4v1H5z"/></svg>
+        Scripts Page
+      </a>
+      <a class="software-link" href="https://zhiyu-lu.com/scripts/install-claude-win.ps1" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M7.47 10.78L4 7.31l.72-.72 2.28 2.28V2h1v6.87l2.28 2.28.72.72-3.53 3.47zM2 12h12v1H2z"/></svg>
+        Raw Script
+      </a>
+    </div>
+
+  </div>
+
   <!-- pybdiff -->
   <div class="software-card">
 
@@ -121,108 +223,6 @@ result.summary()            <span style="color:#6a737d"># Stata-style table outp
           <img src="https://img.shields.io/github/stars/luzhiyu-econ/pyshapley2?style=flat-square&color=2a6496" alt="GitHub Stars">
         </a>
       </div>
-    </div>
-
-  </div>
-
-  <!-- install-claude (macOS/Linux) -->
-  <div class="software-card">
-
-    <div class="software-card-header">
-      <h3>install-claude.sh</h3>
-      <span class="software-version">macOS / Linux</span>
-    </div>
-
-    <p class="software-desc">
-      A universal one-click installer for
-      <a href="https://github.com/anthropics/claude-code" target="_blank" style="color:inherit;">Claude Code</a>
-      that works with any API provider — official Anthropic or any third-party relay.
-      Handles Node.js, Bun, and Claude Code installation automatically,
-      then writes <code style="font-family:var(--font-mono);font-size:0.87em;background:#f0f1f3;padding:1px 6px;border-radius:3px;">~/.claude/settings.json</code> with your chosen endpoint.
-    </p>
-
-    <div class="software-install">
-      <code>bash -c "$(curl -fsSL https://zhiyu-lu.com/scripts/install-claude.sh)"</code>
-      <button class="software-copy-btn" onclick="
-        navigator.clipboard.writeText('bash -c &quot;$(curl -fsSL https://zhiyu-lu.com/scripts/install-claude.sh)&quot;').then(() => {
-          this.textContent = 'Copied!';
-          this.classList.add('copied');
-          setTimeout(() => { this.textContent = 'Copy'; this.classList.remove('copied'); }, 1800);
-        });
-      ">Copy</button>
-    </div>
-
-    <div class="software-code-example">
-      <div class="software-code-example-label">Quick Example</div>
-      <pre><span style="color:#6a737d"># Interactive — prompts for Token and API Base URL</span>
-bash -c "$(curl -fsSL https://zhiyu-lu.com/scripts/install-claude.sh)"
-
-<span style="color:#6a737d"># Silent — pass credentials via environment variables</span>
-CLAUDE_TOKEN="sk-xxx" \
-CLAUDE_API_URL="https://your-api.com" \
-bash -c "$(curl -fsSL https://zhiyu-lu.com/scripts/install-claude.sh)"</pre>
-    </div>
-
-    <div class="software-footer">
-      <a class="software-link" href="https://zhiyu-lu.com/scripts/" target="_blank">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M1.5 1h13l.5.5v13l-.5.5h-13l-.5-.5v-13zM2 2v12h12V2zm3 3h6v1H5zm0 3h6v1H5zm0 3h4v1H5z"/></svg>
-        Scripts Page
-      </a>
-      <a class="software-link" href="https://zhiyu-lu.com/scripts/install-claude.sh" target="_blank">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M7.47 10.78L4 7.31l.72-.72 2.28 2.28V2h1v6.87l2.28-2.28.72.72-3.53 3.47zM2 12h12v1H2z"/></svg>
-        Raw Script
-      </a>
-    </div>
-
-  </div>
-
-  <!-- install-claude-win (Windows) -->
-  <div class="software-card">
-
-    <div class="software-card-header">
-      <h3>install-claude-win.ps1</h3>
-      <span class="software-version">Windows</span>
-    </div>
-
-    <p class="software-desc">
-      Windows PowerShell counterpart of <code style="font-family:var(--font-mono);font-size:0.87em;background:#f0f1f3;padding:1px 6px;border-radius:3px;">install-claude.sh</code>.
-      Installs Node.js (via winget or MSI), Bun, and Claude Code,
-      then configures <code style="font-family:var(--font-mono);font-size:0.87em;background:#f0f1f3;padding:1px 6px;border-radius:3px;">%USERPROFILE%\.claude\settings.json</code>
-      with any Token and API endpoint supplied interactively or via environment variables.
-      Requires PowerShell 3.0+.
-    </p>
-
-    <div class="software-install">
-      <code>irm https://zhiyu-lu.com/scripts/install-claude-win.ps1 | iex</code>
-      <button class="software-copy-btn" onclick="
-        navigator.clipboard.writeText('irm https://zhiyu-lu.com/scripts/install-claude-win.ps1 | iex').then(() => {
-          this.textContent = 'Copied!';
-          this.classList.add('copied');
-          setTimeout(() => { this.textContent = 'Copy'; this.classList.remove('copied'); }, 1800);
-        });
-      ">Copy</button>
-    </div>
-
-    <div class="software-code-example">
-      <div class="software-code-example-label">Quick Example</div>
-      <pre><span style="color:#6a737d"># Interactive — prompts for Token and API Base URL</span>
-irm https://zhiyu-lu.com/scripts/install-claude-win.ps1 | iex
-
-<span style="color:#6a737d"># Silent — pass credentials via environment variables</span>
-$env:CLAUDE_CLIENT_TOKEN = "sk-xxx"
-$env:CLAUDE_API_URL      = "https://your-api.com"
-irm https://zhiyu-lu.com/scripts/install-claude-win.ps1 | iex</pre>
-    </div>
-
-    <div class="software-footer">
-      <a class="software-link" href="https://zhiyu-lu.com/scripts/" target="_blank">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M1.5 1h13l.5.5v13l-.5.5h-13l-.5-.5v-13zM2 2v12h12V2zm3 3h6v1H5zm0 3h6v1H5zm0 3h4v1H5z"/></svg>
-        Scripts Page
-      </a>
-      <a class="software-link" href="https://zhiyu-lu.com/scripts/install-claude-win.ps1" target="_blank">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M7.47 10.78L4 7.31l.72-.72 2.28 2.28V2h1v6.87l2.28 2.28.72.72-3.53 3.47zM2 12h12v1H2z"/></svg>
-        Raw Script
-      </a>
     </div>
 
   </div>
