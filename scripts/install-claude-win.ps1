@@ -305,7 +305,7 @@ try {
             if (-not $s.env) {
                 $s | Add-Member -NotePropertyName "env" -NotePropertyValue ([PSCustomObject]@{}) -Force
             }
-            $s.env | Add-Member -NotePropertyName "ANTHROPIC_API_KEY"               -NotePropertyValue $CLAUDE_TOKEN -Force
+            $s.env | Add-Member -NotePropertyName "ANTHROPIC_AUTH_TOKEN"               -NotePropertyValue $CLAUDE_TOKEN -Force
             $s.env | Add-Member -NotePropertyName "ANTHROPIC_BASE_URL"                 -NotePropertyValue $CLAUDE_API_URL -Force
             $s.env | Add-Member -NotePropertyName "API_TIMEOUT_MS"                     -NotePropertyValue 600000 -Force
             $s.env | Add-Member -NotePropertyName "CLAUDE_CODE_DISABLE_1M_CONTEXT"     -NotePropertyValue "1" -Force
@@ -326,7 +326,7 @@ try {
         $json = @"
 {
   "env": {
-    "ANTHROPIC_API_KEY": "$CLAUDE_TOKEN",
+    "ANTHROPIC_AUTH_TOKEN": "$CLAUDE_TOKEN",
     "ANTHROPIC_BASE_URL": "$CLAUDE_API_URL",
     "API_TIMEOUT_MS": 600000,
     "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1",
@@ -347,7 +347,7 @@ try {
     $json = @"
 {
   "env": {
-    "ANTHROPIC_API_KEY": "$CLAUDE_TOKEN",
+    "ANTHROPIC_AUTH_TOKEN": "$CLAUDE_TOKEN",
     "ANTHROPIC_BASE_URL": "$CLAUDE_API_URL",
     "API_TIMEOUT_MS": 600000,
     "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1",

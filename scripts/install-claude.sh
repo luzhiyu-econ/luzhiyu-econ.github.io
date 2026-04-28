@@ -424,8 +424,8 @@ except Exception:
     data = {}
 
 data.setdefault('env', {})
-data['env'].pop('ANTHROPIC_AUTH_TOKEN', None)  # 删除旧字段，避免与 ANTHROPIC_API_KEY 冲突
-data['env']['ANTHROPIC_API_KEY'] = token
+data['env'].pop('ANTHROPIC_API_KEY', None)  # 删除可能存在的冲突字段
+data['env']['ANTHROPIC_AUTH_TOKEN'] = token
 data['env']['ANTHROPIC_BASE_URL'] = api_url
 data['env']['API_TIMEOUT_MS'] = 600000
 data['env']['CLAUDE_CODE_DISABLE_1M_CONTEXT'] = '1'
@@ -444,8 +444,8 @@ PYEOF
             --arg token "${CLAUDE_TOKEN}" \
             --arg url "${CLAUDE_API_URL}" \
             '.env = (.env // {}) |
-             del(.env.ANTHROPIC_AUTH_TOKEN) |
-             .env.ANTHROPIC_API_KEY = $token |
+             del(.env.ANTHROPIC_API_KEY) |
+             .env.ANTHROPIC_AUTH_TOKEN = $token |
              .env.ANTHROPIC_BASE_URL = $url |
              .env.API_TIMEOUT_MS = 600000 |
              .env.CLAUDE_CODE_DISABLE_1M_CONTEXT = "1" |
@@ -457,7 +457,7 @@ PYEOF
         cat > "$SETTINGS_FILE" <<EOF
 {
   "env": {
-    "ANTHROPIC_API_KEY": "${CLAUDE_TOKEN}",
+    "ANTHROPIC_AUTH_TOKEN": "${CLAUDE_TOKEN}",
     "ANTHROPIC_BASE_URL": "${CLAUDE_API_URL}",
     "API_TIMEOUT_MS": 600000,
     "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1",
