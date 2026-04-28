@@ -18,7 +18,9 @@
       then writes the config file with your chosen Token and API endpoint.
     </p>
 
+    <!-- macOS / Linux -->
     <div class="software-install">
+      <span class="software-platform-label">macOS &amp; Linux</span>
       <code>bash -c "$(curl -fsSL https://zhiyu-lu.com/scripts/install-claude.sh)"</code>
       <button class="software-copy-btn" onclick="
         navigator.clipboard.writeText('bash -c &quot;$(curl -fsSL https://zhiyu-lu.com/scripts/install-claude.sh)&quot;').then(() => {
@@ -29,10 +31,12 @@
       ">Copy</button>
     </div>
 
+    <!-- Windows (PowerShell) — download first to allow interactive input -->
     <div class="software-install">
-      <code>irm https://zhiyu-lu.com/scripts/install-claude-win.ps1 | iex</code>
+      <span class="software-platform-label">Windows</span>
+      <code>$f=[IO.Path]::GetTempFileName()+'ps1'; irm https://zhiyu-lu.com/scripts/install-claude-win.ps1 -OutFile $f; & $f; del $f</code>
       <button class="software-copy-btn" onclick="
-        navigator.clipboard.writeText('irm https://zhiyu-lu.com/scripts/install-claude-win.ps1 | iex').then(() => {
+        navigator.clipboard.writeText('$f=[IO.Path]::GetTempFileName()+\'ps1\'; irm https://zhiyu-lu.com/scripts/install-claude-win.ps1 -OutFile $f; & $f; del $f').then(() => {
           this.textContent = 'Copied!';
           this.classList.add('copied');
           setTimeout(() => { this.textContent = 'Copy'; this.classList.remove('copied'); }, 1800);
