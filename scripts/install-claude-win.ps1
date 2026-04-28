@@ -211,11 +211,13 @@ $installSuccess = $false
 Write-Host "[INFO]  尝试官方安装脚本..." -ForegroundColor Gray
 try {
     irm https://claude.ai/install.ps1 | iex
-    if ($?) {
+    # 验证 claude 命令实际可用，避免脚本静默失败
+    $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+    if (Get-Command claude -ErrorAction SilentlyContinue) {
         Write-Host "[OK]    Claude Code 安装成功（官方脚本）！" -ForegroundColor Green
         $installSuccess = $true
     } else {
-        throw "官方安装脚本失败"
+        throw "官方脚本运行完成但 claude 命令不可用"
     }
 } catch {
     Write-Host "[WARN]  官方脚本失败，切换到 Bun..." -ForegroundColor Yellow
@@ -303,7 +305,7 @@ try {
             if (-not $s.env) {
                 $s | Add-Member -NotePropertyName "env" -NotePropertyValue ([PSCustomObject]@{}) -Force
             }
-            $s.env | Add-Member -NotePropertyName "ANTHROPIC_AUTH_TOKEN"               -NotePropertyValue $CLAUDE_TOKEN -Force
+            $s.env | Add-Member -NotePropertyName "ANTHROPIC_API_KEY"               -NotePropertyValue $CLAUDE_TOKEN -Force
             $s.env | Add-Member -NotePropertyName "ANTHROPIC_BASE_URL"                 -NotePropertyValue $CLAUDE_API_URL -Force
             $s.env | Add-Member -NotePropertyName "API_TIMEOUT_MS"                     -NotePropertyValue 600000 -Force
             $s.env | Add-Member -NotePropertyName "CLAUDE_CODE_DISABLE_1M_CONTEXT"     -NotePropertyValue "1" -Force
@@ -324,7 +326,7 @@ try {
         $json = @"
 {
   "env": {
-    "ANTHROPIC_AUTH_TOKEN": "$CLAUDE_TOKEN",
+    "ANTHROPIC_API_KEY": "$CLAUDE_TOKEN",
     "ANTHROPIC_BASE_URL": "$CLAUDE_API_URL",
     "API_TIMEOUT_MS": 600000,
     "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1",
@@ -345,7 +347,7 @@ try {
     $json = @"
 {
   "env": {
-    "ANTHROPIC_AUTH_TOKEN": "$CLAUDE_TOKEN",
+    "ANTHROPIC_API_KEY": "$CLAUDE_TOKEN",
     "ANTHROPIC_BASE_URL": "$CLAUDE_API_URL",
     "API_TIMEOUT_MS": 600000,
     "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1",
