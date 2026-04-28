@@ -358,24 +358,11 @@ else
         _bun_global_bin="${BUN_INSTALL:-$HOME/.bun}/bin"
         export PATH="$_bun_global_bin:$PATH"
 
-        # 修复 bun 已知问题：安装后有时不自动创建 ~/.bun/bin/claude 符号链接
-        if [ ! -x "$_bun_global_bin/claude" ]; then
-            show_progress "检测到 bun 未自动创建符号链接，手动修复..."
-            _pkg_dir="${BUN_INSTALL:-$HOME/.bun}/install/global/node_modules/@anthropic-ai/claude-code"
-            _claude_bin=$(find "$_pkg_dir/bin" -name "claude*" -type f -perm /111 2>/dev/null | head -1)
-            if [ -n "$_claude_bin" ]; then
-                ln -sf "$_claude_bin" "$_bun_global_bin/claude"
-                show_success "符号链接已创建: $_bun_global_bin/claude -> $_claude_bin"
-            else
-                show_warning "未找到 claude 二进制文件，请检查安装"
-            fi
-        fi
-
         show_progress "运行 postinstall 脚本下载 native binary..."
-        global_install="$HOME/.bun/install/global/node_modules/@anthropic-ai/claude-code/install.cjs"
+        _pkg_dir="${BUN_INSTALL:-$HOME/.bun}/install/global/node_modules/@anthropic-ai/claude-code"
         postinstall_script=""
-        [ -f "$global_install" ] && postinstall_script="$global_install" || \
-            postinstall_script=$(find "$HOME/.bun/install/global" -path "*/@anthropic-ai/claude-code/install.cjs" 2>/dev/null | head -1)
+        [ -f "$_pkg_dir/install.cjs" ] && postinstall_script="$_pkg_dir/install.cjs" || \
+            postinstall_script=$(find "${BUN_INSTALL:-$HOME/.bun}/install/global" -path "*/@anthropic-ai/claude-code/install.cjs" 2>/dev/null | head -1)
 
         if [ -n "$postinstall_script" ] && [ -f "$postinstall_script" ]; then
             node "$postinstall_script" && show_success "Native binary 下载完成" || \
@@ -383,6 +370,19 @@ else
         else
             show_warning "未找到 postinstall 脚本，请手动执行："
             printf "  ${colorCyan}node ~/.bun/install/global/node_modules/@anthropic-ai/claude-code/install.cjs${colorReset}\n"
+        fi
+
+        # 修复 bun 已知问题：postinstall 下载完 native binary 后，
+        # bun 有时仍不自动创建 ~/.bun/bin/claude 符号链接
+        if [ ! -x "$_bun_global_bin/claude" ]; then
+            show_progress "检测到 bun 未自动创建符号链接，手动修复..."
+            _claude_bin=$(find "$_pkg_dir/bin" -name "claude*" -type f -perm /111 2>/dev/null | head -1)
+            if [ -n "$_claude_bin" ]; then
+                ln -sf "$_claude_bin" "$_bun_global_bin/claude"
+                show_success "符号链接已创建: $_bun_global_bin/claude -> $_claude_bin"
+            else
+                show_warning "未找到 claude 二进制文件，请检查安装"
+            fi
         fi
     else
         show_error "Claude Code 安装失败"
