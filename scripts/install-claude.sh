@@ -358,6 +358,19 @@ else
         _bun_global_bin="${BUN_INSTALL:-$HOME/.bun}/bin"
         export PATH="$_bun_global_bin:$PATH"
 
+        # 修复 bun 已知问题：安装后有时不自动创建 ~/.bun/bin/claude 符号链接
+        if [ ! -x "$_bun_global_bin/claude" ]; then
+            show_progress "检测到 bun 未自动创建符号链接，手动修复..."
+            _pkg_dir="${BUN_INSTALL:-$HOME/.bun}/install/global/node_modules/@anthropic-ai/claude-code"
+            _claude_bin=$(find "$_pkg_dir/bin" -name "claude*" -type f -perm /111 2>/dev/null | head -1)
+            if [ -n "$_claude_bin" ]; then
+                ln -sf "$_claude_bin" "$_bun_global_bin/claude"
+                show_success "符号链接已创建: $_bun_global_bin/claude -> $_claude_bin"
+            else
+                show_warning "未找到 claude 二进制文件，请检查安装"
+            fi
+        fi
+
         show_progress "运行 postinstall 脚本下载 native binary..."
         global_install="$HOME/.bun/install/global/node_modules/@anthropic-ai/claude-code/install.cjs"
         postinstall_script=""
