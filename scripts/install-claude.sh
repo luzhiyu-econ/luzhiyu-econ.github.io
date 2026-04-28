@@ -116,21 +116,67 @@ ensure_claude_in_path() {
     if command -v claude >/dev/null 2>&1; then
         return 0
     fi
+
+    # 构建候选目录列表：
+    # 1. 固定默认路径
+    # 2. bun 可执行文件所在目录（应对 homebrew/nix/apt 等非默认安装）
+    # 3. bun 全局 bin（通过 BUN_INSTALL 环境变量）
     local search_dirs=("$HOME/.local/bin" "$HOME/.bun/bin")
+    if command -v bun >/dev/null 2>&1; then
+        local _bun_bin_dir
+        _bun_bin_dir="$(dirname "$(command -v bun)")"
+        search_dirs+=("$_bun_bin_dir")
+        # bun 有时把全局 bin 放在与自身相同的目录
+        local _bun_install_bin
+        _bun_install_bin="$(bun --eval "process.stdout.write(process.env.BUN_INSTALL || (process.env.HOME + '/.bun'))" 2>/dev/null)/bin"
+        [ "$_bun_install_bin" != "/bin" ] && search_dirs+=("$_bun_install_bin")
+    fi
+
     for dir in "${search_dirs[@]}"; do
         if [ -x "$dir/claude" ]; then
             show_progress "在 $dir 找到 claude，正在添加到 PATH..."
             export PATH="$dir:$PATH"
-            local relative_dir="${dir#$HOME}"
-            if ! grep -q "$relative_dir" "$PROFILE" 2>/dev/null; then
-                echo '' >> "$PROFILE"
-                echo "# Claude Code PATH" >> "$PROFILE"
-                echo "export PATH=\"\$HOME${relative_dir}:\$PATH\"" >> "$PROFILE"
-                show_success "\$HOME${relative_dir} 已添加到 $PROFILE"
+            # 写入 profile（绝对路径或 $HOME 相对路径均支持）
+            local path_entry
+            if [[ "$dir" == "$HOME"* ]]; then
+                local relative_dir="${dir#$HOME}"
+                path_entry="export PATH=\"\$HOME${relative_dir}:\$PATH\""
+                grep -q "$relative_dir" "$PROFILE" 2>/dev/null || {
+                    echo '' >> "$PROFILE"
+                    echo "# Claude Code PATH" >> "$PROFILE"
+                    echo "$path_entry" >> "$PROFILE"
+                    show_success "\$HOME${relative_dir} 已添加到 $PROFILE"
+                }
+            else
+                path_entry="export PATH=\"${dir}:\$PATH\""
+                grep -q "$dir" "$PROFILE" 2>/dev/null || {
+                    echo '' >> "$PROFILE"
+                    echo "# Claude Code PATH" >> "$PROFILE"
+                    echo "$path_entry" >> "$PROFILE"
+                    show_success "${dir} 已添加到 $PROFILE"
+                }
             fi
             return 0
         fi
     done
+
+    # 最后手段：在 bun 相关目录下广域搜索
+    show_progress "在候选目录中未找到 claude，尝试广域搜索..."
+    local found
+    found=$(find "$HOME/.bun" "$HOME/.local" -maxdepth 6 -name "claude" -type f -perm /111 2>/dev/null | head -1)
+    if [ -n "$found" ]; then
+        local found_dir
+        found_dir="$(dirname "$found")"
+        show_progress "广域搜索找到: $found_dir/claude"
+        export PATH="$found_dir:$PATH"
+        grep -q "$found_dir" "$PROFILE" 2>/dev/null || {
+            echo '' >> "$PROFILE"
+            echo "# Claude Code PATH" >> "$PROFILE"
+            echo "export PATH=\"${found_dir}:\$PATH\"" >> "$PROFILE"
+            show_success "${found_dir} 已添加到 $PROFILE"
+        }
+        return 0
+    fi
     return 1
 }
 
@@ -308,6 +354,11 @@ else
     show_warning "官方脚本安装失败，切换到 Bun 安装..."
     if bun install -g @anthropic-ai/claude-code; then
         show_success "Claude Code 安装成功（通过 Bun）！"
+        # 让 bun 的全局 bin 立即生效（应对 bun 安装在非默认位置的情况）
+        if command -v bun >/dev/null 2>&1; then
+            _bun_global_bin="$(bun --eval "process.stdout.write(process.env.BUN_INSTALL || (process.env.HOME + '/.bun'))" 2>/dev/null)/bin"
+            [ -d "$_bun_global_bin" ] && export PATH="$_bun_global_bin:$PATH"
+        fi
 
         show_progress "运行 postinstall 脚本下载 native binary..."
         global_install="$HOME/.bun/install/global/node_modules/@anthropic-ai/claude-code/install.cjs"
