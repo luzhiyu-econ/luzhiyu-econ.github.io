@@ -294,7 +294,15 @@ bun uninstall -g @anthropic-ai/claude-code >/dev/null 2>&1 || true
 npm uninstall -g @anthropic-ai/claude-code >/dev/null 2>&1 || true
 
 show_progress "尝试使用官方脚本安装 Claude Code..."
-if curl -fsSL https://claude.ai/install.sh | bash; then
+_tmp_official=$(mktemp)
+_official_ok=false
+if curl -fsSL --connect-timeout 15 https://claude.ai/install.sh -o "$_tmp_official" 2>/dev/null \
+    && [ -s "$_tmp_official" ] \
+    && bash "$_tmp_official"; then
+    _official_ok=true
+fi
+rm -f "$_tmp_official"
+if [ "$_official_ok" = true ]; then
     show_success "Claude Code 安装成功（通过官方脚本）！"
 else
     show_warning "官方脚本安装失败，切换到 Bun 安装..."
