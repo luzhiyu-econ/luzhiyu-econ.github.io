@@ -143,12 +143,11 @@
   function initNav() {
     document.querySelectorAll(".nav-link").forEach((link) => {
       link.addEventListener("click", (e) => {
-        e.preventDefault();
         const target = link.dataset.section;
-        if (target) {
-          currentBlogView = "list";
-          navigateTo(target);
-        }
+        if (!target) return; // external link — let browser handle it
+        e.preventDefault();
+        currentBlogView = "list";
+        navigateTo(target);
       });
     });
 
