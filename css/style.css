@@ -152,13 +152,13 @@ img {
 /* ===== Home / Profile ===== */
 .profile-container {
   display: flex;
-  gap: 48px;
+  gap: 40px;
   align-items: flex-start;
   margin-bottom: 40px;
 }
 
 .profile-image img {
-  width: 240px;
+  width: 160px;
   border-radius: var(--radius);
   box-shadow: var(--shadow-md);
 }
@@ -467,7 +467,7 @@ img {
   }
 
   .profile-image img {
-    width: 200px;
+    width: 140px;
   }
 
   .profile-info {
@@ -502,7 +502,7 @@ img {
   }
 
   .profile-image img {
-    width: 160px;
+    width: 120px;
   }
 }
 
