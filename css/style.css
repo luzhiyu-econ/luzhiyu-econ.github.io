@@ -166,7 +166,7 @@ img {
 .profile-info h2 {
   font-size: 1.15rem;
   font-weight: 600;
-  color: var(--color-text-secondary);
+  color: var(--color-accent);
   margin-bottom: 16px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
