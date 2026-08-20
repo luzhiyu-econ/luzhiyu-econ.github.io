@@ -2,50 +2,6 @@
 
 <div class="software-list">
 
-  <!-- install-claude -->
-  <div class="software-card">
-
-    <div class="software-card-header">
-      <h3>install-claude</h3>
-      <span class="software-version">macOS · Linux · Windows</span>
-    </div>
-
-    <p class="software-desc">
-      A universal one-click installer for
-      <a href="https://github.com/anthropics/claude-code" target="_blank" style="color:inherit;">Claude Code</a>
-      that works with any API provider — official Anthropic or any third-party relay.
-      Handles Node.js, Bun, and Claude Code installation automatically,
-      then writes the config file with your chosen Token and API endpoint.
-    </p>
-
-    <!-- macOS / Linux -->
-    <div class="software-install">
-      <span class="software-platform-label">macOS &amp; Linux</span>
-      <code>bash -c "$(curl -fsSL https://zhiyu-lu.com/scripts/install-claude.sh)"</code>
-      <button class="software-copy-btn" onclick="
-        navigator.clipboard.writeText('bash -c &quot;$(curl -fsSL https://zhiyu-lu.com/scripts/install-claude.sh)&quot;').then(() => {
-          this.textContent = 'Copied!';
-          this.classList.add('copied');
-          setTimeout(() => { this.textContent = 'Copy'; this.classList.remove('copied'); }, 1800);
-        });
-      ">Copy</button>
-    </div>
-
-    <!-- Windows (PowerShell) — download first to allow interactive input -->
-    <div class="software-install">
-      <span class="software-platform-label">Windows</span>
-      <code>$f=[IO.Path]::GetTempFileName()+'ps1'; irm https://zhiyu-lu.com/scripts/install-claude-win.ps1 -OutFile $f; & $f; del $f</code>
-      <button class="software-copy-btn" onclick="
-        navigator.clipboard.writeText('$f=[IO.Path]::GetTempFileName()+\'ps1\'; irm https://zhiyu-lu.com/scripts/install-claude-win.ps1 -OutFile $f; & $f; del $f').then(() => {
-          this.textContent = 'Copied!';
-          this.classList.add('copied');
-          setTimeout(() => { this.textContent = 'Copy'; this.classList.remove('copied'); }, 1800);
-        });
-      ">Copy</button>
-    </div>
-
-  </div>
-
   <!-- pybdiff -->
   <div class="software-card">
 
