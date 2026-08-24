@@ -11,6 +11,9 @@ package-lock.json
 
 local/
 
+# Local Codex project maintenance instructions
+AGENTS.md
+
 BLOG_README.md
 
 # Wiki: Obsidian vault config (local-only)
