@@ -1,7 +1,7 @@
 ---
 title: AI Agent 上手教程
 tags:
-  - sharing/ai-agent
+  - skills
 order: 1
 description: AI Agent 与 Claude Code 科研实践分享，含录像、幻灯片、讲稿及配套资料。
 ---
