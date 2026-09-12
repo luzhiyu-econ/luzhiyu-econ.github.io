@@ -20,6 +20,6 @@ description: AI Agent 与 Claude Code 科研实践分享，含录像、幻灯片
 
 - <a href="/wiki/assets/downloads/ai-agent-sharing/slides.pdf" download>分享幻灯片（PDF，24 页）</a>：原文件 `Beamer.pdf`，概括 AI 使用方式的演进、Claude Code 的工作原理、实际配置和 Skills 的科研应用。
 - <a href="/wiki/assets/downloads/ai-agent-sharing/speaker-notes.pdf" download>分享讲稿（PDF，10 页）</a>：原文件 `讲稿.pdf`，对幻灯片中的主题作更详细的文字说明，包含使用经验和科研工作流示例。
-- <a href="/wiki/assets/downloads/ai-agent-sharing/research-skills.zip" download>科研 Skills 合集（ZIP，18 个）</a>：分享配套的技能文件及其参考资料、脚本和模板，涉及研究构思、文献综述、实证分析、学术写作、图表与回归表、文档排版等任务。
+- [[research-skills|科研 Skills 合集]]：查看 18 个技能的用途说明、单独下载与 GitHub 项目入口；也可<a href="/wiki/assets/downloads/ai-agent-sharing/research-skills.zip" download>下载完整合集（ZIP）</a>。
 - <a href="/wiki/assets/downloads/ai-agent-sharing/learning-resources.csv" download>学习资源清单（CSV，34 条）</a>：整理 Claude Code 与经济学科研相关的教程和工具，包含名称、作者、类别、语言、难度、主题及链接。
 - <a href="/wiki/assets/downloads/ai-agent-sharing/settings.json" download>配置示例（JSON）</a>：展示模型接入、工具权限和任务通知设置。接入地址和密钥留空；示例开启跳过权限确认，提示音命令适用于 macOS，使用时请按自己的环境调整。
