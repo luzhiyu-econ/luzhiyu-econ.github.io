@@ -270,22 +270,43 @@ img {
 }
 
 /* ===== Blog ===== */
-.wiki-link-hint {
-  font-size: 0.92rem;
-  color: var(--color-text-light);
-  margin-bottom: 18px;
+.wiki-entry-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+  padding: 24px 28px;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all var(--transition);
 }
 
-.wiki-link-hint a {
-  color: var(--color-primary);
-  font-weight: 500;
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: border-color var(--transition);
+.wiki-entry-card:hover {
+  color: var(--color-text);
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
-.wiki-link-hint a:hover {
-  border-bottom-color: var(--color-primary);
+.wiki-entry-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.wiki-entry-action {
+  flex-shrink: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.wiki-entry-card:focus-visible {
+  outline: 3px solid rgba(42, 100, 150, 0.24);
+  outline-offset: 3px;
 }
 
 .blog-list {
@@ -482,6 +503,7 @@ img {
     padding: 32px 0 60px;
   }
 
+  .wiki-entry-card,
   .blog-card {
     padding: 18px 20px;
   }
