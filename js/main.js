@@ -11,6 +11,7 @@
   const sectionCache = {};
   let blogPosts = [];
   let currentBlogView = "list";
+  let sectionRequest = 0;
 
   // ── Markdown ──
 
@@ -102,21 +103,28 @@
     const url = SECTIONS[name];
     if (!url) return;
 
+    const request = ++sectionRequest;
+    document.querySelector("body > home-avatar")?.remove();
     removeBlogTOC();
 
     const container = document.getElementById("main-content");
     try {
       const html = await fetchText(url);
+      if (request !== sectionRequest) return;
       container.innerHTML = html;
       container.classList.remove("active");
       // Force reflow so the CSS transition replays
       void container.offsetWidth;
       container.classList.add("active");
 
-      if (name === "blog") {
+      if (name === "home") {
+        const avatar = container.querySelector("#home-avatar-template");
+        if (avatar) document.body.append(avatar.content.cloneNode(true));
+      } else if (name === "blog") {
         await initBlog(postId);
       }
     } catch {
+      if (request !== sectionRequest) return;
       container.innerHTML =
         '<p style="text-align:center;color:#888;padding:60px 0;">Loading failed. Please refresh.</p>';
     }

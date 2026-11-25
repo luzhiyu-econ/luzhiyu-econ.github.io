@@ -14,6 +14,34 @@
     </div>
 </div>
 
+<template id="home-avatar-template">
+    <home-avatar class="home-avatar" role="region" aria-label="Zhiyu Lu’s digital avatar" lang="en">
+        <button class="avatar-stage" type="button" aria-label="Talk to Zhiyu Lu’s avatar"
+                aria-controls="avatar-conversation" aria-expanded="false" aria-describedby="avatar-instructions"
+                title="Click to talk, drag to move">
+            <span class="avatar-figure" aria-hidden="true">
+                <span class="avatar-gesture" hidden></span>
+                <img src="fig/avatar/idle.webp" width="240" height="360" alt="" draggable="false">
+            </span>
+        </button>
+        <span id="avatar-instructions" hidden>Press Enter to talk or use the arrow keys to move.</span>
+        <span class="avatar-announcement" role="status" aria-atomic="true"></span>
+        <div class="avatar-content" id="avatar-conversation" hidden>
+            <button class="avatar-dismiss" type="button" aria-label="Close reply">&times;</button>
+            <div class="avatar-message">
+                <p class="avatar-caption" lang="zh-CN"></p>
+                <p class="avatar-translation"></p>
+                <p class="avatar-feedback" hidden></p>
+                <div class="avatar-followup" hidden>
+                    <a class="avatar-link" hidden></a>
+                    <button class="avatar-stop" type="button" hidden>Stop audio</button>
+                </div>
+            </div>
+        </div>
+        <audio preload="none"></audio>
+    </home-avatar>
+</template>
+
 <div class="bio">
     <p>I am Zhiyu Lu, a <strong>Ph.D. Candidate in Public Finance at the Central University of Finance and Economics</strong> (CUFE). My friends and colleagues also know me as Mark.</p>
     <p>My research interests lie at the intersection of <strong>political economy</strong>, <strong>public economics</strong>, and <strong>the economics of innovation</strong>. I use computational text analysis and large language models to recover high-dimensional semantic information from unstructured text and construct scalable measures for empirical economic research. I also study large language models as agents in economic experiments.</p>
